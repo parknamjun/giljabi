@@ -24,7 +24,7 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class RouterController {
 
-    @GetMapping("/api/1.0/getOpenRouter")
+    @GetMapping("/api/1.0/getOpenRoute")
     @ApiOperation(value="", notes = "openrouterservice에서 경로정보를 받아오는 api")
     public Response getOpenRouteService() {
 
