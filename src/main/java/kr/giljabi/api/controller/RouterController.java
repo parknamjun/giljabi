@@ -1,5 +1,7 @@
 package kr.giljabi.api.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import kr.giljabi.api.response.Response;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 public class RouterController {
 
     @GetMapping("/api/1.0/getOpenRouter")
+    @ApiOperation(value="", notes = "openrouterservice에서 경로정보를 받아오는 api")
     public Response getOpenRouteService() {
 
         return Response.of();//.setData(new HashMap());
