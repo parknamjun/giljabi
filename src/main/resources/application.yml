@@ -17,3 +17,8 @@ h2:
   enabled: true
   path: /h2-console
 #  org.hibernate.type: trace
+
+giljabi:
+  openrouteservice:
+    apikey:
+    directionUrl: https://api.openrouteservice.org/v2/directions/%s/json

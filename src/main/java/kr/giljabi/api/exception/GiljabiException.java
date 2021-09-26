@@ -5,23 +5,21 @@ import lombok.Setter;
 
 @Getter
 public class GiljabiException extends RuntimeException {
+    private int status;
     private String code;
-
     private String message;
 
-    public GiljabiException() {
-    }
-
+    /*
     public GiljabiException(String code, String message) {
         super(message);
         this.code = code;
         this.message = message;
     }
-
-    public GiljabiException(String code, String message, Throwable cause) {
-        super(message, cause);
-        this.code = code;
+*/
+    public GiljabiException(int status, ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.status = status;
+        this.code = errorCode.getCode();
+        this.message = errorCode.getMessage();
     }
-
-
 }
