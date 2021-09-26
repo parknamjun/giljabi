@@ -10,30 +10,29 @@ public class Response {
     private static final short STATUS_FAILURE = -1;
 
     private final short status;
-    private final String code;
 
     private String message;
     private Object data;
 
-    private Response(short status, String code) {
+    private Response(short status) {
         this.status = status;
-        this.code = code;
     }
 
-    private Response(short status, String code, String message) {
-        this(status, code);
+    private Response(short status, String message) {
+        this(status);
         this.message = message;
     }
 
     public static Response of() {
-        return new Response(STATUS_SUCCESS, "OK");
+        return new Response(STATUS_SUCCESS, "정상 처리 되었습니다.");
     }
-
-    public static Response of(GiljabiException e) {
-        return new Response(STATUS_FAILURE, e.getCode(), e.getMessage());
-    }
-
     public static Response of(Exception e) {
-        return new Response(STATUS_FAILURE, "S999", "시스템 오류입니다.");
+        return new Response(STATUS_FAILURE, "시스템 오류입니다.");
     }
+
+    public Response addObject(Object data) {
+        this.data = data;
+        return this;
+    }
+
 }
