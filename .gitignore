@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### 공유하면 안되는 giljabi 정보, openrouteservice, google elevation apikey
+application-local.yml
+
 ### STS ###
 .apt_generated
 .classpath
