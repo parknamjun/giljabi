@@ -2,7 +2,7 @@ package kr.giljabi.api.utils;
 
 import java.util.ArrayList;
 
-import kr.giljabi.api.dto.GeoPositionData;
+import kr.giljabi.api.geo.GeoPositionData;
 
 /**
  * from https://github.com/GIScience/openrouteservice-docs
