@@ -20,5 +20,5 @@ h2:
 
 giljabi:
   openrouteservice:
-    apikey:
+    apikey: 
     directionUrl: https://api.openrouteservice.org/v2/directions/%s/json

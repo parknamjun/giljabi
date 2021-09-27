@@ -1,4 +1,4 @@
-package kr.giljabi.api.dto;
+package kr.giljabi.api.geo;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
