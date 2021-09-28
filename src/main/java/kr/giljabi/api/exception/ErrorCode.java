@@ -6,7 +6,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public enum ErrorCode {
-    OPENROUTESERVICE_ERROR("E001", "OPENROUTESERVICE에서 오류가 발생하였습니다.")
+    OPENROUTESERVICE_ERROR("E001", "OPENROUTESERVICE 오류가 발생하였습니다.")
     ;
 
     private final String code;

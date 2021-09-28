@@ -10,7 +10,7 @@ import lombok.ToString;
 @Data
 @RequiredArgsConstructor
 @ToString
-public class RequestOpenRouteServiceData {
+public class RequestRouteData {
     private Double start_lat;
     private Double start_lng;
     private Double target_lat;

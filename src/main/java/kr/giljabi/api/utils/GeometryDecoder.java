@@ -2,15 +2,15 @@ package kr.giljabi.api.utils;
 
 import java.util.ArrayList;
 
-import kr.giljabi.api.geo.GeoPositionData;
+import kr.giljabi.api.geo.Geometry3DPoint;
 
 /**
  * from https://github.com/GIScience/openrouteservice-docs
  *
  */
 public class GeometryDecoder {
-    public static ArrayList<GeoPositionData> decodeGeometry(String encodedGeometry, boolean inclElevation) {
-		ArrayList<GeoPositionData> list = new ArrayList<GeoPositionData>();
+    public static ArrayList<Geometry3DPoint> decodeGeometry(String encodedGeometry, boolean inclElevation) {
+		ArrayList<Geometry3DPoint> list = new ArrayList<Geometry3DPoint>();
         int len = encodedGeometry.length();
         int index = 0;
         int lat = 0;
@@ -48,7 +48,7 @@ public class GeometryDecoder {
                 ele += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
             }
 
-            GeoPositionData eleData = new GeoPositionData(lng, lat, ele);
+            Geometry3DPoint eleData = new Geometry3DPoint(lng, lat, ele);
 
             list.add(eleData);
         }

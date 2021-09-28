@@ -1,5 +1,6 @@
 package kr.giljabi.api.response;
 
+import kr.giljabi.api.exception.ErrorCode;
 import kr.giljabi.api.exception.GiljabiException;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +27,9 @@ public class Response {
     public static Response of() {
         return new Response(STATUS_SUCCESS, "정상 처리 되었습니다.");
     }
+
     public static Response of(Exception e) {
-        return new Response(STATUS_FAILURE, "시스템 오류입니다.");
+        return new Response(STATUS_FAILURE, e.getMessage());
     }
 
     public Response addObject(Object data) {
