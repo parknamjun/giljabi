@@ -2,7 +2,7 @@ package kr.giljabi.api.geo;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import kr.giljabi.api.request.RequestOpenRouteServiceData;
+import kr.giljabi.api.request.RequestRouteData;
 import kr.giljabi.api.exception.ErrorCode;
 import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.utils.GeometryDecoder;
@@ -25,17 +25,22 @@ import java.util.ArrayList;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GeometryService {
+public class RouteService {
     @Value("${giljabi.openrouteservice.apikey}")
     private String apikey;
 
     @Value("${giljabi.openrouteservice.directionUrl}")
     private String directionUrl;
 
-    public ArrayList<GeoPositionData> getOpenRouteService(RequestOpenRouteServiceData request)
+    /**
+     * openrouteservice
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public ArrayList<Geometry3DPoint> getOpenRouteService(RequestRouteData request)
             throws Exception {
 
-        HttpPost httpPost = makeHttpPost(request);
 
         //경로 요청 파라메터 정보를 만들고...
         Double[] start = new Double[]{request.getStart_lng(), request.getStart_lat()};
@@ -47,6 +52,7 @@ public class GeometryService {
         json.put("elevation", "true");
         log.info(json.toString());
 
+        HttpPost httpPost = makeHttpPost(request);
         String body = requestOpenRouteService(httpPost, json);
 
         Gson gson = new GsonBuilder().create();
@@ -54,7 +60,7 @@ public class GeometryService {
         ArrayList<OSRDirectionV2.Routes> routes = direction.getRoutes();
 
         //GeoPositionData를 배열로 구성하면 응답데이터를 크기를 줄일 수 있겠다...
-        ArrayList<GeoPositionData> list = GeometryDecoder.decodeGeometry(routes.get(0).getGeometry(), true);
+        ArrayList<Geometry3DPoint> list = GeometryDecoder.decodeGeometry(routes.get(0).getGeometry(), true);
 
         return list; //gson.toJson(list);
     }
@@ -64,18 +70,25 @@ public class GeometryService {
         httpPost.setEntity(postEntity);
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        CloseableHttpResponse response = httpClient.execute(httpPost);
+        String result = "";
+        try {
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            try {
+                //에러, 예외처리를 어떻게 할까나....
+                if (response.getStatusLine().getStatusCode() != 200)
+                    throw new GiljabiException(response.getStatusLine().getStatusCode(),
+                            ErrorCode.OPENROUTESERVICE_ERROR);
 
-        //에러, 예외처리를 어떻게 할까나....
-        if(response.getStatusLine().getStatusCode() != 200)
-            throw new GiljabiException(response.getStatusLine().getStatusCode(),
-                    ErrorCode.OPENROUTESERVICE_ERROR);
-
-        ResponseHandler<String> handler = new BasicResponseHandler();
-        String body = handler.handleResponse(response);
-
-        log.info(body);
-        return body;
+                ResponseHandler<String> handler = new BasicResponseHandler();
+                result = handler.handleResponse(response);
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpClient.close();
+        }
+        log.info(result);
+        return result;
     }
 
     /**
@@ -83,7 +96,7 @@ public class GeometryService {
      * @param request
      * @return
      */
-    private HttpPost makeHttpPost(RequestOpenRouteServiceData request) {
+    private HttpPost makeHttpPost(RequestRouteData request) {
         directionUrl = String.format(directionUrl, request.getProfile());
         HttpPost httpPost = new HttpPost(directionUrl);
         httpPost.setHeader("Authorization", apikey);
@@ -91,4 +104,7 @@ public class GeometryService {
         httpPost.setHeader("Content-Type", "application/json; charset=utf-8");
         return httpPost;
     }
+
+    /////////////////////////////////////////////////////////////
+
 }
