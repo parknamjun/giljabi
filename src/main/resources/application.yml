@@ -20,10 +20,10 @@ h2:
 
 giljabi:
   openrouteservice:
-    apikey:
+    apikey: ####
     directionUrl: https://api.openrouteservice.org/v2/directions/%s/json
   google:
     elevation:
-      apikey:
-      elevationUrl:
+      apikey: ####
+      elevationUrl: ttps://maps.googleapis.com/maps/api/elevation/json?
 

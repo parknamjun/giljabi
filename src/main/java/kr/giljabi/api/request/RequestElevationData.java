@@ -1,6 +1,7 @@
 package kr.giljabi.api.request;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class RequestElevationData {
     private List<Geometry2DPoint> trackPoint = new ArrayList<>();
 
+    @Getter
     public static class Geometry2DPoint {
         public double lng;
         public double lat;
