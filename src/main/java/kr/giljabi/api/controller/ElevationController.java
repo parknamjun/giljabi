@@ -37,6 +37,8 @@ public class ElevationController {
                 new Exception("입력된 트랙정보가 없습니다.");
 
             googleService.checkGoogle();
+
+            googleService.getElevation(request);
         /*
         try {
             //    list = geometryService.getOpenRouteService(request);
