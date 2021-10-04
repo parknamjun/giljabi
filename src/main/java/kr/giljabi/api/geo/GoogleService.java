@@ -1,33 +1,21 @@
 package kr.giljabi.api.geo;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import kr.giljabi.api.exception.ErrorCode;
-import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.request.RequestElevationData;
-import kr.giljabi.api.request.RequestRouteData;
-import kr.giljabi.api.utils.GeometryDecoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.net.ssl.HttpsURLConnection;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,10 +39,14 @@ public class GoogleService {
         httpGet(paramter);
     }
 
-    public void getElevation(RequestElevationData request) throws Exception {
+    public ArrayList<Geometry3DPoint> getElevation(RequestElevationData request) throws Exception {
         StringBuffer location = new StringBuffer();
         List<RequestElevationData.Geometry2DPoint> trackPoint = request.getTrackPoint();
         int MAXCOUNT = 4;
+
+        Gson gson = new Gson();
+
+        ArrayList<Geometry3DPoint> returnLocationList = new ArrayList<Geometry3DPoint>();
 
         //elevation api는 하루 2500요청
         //get을 사용해하므로 request url의 길이는 8192를 넘지 않아야 한다.
@@ -80,56 +72,56 @@ public class GoogleService {
                 String jsonElevation = httpGet(location.substring(0, location.length() - 1));
                 log.info(jsonElevation);
                 //응답옹 데이터
-                //makeElevation(jsonElevation);
-                location.setLength(0);
+                GoogleElevation googleElevation = gson.fromJson(jsonElevation, GoogleElevation.class);
+
+                if(googleElevation.getStatus().compareTo("OK") == 0) {
+                    log.info("Elevation info success...");
+                    for(GoogleElevation.Results result : googleElevation.getResults()) {
+                        Geometry3DPoint point = new Geometry3DPoint();
+                        point.setLng(result.getLocation().getLng());
+                        point.setLat(result.getLocation().getLat());
+
+                        DecimalFormat decimalFormat = new DecimalFormat("#.#"); //소수점 1자리만...
+                        point.setEle(Double.parseDouble(decimalFormat.format(result.getElevation())));
+
+                        returnLocationList.add(point);
+                    }
+                }
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
         long end = System.currentTimeMillis();
+        return returnLocationList;
     }
-/*
-    public void makeElevation(String jsonElevation) {
-        Gson gson = new Gson();
-        List<Ge> result = gson.fromJson(jsonElevation , LinkedTreeMap.class);
-        if(((String)result.get("status")).compareTo("OK") == 0) {
-            logger.info(requestServer + ": Elevation info success...");
-            ArrayList<LinkedTreeMap> elevationData = (ArrayList<LinkedTreeMap>)result.get("results");
-            for(LinkedTreeMap edata : elevationData) {
-                GeoPositionData eleData = new GeoPositionData();
-                eleData.setLat(Double.toString((double)((LinkedTreeMap)edata.get("location")).get("lat")));
-                eleData.setLng(Double.toString((double)((LinkedTreeMap)edata.get("location")).get("lng")));
-                eleData.setEle(String.format("%.1f", (double)edata.get("elevation")));
 
-                returnLocationList.add(eleData);
-                //System.out.println(eleData.toString());
-            }
-        }
-    }
-*/
     //key를 parameter로 처리하는 이유는 최초 접속 테스트는 key가 필요없기 때문에...
     private String httpGet(String paramter) throws Exception {
-        String result = "";
         String key = String.format("key=%s&", apikey);
-        String location = String.format("%s=%s&", "locations", paramter);
+        String location = String.format("%s=%s", "locations", paramter);
 
         String requestUrl = elevationUrl + key + location;
         log.info(requestUrl);
 
-        HttpGet httpGet = new HttpGet(requestUrl);
-        httpGet.setHeader("Content-Type", "application/json; charset=utf-8");
+        URL myUrl = new URL(requestUrl);
+        HttpsURLConnection conn = (HttpsURLConnection)myUrl.openConnection();
+        conn.setRequestMethod("GET");
 
-        HttpResponse response = httpClient.execute(httpGet);
+        return readerHttpStream(conn);
 
-        //Response 출력
-        if (response.getStatusLine().getStatusCode() == 200) {
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            String body = handler.handleResponse(response);
-            System.out.println(body);
-        } else {
-            System.out.println("response is error : " + response.getStatusLine().getStatusCode());
-        }
-        return result;
     }
+
+    public String readerHttpStream(HttpsURLConnection conn) throws UnsupportedEncodingException, IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+        String inputLine = "";
+        String jsonString = "";
+        while((inputLine = in.readLine()) != null) { // response 출력
+            jsonString += inputLine.replace(" ", "");
+        }
+        in.close();
+        return jsonString;
+    }
+
 
 }

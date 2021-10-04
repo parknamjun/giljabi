@@ -1,5 +1,6 @@
 package kr.giljabi.api.geo;
 
+import jdk.nashorn.internal.objects.annotations.Constructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -11,16 +12,15 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@RequiredArgsConstructor
 public class Geometry3DPoint {
 	public double lng;
 	public double lat;
 	public double ele;
 
 	public Geometry3DPoint(double lng, double lat, double ele) {
-		this.lng = lng / 1E5;
-		this.lat = lat / 1E5;
-		this.ele = ele / 100;
+		this.lng = lng;
+		this.lat = lat;
+		this.ele = ele;
 	}
-
 }

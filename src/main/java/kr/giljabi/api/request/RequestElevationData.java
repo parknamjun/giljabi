@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,11 @@ public class RequestElevationData {
         public double lat;
 
         public Geometry2DPoint(double lng, double lat) {
-            this.lng = lng;
-            this.lat = lat;
+            //소수점 이하 5자리로 제한
+            DecimalFormat decimalFormat = new DecimalFormat("#.#####");
+
+            this.lng = Double.parseDouble(decimalFormat.format(lng));
+            this.lat = Double.parseDouble(decimalFormat.format(lat));
         }
     }
 }
