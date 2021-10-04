@@ -48,7 +48,8 @@ public class GeometryDecoder {
                 ele += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
             }
 
-            Geometry3DPoint eleData = new Geometry3DPoint(lng, lat, ele);
+            Geometry3DPoint eleData = new Geometry3DPoint(
+                    (double)(lng / 1E5), (double)(lat / 1E5), (double)(ele / 100));
 
             list.add(eleData);
         }

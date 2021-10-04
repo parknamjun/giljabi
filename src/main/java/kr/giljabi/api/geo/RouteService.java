@@ -41,7 +41,6 @@ public class RouteService {
     public ArrayList<Geometry3DPoint> getOpenRouteService(RequestRouteData request)
             throws Exception {
 
-
         //경로 요청 파라메터 정보를 만들고...
         Double[] start = new Double[]{request.getStart_lng(), request.getStart_lat()};
         Double[] target = new Double[]{request.getTarget_lng(), request.getTarget_lat()};

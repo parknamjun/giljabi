@@ -30,7 +30,7 @@ public class RouterController {
 
     private final RouteService geometryService;
 
-    @GetMapping("/api/1.0/getRoute")
+    @GetMapping("/api/1.0/route")
     @ApiOperation(value="", notes = "openrouterservice에서 경로정보를 받아오는 api")
     public Response getRoute(@RequestBody RequestRouteData request) {
         ArrayList<Geometry3DPoint> list = new ArrayList<>();
