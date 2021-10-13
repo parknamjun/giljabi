@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8090/api/1.0/getElevation
+POST http://localhost:8090/api/1.0/elevation
 Content-Type: application/json
 
 {
