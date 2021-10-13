@@ -2,7 +2,7 @@ package kr.giljabi.api.controller;
 
 import io.swagger.annotations.ApiOperation;
 import kr.giljabi.api.geo.Geometry3DPoint;
-import kr.giljabi.api.geo.GoogleService;
+import kr.giljabi.api.geo.ElevationService;
 import kr.giljabi.api.request.RequestElevationData;
 import kr.giljabi.api.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class ElevationController {
 
-    private final GoogleService googleService;
+    private final ElevationService googleService;
 
     @PostMapping("/api/1.0/elevation")
     @ApiOperation(value = "", notes = "google elevation api 이용하여 고도정보를 받아오는 api")

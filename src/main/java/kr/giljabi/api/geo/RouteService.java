@@ -40,7 +40,6 @@ public class RouteService {
      */
     public ArrayList<Geometry3DPoint> getOpenRouteService(RequestRouteData request)
             throws Exception {
-
         //경로 요청 파라메터 정보를 만들고...
         Double[] start = new Double[]{request.getStart_lng(), request.getStart_lat()};
         Double[] target = new Double[]{request.getTarget_lng(), request.getTarget_lat()};
@@ -51,17 +50,22 @@ public class RouteService {
         json.put("elevation", "true");
         log.info(json.toString());
 
-        HttpPost httpPost = makeHttpPost(request);
+        directionUrl = String.format(directionUrl, request.getProfile());
+        HttpPost httpPost = new HttpPost(directionUrl); //POST call
+        httpPost.setHeader("Authorization", apikey);
+        httpPost.setHeader("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8");
+        httpPost.setHeader("Content-Type", "application/json; charset=utf-8");
+
         String body = requestOpenRouteService(httpPost, json);
 
         Gson gson = new GsonBuilder().create();
         OSRDirectionV2 direction = gson.fromJson(body, OSRDirectionV2.class);
         ArrayList<OSRDirectionV2.Routes> routes = direction.getRoutes();
 
-        //GeoPositionData를 배열로 구성하면 응답데이터를 크기를 줄일 수 있겠다...
+        //GeoPositionData를 배열로 구성하면 응답데이터를 크기를 줄일 수 있을수도...
         ArrayList<Geometry3DPoint> list = GeometryDecoder.decodeGeometry(routes.get(0).getGeometry(), true);
 
-        return list; //gson.toJson(list);
+        return list;
     }
 
     private String requestOpenRouteService(HttpPost httpPost, JSONObject json) throws IOException {
@@ -73,7 +77,6 @@ public class RouteService {
         try {
             CloseableHttpResponse response = httpClient.execute(httpPost);
             try {
-                //에러, 예외처리를 어떻게 할까나....
                 if (response.getStatusLine().getStatusCode() != 200)
                     throw new GiljabiException(response.getStatusLine().getStatusCode(),
                             ErrorCode.OPENROUTESERVICE_ERROR);
@@ -86,22 +89,8 @@ public class RouteService {
         } finally {
             httpClient.close();
         }
-        log.info(result);
+        //log.info(result);
         return result;
-    }
-
-    /**
-     * Make post object for request header.
-     * @param request
-     * @return
-     */
-    private HttpPost makeHttpPost(RequestRouteData request) {
-        directionUrl = String.format(directionUrl, request.getProfile());
-        HttpPost httpPost = new HttpPost(directionUrl);
-        httpPost.setHeader("Authorization", apikey);
-        httpPost.setHeader("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8");
-        httpPost.setHeader("Content-Type", "application/json; charset=utf-8");
-        return httpPost;
     }
 
     /////////////////////////////////////////////////////////////
