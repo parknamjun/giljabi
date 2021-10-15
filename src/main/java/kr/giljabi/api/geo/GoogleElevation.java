@@ -7,7 +7,9 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.List;
 
-/*
+/**
+ https://developers.google.com/maps/documentation/elevation/start#maps_http_elevation_locations-java
+ google result data
 {
         "results":
         [
