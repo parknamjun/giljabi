@@ -13,19 +13,22 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ElevationService {
+public class GoogleService {
     @Value("${giljabi.google.elevation.apikey}")
     private String apikey;
 
     @Value("${giljabi.google.elevation.elevationUrl}")
     private String elevationUrl;
+
+    @Value("${giljabi.google.elevation.googleGetCount}")
+    private int googleGetCount;
 
     private HttpClient httpClient = HttpClientBuilder.create().build(); // HttpClient 생성
 
@@ -33,22 +36,26 @@ public class ElevationService {
     //이때 key를 사용해도 되지만 호출건수가 증가하므로 key를 사용하지 않게 한다.
     public void checkGoogle() throws Exception {
         String paramter = "37.566102885810565,126.97594723621106";
-        requestElevationService(paramter);
+        HttpResponse response = requestElevationService(paramter);
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            ResponseHandler<String> handler = new BasicResponseHandler();
+            String jsonElevation = handler.handleResponse(response);
+            log.info(jsonElevation);
+        }
+
     }
 
     public ArrayList<Geometry3DPoint> getElevation(RequestElevationData request) throws Exception {
         List<RequestElevationData.Geometry2DPoint> trackPoint = request.getTrackPoint();
         ArrayList<Geometry3DPoint> returnPoint = new ArrayList<Geometry3DPoint>();
 
-        int MAXCOUNT = 4;
-
         //elevation api는 하루 2500요청
         //get을 사용해하므로 request url의 길이는 8192를 넘지 않아야 한다.
         int maxPage = 0;
-        if(trackPoint.size() % MAXCOUNT == 0)
-            maxPage = (int)(trackPoint.size() / MAXCOUNT);
+        if(trackPoint.size() % googleGetCount == 0)
+            maxPage = (int)(trackPoint.size() / googleGetCount);
         else
-            maxPage = (int)(trackPoint.size() / MAXCOUNT) + 1;
+            maxPage = (int)(trackPoint.size() / googleGetCount) + 1;
 
         long startTime = System.currentTimeMillis();
 
@@ -56,7 +63,7 @@ public class ElevationService {
             int index = 0;
             StringBuffer location = new StringBuffer();
             for (int j = 1; j <= maxPage; j++) {
-                for (; index < MAXCOUNT * j; index++) {
+                for (; index < googleGetCount * j; index++) {
                     if (index == trackPoint.size())
                         break;
                     location.append(String.format("%s,%s|"
@@ -84,30 +91,21 @@ public class ElevationService {
         return returnPoint;
     }
 
-    //key를 parameter로 처리하는 이유는 최초 접속 테스트는 key가 필요없기 때문에...
+    /**
+     * encode를 사용하는 이유는 '|' 문자 때문...
+     * @param parameter
+     * @return
+     * @throws Exception
+     */
     private HttpResponse requestElevationService(String parameter) throws Exception {
-        String key = String.format("key=%s&", apikey);
-        String location = String.format("%s=%s&", "locations", parameter);
-
-        String requestUrl = elevationUrl + key + location;
+        String requestUrl = String.format("%s?locations=%s&key=%s"
+                , elevationUrl, URLEncoder.encode(parameter, "UTF-8"), apikey);
         log.info(requestUrl);
 
         //GET 호출만 사용가능
         HttpGet httpGet = new HttpGet(requestUrl);
-        httpGet.setHeader("Content-Type", "application/json; charset=utf-8");
 
         return httpClient.execute(httpGet);
-/*
-        //예외처리 추가 필요
-        if (response.getStatusLine().getStatusCode() == 200) {
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            result = handler.handleResponse(response);
-            log.info(result);
-        } else {
-            log.info("response is error : " + response.getStatusLine().getStatusCode());
-        }
-        return result;
- */
     }
 
 }
