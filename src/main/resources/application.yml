@@ -25,7 +25,7 @@ giljabi:
   google:
     elevation:
   #google elevation get api는 요청된 좌표적 적절히 잘라서 8192를 넘지 않아야 한다. 400이 적당
-      googleGetCount: 4
+      googleGetCount: 400
       apikey: ####
       elevationUrl: https://maps.googleapis.com/maps/api/elevation/json
 server:

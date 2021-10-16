@@ -3,6 +3,8 @@ package kr.giljabi.api.geo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.text.DecimalFormat;
+
 /**
  * @author parknamjun(eahn.park@gmail.com)
  * date   2018-12-22
@@ -19,4 +21,5 @@ public class Geometry3DPoint {
 		this.lat = lat;
 		this.ele = ele;
 	}
+
 }

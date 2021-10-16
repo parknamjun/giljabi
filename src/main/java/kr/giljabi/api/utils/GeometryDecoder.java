@@ -6,7 +6,7 @@ import kr.giljabi.api.geo.Geometry3DPoint;
 
 /**
  * from https://github.com/GIScience/openrouteservice-docs
- *
+ * OpenRouteService에서 사용하는 경로정보 decoder
  */
 public class GeometryDecoder {
     public static ArrayList<Geometry3DPoint> decodeGeometry(String encodedGeometry, boolean inclElevation) {
