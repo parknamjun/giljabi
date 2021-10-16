@@ -1,5 +1,5 @@
 ###
-GET http://localhost:8090/api/1.0/getRoute
+GET http://localhost:8090/api/1.0/route
 Content-Type: application/json
 
 {
