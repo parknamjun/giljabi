@@ -33,7 +33,7 @@ public class RouteService {
     private String directionUrl;
 
     /**
-     * openrouteservice
+     * openrouteservice를 사용하지만, google direction를 사용하는 것도 고려할 필요 있음
      * @param request
      * @return
      * @throws Exception

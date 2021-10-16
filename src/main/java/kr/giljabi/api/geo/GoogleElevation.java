@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -42,7 +41,7 @@ public class GoogleElevation {
     @Setter
     @Getter
     @RequiredArgsConstructor
-    public static class Location {
+    public class Location {
         private double lng;
         private double lat;;
     }
