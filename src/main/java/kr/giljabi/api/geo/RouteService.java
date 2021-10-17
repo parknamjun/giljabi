@@ -59,8 +59,8 @@ public class RouteService {
         String body = requestOpenRouteService(httpPost, json);
 
         Gson gson = new GsonBuilder().create();
-        OSRDirectionV2 direction = gson.fromJson(body, OSRDirectionV2.class);
-        ArrayList<OSRDirectionV2.Routes> routes = direction.getRoutes();
+        OSRDirectionV2Data direction = gson.fromJson(body, OSRDirectionV2Data.class);
+        ArrayList<OSRDirectionV2Data.Routes> routes = direction.getRoutes();
 
         //GeoPositionData를 배열로 구성하면 응답데이터를 크기를 줄일 수 있을수도...
         ArrayList<Geometry3DPoint> list = GeometryDecoder.decodeGeometry(routes.get(0).getGeometry(), true);

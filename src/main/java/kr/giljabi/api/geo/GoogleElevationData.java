@@ -25,7 +25,7 @@ import java.util.List;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class GoogleElevation {
+public class GoogleElevationData {
     private String status;
     private List<Results> results;
 

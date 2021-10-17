@@ -10,11 +10,11 @@ import java.util.ArrayList;
  * @2020.11.15
  */
 @Setter @Getter
-public class OSRDirectionV2 {
+public class OSRDirectionV2Data {
 	public ArrayList<Routes> routes = new ArrayList<Routes>();
 	public ArrayList<Object> bbox = new ArrayList<Object>();
 	public Metadata metadata;
-	public OSRDirectionV2() {
+	public OSRDirectionV2Data() {
 	}
 
 	@Setter @Getter
