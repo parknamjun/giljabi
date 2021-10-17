@@ -16,9 +16,11 @@
 
 테스트 방법
 1. 경로탐색
+
 .http 파일의 내용을 참고
 
-GET http://localhost:8090/api/1.0/getRoute
+GET http://localhost:8090/api/1.0/route
+
 Content-Type: application/json
 
 {
@@ -30,7 +32,9 @@ Content-Type: application/json
 }
 
 2. 높이정보
+
 POST http://localhost:8090/api/1.0/elevation
+
 Content-Type: application/json
 
 {
