@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 public class RequestElevationData {
+    @NotNull
     private List<Geometry2DPoint> trackPoint = new ArrayList<>();
 
     @Getter
