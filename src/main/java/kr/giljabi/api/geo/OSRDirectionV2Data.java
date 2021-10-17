@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 /**
  * openrouteservice에서 받은 데이터 파싱
- * @2020.11.15
+ * eahn.park@gmail.com
+ * 2020.11.15
  */
 @Setter @Getter
 public class OSRDirectionV2Data {
