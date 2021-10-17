@@ -7,6 +7,9 @@ import lombok.Setter;
 import java.util.List;
 
 /**
+ * Google elevation api 수신데이터 
+ * eahn.park@gmail.com
+ * 2021.10.05
  https://developers.google.com/maps/documentation/elevation/start#maps_http_elevation_locations-java
  google result data
 {
