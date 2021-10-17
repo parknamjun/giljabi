@@ -6,8 +6,9 @@ import lombok.Setter;
 import java.text.DecimalFormat;
 
 /**
- * @author parknamjun(eahn.park@gmail.com)
- * date   2018-12-22
+ * 위경도 좌표에 높이 정보가 있는 데이터 
+ * eahn.park@gmail.com
+ * 2018-12-22
  */
 @Getter
 @Setter
