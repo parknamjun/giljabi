@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 /**
@@ -32,8 +33,8 @@ public class RouterController {
 
     @GetMapping("/api/1.0/route")
     @ApiOperation(value="", notes = "openrouterservice에서 경로정보를 받아오는 api")
-    public Response getRoute(@RequestBody RequestRouteData request) {
-        ArrayList<Geometry3DPoint> list = new ArrayList<>();
+    public Response getRoute(final @Valid @RequestBody RequestRouteData request) {
+        ArrayList<Geometry3DPoint> list;
         try {
             list = geometryService.getOpenRouteService(request);
         } catch(Exception e) {
