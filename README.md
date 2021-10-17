@@ -18,7 +18,7 @@
 1. 경로탐색
 
 .http 파일의 내용을 참고
-
+profile : cycling-road, cycling-mountain, driving-car, foot-walking외 다양한 경로를 찾을 수 있습니다. 
 GET http://localhost:8090/api/1.0/route
 
 Content-Type: application/json
