@@ -3,10 +3,8 @@ GET http://localhost:8090/api/1.0/route
 Content-Type: application/json
 
 {
-  "start_lat": 37.58052832938857,
-  "start_lng": 127.021374295649,
-  "target_lat": 37.58340695922779,
-  "target_lng": 127.0391273352651,
+  "start": [127.021374295649,37.58052832938857],
+  "target": [127.0391273352651,37.58340695922779],
   "profile": "cycling-road"
 }
 

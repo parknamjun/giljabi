@@ -16,9 +16,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 @NotNull
 public class RequestRouteData {
-    private Double start_lat;
-    private Double start_lng;
-    private Double target_lat;
-    private Double target_lng;
+    private Double[] start;
+    private Double[] target;
     private String profile;
 }
