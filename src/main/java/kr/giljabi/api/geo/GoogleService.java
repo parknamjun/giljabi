@@ -87,9 +87,8 @@ public class GoogleService {
                     );
                     returnPoint.add(point);
                 }
-                log.info("1초 지연 시작");
+                //너물 짧은 간격으로 호출하면 문제가 있을 수 있다...1초 지연
                 TimeUnit.SECONDS.sleep(1);
-                log.info("1초 지연");
             }
         } catch(Exception e) {
             e.printStackTrace();
