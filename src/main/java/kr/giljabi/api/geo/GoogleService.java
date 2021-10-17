@@ -72,11 +72,11 @@ public class GoogleService {
                 }
 
                 String jsonElevation = requestElevationService(buffer.substring(0, buffer.length() - 1), googleApikey);
-                GoogleElevation googleElevation = gson.fromJson(jsonElevation, GoogleElevation.class);
-                List<GoogleElevation.Results> results = googleElevation.getResults();
+                GoogleElevationData googleElevation = gson.fromJson(jsonElevation, GoogleElevationData.class);
+                List<GoogleElevationData.Results> results = googleElevation.getResults();
 
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
-                for(GoogleElevation.Results googleLocation : results) {
+                for(GoogleElevationData.Results googleLocation : results) {
                     Geometry3DPoint point = new Geometry3DPoint(
                             googleLocation.getLocation().getLng(),
                             googleLocation.getLocation().getLat(),
