@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * elevation api 이후 direction api를 사용해서 openrouteservice를 바꿀 수 있을지 확인...
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -40,33 +43,35 @@ public class GoogleService {
 
     public ArrayList<Geometry3DPoint> getElevation(RequestElevationData request) throws Exception {
         List<RequestElevationData.Geometry2DPoint> trackPoint = request.getTrackPoint();
-        ArrayList<Geometry3DPoint> returnPoint = new ArrayList<Geometry3DPoint>();
+        ArrayList<Geometry3DPoint> returnPoint = new ArrayList<>();
 
         //elevation api는 하루 2500요청
         //get을 사용해하므로 request url의 길이는 8192를 넘지 않아야 한다.
-        int maxPage = 0;
+        int maxPage;
         if(trackPoint.size() % googleGetCount == 0)
-            maxPage = (int)(trackPoint.size() / googleGetCount);
+            maxPage = (trackPoint.size() / googleGetCount);
         else
-            maxPage = (int)(trackPoint.size() / googleGetCount) + 1;
+            maxPage = (trackPoint.size() / googleGetCount) + 1;
 
         long startTime = System.currentTimeMillis();
 
         try {
             int index = 0;
-            StringBuffer location = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             Gson gson = new GsonBuilder().create();
+
+            log.info("maxPage:" + maxPage);
 
             for (int j = 1; j <= maxPage; j++) {
                 for (; index < googleGetCount * j; index++) {
                     if (index == trackPoint.size())
                         break;
-                    location.append(String.format("%s,%s|"
+                    buffer.append(String.format("%s,%s|"
                             , trackPoint.get(index).getLat()
                             , trackPoint.get(index).getLng()));
                 }
 
-                String jsonElevation = requestElevationService(location.substring(0, location.length() - 1), googleApikey);
+                String jsonElevation = requestElevationService(buffer.substring(0, buffer.length() - 1), googleApikey);
                 GoogleElevation googleElevation = gson.fromJson(jsonElevation, GoogleElevation.class);
                 List<GoogleElevation.Results> results = googleElevation.getResults();
 
@@ -79,7 +84,9 @@ public class GoogleService {
                     );
                     returnPoint.add(point);
                 }
+                log.info("1초 지연 시작");
                 TimeUnit.SECONDS.sleep(1);
+                log.info("1초 지연");
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -99,8 +106,8 @@ public class GoogleService {
         StringBuilder stringBuilder = new StringBuilder();
         log.info("http status:" + httpConnection.getResponseCode());
         if(httpConnection.getResponseCode() == HttpStatus.SC_OK) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(httpConnection.getInputStream(), "UTF-8"));
-            String inputLine = "";
+            BufferedReader in = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
+            String inputLine;
             while((inputLine = in.readLine()) != null) {
                 stringBuilder.append(inputLine);
             }

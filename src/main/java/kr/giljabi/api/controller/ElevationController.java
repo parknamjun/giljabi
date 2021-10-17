@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Gpx track 정보를 tcx 변환
  * @author eahn.park@gmail.com
- * @date   2018-11-24
+ * date   2018-11-24
  * 2021.09.17 Spring boot 2.5.4
  */
 
@@ -30,12 +30,13 @@ public class ElevationController {
     @PostMapping("/api/1.0/elevation")
     @ApiOperation(value = "", notes = "google elevation api 이용하여 고도정보를 받아오는 api")
     public Response getElevation(@RequestBody RequestElevationData request) {
-        ArrayList<Geometry3DPoint> list = new ArrayList<Geometry3DPoint>();
+        ArrayList<Geometry3DPoint> list;
         try {
             if (request.getTrackPoint().size() == 0)
                 new Exception("입력된 트랙정보가 없습니다.");
 
-            //googleService.checkGoogle();    //tcp socket exception 방지, 장시간 사용이 없으면 예외가 발생해서...
+            //tcp socket exception 방지, 개발초기에 간혹 발생했었는데 이제는 이런 문제는 없는듯...
+            //googleService.checkGoogle();
 
             list =  googleService.getElevation(request);
         } catch (Exception e) {
