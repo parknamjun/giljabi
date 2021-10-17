@@ -112,7 +112,7 @@ public class GoogleService {
             while((inputLine = in.readLine()) != null) {
                 stringBuilder.append(inputLine);
             }
-            in.close();
+            if(in != null) in.close();
         }
         return stringBuilder.toString();
     }
