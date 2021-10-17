@@ -70,8 +70,7 @@ public class GoogleService {
                     if (index == trackPoint.size())
                         break;
                     buffer.append(String.format("%s,%s|"
-                            , trackPoint.get(index).getLat()
-                            , trackPoint.get(index).getLng()));
+                            , trackPoint.get(index).getLat(), trackPoint.get(index).getLng()));
                 }
 
                 String jsonElevation = requestElevationService(buffer.substring(0, buffer.length() - 1), googleApikey);
