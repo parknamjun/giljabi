@@ -39,16 +39,11 @@ public class RouteService {
 
     /**
      * openrouteservice를 사용하지만, google direction를 사용하는 것도 고려할 필요 있음
-     * @param request
-     * @return
-     * @throws Exception
      */
     public ArrayList<Geometry3DPoint> getOpenRouteService(RequestRouteData request)
             throws Exception {
         //경로 요청 파라메터 정보를 만들고...
-        Double[] start = new Double[]{request.getStart_lng(), request.getStart_lat()};
-        Double[] target = new Double[]{request.getTarget_lng(), request.getTarget_lat()};
-        Double[][] coordinates = {start, target};	//2개 위치만 사용
+        Double[][] coordinates = {request.getStart(), request.getTarget()};
 
         JSONObject json = new JSONObject();
         json.put("coordinates", coordinates);   //좌표 배열로 입력 가능....
@@ -68,9 +63,7 @@ public class RouteService {
         ArrayList<OSRDirectionV2Data.Routes> routes = direction.getRoutes();
 
         //GeoPositionData를 배열로 구성하면 응답데이터를 크기를 줄일 수 있을수도...
-        ArrayList<Geometry3DPoint> list = GeometryDecoder.decodeGeometry(routes.get(0).getGeometry(), true);
-
-        return list;
+        return GeometryDecoder.decodeGeometry(routes.get(0).getGeometry(), true);
     }
 
     private String requestOpenRouteService(HttpPost httpPost, JSONObject json) throws IOException {
@@ -78,21 +71,18 @@ public class RouteService {
         httpPost.setEntity(postEntity);
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        String result = "";
+        String result;
+        CloseableHttpResponse response = httpClient.execute(httpPost);
         try {
-            CloseableHttpResponse response = httpClient.execute(httpPost);
-            try {
-                if (response.getStatusLine().getStatusCode() != 200)
-                    throw new GiljabiException(response.getStatusLine().getStatusCode(),
-                            ErrorCode.OPENROUTESERVICE_ERROR);
+            if (response.getStatusLine().getStatusCode() != 200)
+                throw new GiljabiException(response.getStatusLine().getStatusCode(),
+                        ErrorCode.OPENROUTESERVICE_ERROR);
 
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                result = handler.handleResponse(response);
-            } finally {
-                response.close();
-            }
+            ResponseHandler<String> handler = new BasicResponseHandler();
+            result = handler.handleResponse(response);
         } finally {
-            httpClient.close();
+            if(response != null) response.close();
+            if(httpClient != null) httpClient.close();
         }
         //log.info(result);
         return result;
