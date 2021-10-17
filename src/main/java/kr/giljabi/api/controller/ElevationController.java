@@ -30,19 +30,18 @@ public class ElevationController {
     @PostMapping("/api/1.0/elevation")
     @ApiOperation(value = "", notes = "google elevation api 이용하여 고도정보를 받아오는 api")
     public Response getElevation(@RequestBody RequestElevationData request) {
-
-        ArrayList<Geometry3DPoint> data = new ArrayList<Geometry3DPoint>();
+        ArrayList<Geometry3DPoint> list = new ArrayList<Geometry3DPoint>();
         try {
             if (request.getTrackPoint().size() == 0)
                 new Exception("입력된 트랙정보가 없습니다.");
 
-            googleService.checkGoogle();
+            //googleService.checkGoogle();    //tcp socket exception 방지, 장시간 사용이 없으면 예외가 발생해서...
 
-            data =  googleService.getElevation(request);
+            list =  googleService.getElevation(request);
         } catch (Exception e) {
             return Response.of(e);
         }
-        return Response.of().addObject(data);
+        return Response.of().addObject(list);
     }
 
 
