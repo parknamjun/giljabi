@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--
+www.eahn.kr :9aab1f963e35566c1586232a4ddbd12d
+www.tourkorea.or.kr:8080 27f606d8edf497ab495f16d1d983047f
+localhost : 8308318b8eb4a034a08dfd306468bf0c
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131114801-1"></script>
+<script type="text/javascript" src="/js/google.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=27f606d8edf497ab495f16d1d983047f"></script>
+<script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/js/jquery.flot.js"></script>
+<script type="text/javascript" src="/js/jquery.flot.crosshair.js"></script>
+<script type="text/javascript" src="/js/json2.js"></script>
+<script type="text/javascript" src="/js/common-min.js"></script>
+<script type="text/javascript" src="/js/routeutil-min.js"></script>
+<script type="text/javascript" src="/js/waypoint-min.js"></script>
+<script type="text/javascript" src="js/tcxshare-min.js"></script>
+<link type="text/css" href="/js/jquery-ui.css" rel="stylesheet" />
+<link type="text/css" href="/js/tourkorea.css" rel="stylesheet" />
+</head>
+
+<body>
+<div><img src="/images/tourkorea.ico" width="76">
+<ins class="kakao_ad_area" style="display:none;"
+ data-ad-unit    = "DAN-1jia0ouhe7x41"
+ data-ad-width   = "728"
+ data-ad-height  = "90"></ins>
+<script type="text/javascript" src="//t1.daumcdn.net/adfit/static/ad.min.js" async></script>
+</div>
+
+<div w3-include-html="/menu.html"></div>
+Track Viewer
+<table>
+	<tr>
+		<td>
+			<div class="map_wrap">
+				<div id="map" style="width:940px;height:500px;"></div>
+				<p class="modes">
+				    <input class="mapType" type="checkbox" id="chkTerrain"/><label for="chkTerrain">지형정보 보기</label> 
+			    	<input class="mapType" type="checkbox" id="chkBicycle"/><label for="chkBicycle">자전거도로 정보 보기</label> 
+				</p>
+			</div>
+		</td>
+		<td>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<td>
+			<div id="page-wrapper">
+				<div style="width:800px;">
+				경로명 : <input type="text" id="gpxname" size="40">&nbsp;&nbsp;&nbsp;
+				경사도: <input type="text" id="slope" size="10">
+				</div>
+				<div class="elevationContainer">
+					<div id="elevationImage" class="elevation"></div>
+				</div>
+			</div>
+		</td>
+		<td>
+	<input type="button" id="filedownload" class="button" value="tcx Save to PC" /><br>
+	저장 후 <a href='http://www.tourkorea.or.kr/gpx2tcx.html' target='top'>웨이포인트</a>에서<br>편집할 수 있습니다.
+	</tr>
+</table>
+<script type="text/javascript">
+    includeHTML();
+</script>
+
+</body>
+</html>

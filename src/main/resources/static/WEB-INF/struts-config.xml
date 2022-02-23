@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+        "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+
+    <form-beans>
+        <form-bean name="sample1010" type="org.cdvan.action.test.form.Sample1010Form"></form-bean>
+        <form-bean name="gpx2tcx" type="kr.eahn.bike.action.form.Gpx2TcxForm"></form-bean>
+        <form-bean name="elevation" type="kr.eahn.bike.action.form.GetElevationForm"></form-bean>
+        <form-bean name="tcxshare" type="kr.eahn.bike.action.form.TcxShareForm"></form-bean>
+        <form-bean name="poiupload" type="kr.eahn.bike.action.form.PoiUploadForm"></form-bean>
+        <form-bean name="poiview" type="kr.eahn.bike.action.form.PoiViewForm"></form-bean>
+        <form-bean name="adsview" type="kr.eahn.bike.action.form.AdBlockCheckerForm"></form-bean>
+        <form-bean name="router" type="kr.eahn.bike.action.form.GetRouterForm"></form-bean>
+
+        <form-bean name="board1010" type="kr.giljabi.board.form.BoardForm1010"></form-bean>
+        <form-bean name="board1020" type="kr.giljabi.board.form.BoardForm1020"></form-bean>
+
+        <form-bean name="login" type="kr.giljabi.action.form.LoginForm"></form-bean>
+    </form-beans>
+
+    <global-exceptions/>
+
+    <global-forwards/>
+
+    <action-mappings>
+        <action path="/sample1010" type="org.cdvan.action.test.Sample1010Action" scope="request"></action>
+        <action path="/gpx2tcx" name="gpx2tcx" type="kr.eahn.bike.action.Gpx2TcxAction" scope="request"></action>
+        <action path="/elevation" name="elevation" type="kr.eahn.bike.action.GetElevationAction" scope="request"></action>
+        <action path="/tcxshare" name="tcxshare" type="kr.eahn.bike.action.TcxShareAction" scope="request"></action>
+        <action path="/poiupload" name="poiupload" type="kr.eahn.bike.action.PoiUploadAction" scope="request"></action>
+        <action path="/poiview" name="poiview" type="kr.eahn.bike.action.PoiViewAction" scope="request"></action>
+        <action path="/adsview" name="adsview" type="kr.eahn.bike.action.AdBlockCheckerAction" scope="request"></action>
+        <action path="/router" name="router" type="kr.eahn.bike.action.GetRouterAction" scope="request"></action>
+
+        <action path="/board1010" name="board1010" type="kr.giljabi.board.action.BoardAction1010" scope="request"></action>
+        <action path="/board1020" name="board1020" type="kr.giljabi.board.action.BoardAction1020" scope="request"></action>
+
+        <action path="/login" name="login" type="kr.giljabi.action.LoginAction" scope="request"></action>
+    </action-mappings>
+
+    <message-resources parameter="MessageResources"/>
+
+</struts-config>

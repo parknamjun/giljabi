@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="/js/jquery-plugin/jquery.form.min.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="js/fileupload.js"></script>
+<link type="text/css" href="/js/tourkorea.css" rel="stylesheet" />
+
+<style>
+
+body{
+  font-family: dotum, gulim, arial, helvetica, sans-serif;
+  font-size : 12px;
+  line-height:1.8em; 
+}
+
+form { display: block; background: #eee; border-radius: 10px; padding: 15px }
+
+</style>
+</head>
+<body>
+<h3>POI 등록</h3>
+<form action="" method="post" id="poifileform" enctype="multipart/form-data">
+   <!-- input type="file" name="myfile[]" multiple> 여러개...-->
+    POI 위치사진 : ​<input type="file" name="myfile"><br>
+    POI 명칭 : <input type="text" id="poiname" size="30" maxlength="50"><br>
+    POI 전화 : <input type="text" id="poiphoneno" maxlength="16"><br>
+	POI 종류 : <select id="poitype">
+		<option></option>
+		<option value="01">인증센터</option>
+		<option value="02">편의점/매점</option>
+		<option value="03">먹거리</option>
+		<option value="04">자전거수리/펌프</option>
+		<option value="05">잠자리</option>
+		<option value="06">카페</option>
+		<option value="07">화장실</option>
+	</select>
+	<br>
+	POI설명<br>
+	<textarea id="poitext" rows="5" cols="40"></textarea>
+	<br>
+    <input type="button" id='uploadbutton' value="Upload File to Server">
+    <br>
+    사진은 gps정보가 필요합니다.<br>
+    사용목적은 정확한 POI 위치를 확인하기 위함입니다.
+</form>
+</body>
+</html>

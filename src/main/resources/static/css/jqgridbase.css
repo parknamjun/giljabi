@@ -1,0 +1,81 @@
+p, tr, td, ul, li, select, input
+	{color: #000000; font-family: AppleGotihc, "Malgun Gothic", dotum; font-size: 12px}
+html, body {
+	width: 95%;
+	height: 100%;
+	border: 0;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	background-color: #FFFFFF;
+	font-family:AppleGotihc, "Malgun Gothic", dotum;
+	font-size: 12px;
+	border-style:Solid;
+	border-collapse:collapse;
+	rules:all;
+}
+
+.title {
+	font-family:AppleGotihc, "Malgun Gothic", dotum;
+	font-size: 14px;
+}
+
+.pointer {
+	cursor:pointer;
+}
+
+.pointer_ellipsis {
+	cursor:pointer;
+	text-overflow:ellipsis; 
+}
+
+.table_fix {
+	border:1px;
+	border-color:#627C9E;
+	border-style:Solid;
+	border-collapse:collapse;
+	rules:all;
+}
+
+/*테이블 공통*/
+.tableView  {
+	border-collapse:collapse;
+	border-style:Solid;
+	border: 1px solid #000;
+	rules:all;
+	table-layout:fixed;
+	padding-left: 0px;
+	vertical-align: middle;
+}
+
+.tableView th {
+	border: 1px solid #000;
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	background-color: #EDEDFA;
+}
+.tableView td{
+	border: 1px solid #000;
+	font-size: 12px;
+}
+
+/*
+jqgrid 헤더에서 <br>을 사용하기 위한 정보
+필요한 경우에 해당 jsp에서 정의해서 사용해야 함, 전체 적용하면 안됨
+*/
+/*
+th.ui-th-column div {
+    white-space: normal !important;
+    height: auto !important;
+    padding: 2px;
+}
+*/
+div.blocking {
+	font-weight: bold; 
+	font-family: AppleGotihc, "Malgun Gothic", dotum; 
+	font-size: 12px; 
+	margin: 0px; 
+	padding: 8px;
+	color:#000;
+	background-color:#fff;
+}

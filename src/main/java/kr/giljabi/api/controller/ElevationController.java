@@ -1,7 +1,6 @@
 package kr.giljabi.api.controller;
 
 import io.swagger.annotations.ApiOperation;
-import kr.giljabi.api.exception.ErrorCode;
 import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.geo.Geometry3DPoint;
 import kr.giljabi.api.geo.GoogleService;
@@ -43,7 +42,7 @@ public class ElevationController {
 
             list =  googleService.getElevation(request);
         } catch (Exception e) {
-            return Response.of(new GiljabiException(ErrorCode.ELEVATION_ERROR));
+            return Response.of(new GiljabiException(9001, e.getMessage()));
         }
         return Response.of().addObject(list);
     }
