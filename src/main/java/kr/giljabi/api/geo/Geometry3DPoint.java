@@ -23,4 +23,18 @@ public class Geometry3DPoint {
 		this.ele = ele;
 	}
 
+	public String getTcxTrackinfo(String appentTime, double distance) {
+		StringBuffer buffer = new StringBuffer(256);
+		buffer.append("			<Trackpoint>\n");
+		buffer.append("				<Time>" + appentTime + "</Time>\n");
+		buffer.append("				<Position>\n");
+		buffer.append("					<LatitudeDegrees>" + this.lat + "</LatitudeDegrees>\n");
+		buffer.append("					<LongitudeDegrees>" + this.lng + "</LongitudeDegrees>\n");
+		buffer.append("				</Position>\n");
+		buffer.append("				<AltitudeMeters>" + this.ele + "</AltitudeMeters>\n");
+		buffer.append("				<DistanceMeters>" + String.format("%.2f", distance) + "</DistanceMeters>\n");	//누적거리
+		buffer.append("			</Trackpoint>\n");
+		return buffer.toString();
+	}
+
 }

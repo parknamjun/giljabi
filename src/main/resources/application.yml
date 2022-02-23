@@ -20,13 +20,13 @@ h2:
 
 giljabi:
   openrouteservice:
-    apikey: ####
+    apikey: #### Here, openrouteservice api key
     directionUrl: https://api.openrouteservice.org/v2/directions/%s/json
   google:
     elevation:
   #google elevation get api는 요청된 좌표 적절히 잘라서 8192를 넘지 않아야 한다. 400이 적당
       googleGetCount: 400
-      apikey: ####
+      apikey: #### Here, google elevation api key
       elevationUrl: https://maps.googleapis.com/maps/api/elevation/json
 server:
-  port: 8090
+  port: 8080

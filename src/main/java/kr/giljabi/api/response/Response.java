@@ -1,7 +1,5 @@
 package kr.giljabi.api.response;
 
-import kr.giljabi.api.exception.ErrorCode;
-import kr.giljabi.api.exception.GiljabiException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,17 +8,12 @@ public class Response {
     private static final short STATUS_SUCCESS = 200;
     private static final short STATUS_FAILURE = -1;
 
-    private final short status;
-
+    private short status;
     private String message;
     private Object data;
 
-    private Response(short status) {
+    public Response(short status, String message) {
         this.status = status;
-    }
-
-    private Response(short status, String message) {
-        this(status);
         this.message = message;
     }
 

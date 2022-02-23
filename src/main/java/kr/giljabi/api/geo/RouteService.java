@@ -2,8 +2,7 @@ package kr.giljabi.api.geo;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import kr.giljabi.api.request.RequestRouteData;
-import kr.giljabi.api.exception.ErrorCode;
+import kr.giljabi.api.request.RouteData;
 import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.utils.GeometryDecoder;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class RouteService {
     /**
      * openrouteservice를 사용하지만, google direction를 사용하는 것도 고려할 필요 있음
      */
-    public ArrayList<Geometry3DPoint> getOpenRouteService(RequestRouteData request)
+    public ArrayList<Geometry3DPoint> getOpenRouteService(RouteData request)
             throws Exception {
         //경로 요청 파라메터 정보를 만들고...
         Double[][] coordinates = {request.getStart(), request.getTarget()};
@@ -66,7 +65,7 @@ public class RouteService {
         return GeometryDecoder.decodeGeometry(routes.get(0).getGeometry(), true);
     }
 
-    private String requestOpenRouteService(HttpPost httpPost, JSONObject json) throws IOException {
+    private String requestOpenRouteService(HttpPost httpPost, JSONObject json) throws GiljabiException, IOException {
         StringEntity postEntity = new StringEntity(json.toString());
         httpPost.setEntity(postEntity);
 
@@ -76,7 +75,7 @@ public class RouteService {
         try {
             if (response.getStatusLine().getStatusCode() != 200)
                 throw new GiljabiException(response.getStatusLine().getStatusCode(),
-                        ErrorCode.OPENROUTESERVICE_ERROR);
+                        "Openrouteservice 응답 오류입니다.");
 
             ResponseHandler<String> handler = new BasicResponseHandler();
             result = handler.handleResponse(response);
@@ -84,7 +83,7 @@ public class RouteService {
             if(response != null) response.close();
             if(httpClient != null) httpClient.close();
         }
-        //log.info(result);
+        log.info(result);
         return result;
     }
 
