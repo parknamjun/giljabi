@@ -174,7 +174,7 @@ $(document).ready(function() {
 		if(_fileExt == 'gpx') {
 			loadGpx(readXmlfile);
 		} else if(_fileExt == 'tcx') {
-			loadTcx(readXmlfile);
+			//loadTcx(readXmlfile); gpx 포맷을 끝내고 진행...
 		}
 
 		//시작과 끝 표시
@@ -286,10 +286,8 @@ $(document).ready(function() {
 		let latestPosition = null;
 		let cursorMarker = new kakao.maps.Marker();
 
-		let lastDistance = 0;					//직전이동거리
-		let totalDistance = Number(0);	//누적이동거리
+		let lastDistance = 0;					//이동거리
 		let flag = true;						//다음값을 사용할것인지 결정
-		let spentTime = 0;
 		let minAlti = 0, maxAlti = 0, curAlti = 0;	//높이정보
 		let currentLat, currentLng, nextLat, nextLng;
 		
@@ -300,7 +298,6 @@ $(document).ready(function() {
 			if(flag) { //다음값을 비교하기 위한 플래그
 				minAlti = curAlti;
 				maxAlti = curAlti;
-
 				currentLat = pos.lat;
 				currentLng = pos.lng;
 				nextLat = pos.lat;
@@ -313,14 +310,10 @@ $(document).ready(function() {
 			if(curAlti >= maxAlti) maxAlti = curAlti; //전체 경로에서 최대높이
 			if(curAlti <= minAlti) minAlti = curAlti; //전체 경로에서 최저높이
 
-			lastDistance = getDistance(new Point3D(currentLat, currentLng),
-				new Point3D(nextLat, nextLng));
-			totalDistance += Number(lastDistance);
-			
-			//spentTime = lastDistance / 3.6;
-			
+			lastDistance += getDistance(new Point3D(currentLat, currentLng), new Point3D(nextLat, nextLng));
+
 			//누적거리와 고도정보
-			_eleArray.push([totalDistance, Number(pos.ele)]);
+			_eleArray.push([lastDistance, Number(pos.ele)]);
 			if(flag === false) {
 				currentLat = nextLat;
 				currentLng = nextLng;
@@ -387,7 +380,7 @@ $(document).ready(function() {
 				updateLegendTimeout = setTimeout(updateLegend, 50);
 			}
 			
-			if (item) {
+			if(item) {
 				let x = item.datapoint[0].toFixed(1),
 					y = item.datapoint[1].toFixed(0);
 
