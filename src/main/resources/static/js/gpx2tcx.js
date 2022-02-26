@@ -279,8 +279,7 @@ $(document).ready(function() {
 		});
 	}
 
-
-	var plot;
+	//var plot;
 	function drawPlot() {
 		$('#elevationImage').empty();
 		let updateLegendTimeout = null;
@@ -290,7 +289,6 @@ $(document).ready(function() {
 		let lastDistance = 0;					//직전이동거리
 		let totalDistance = Number(0);	//누적이동거리
 		let flag = true;						//다음값을 사용할것인지 결정
-		let currentTime = new Date(), nextTime = new Date();
 		let spentTime = 0;
 		let minAlti = 0, maxAlti = 0, curAlti = 0;	//높이정보
 		let currentLat, currentLng, nextLat, nextLng;
@@ -300,8 +298,6 @@ $(document).ready(function() {
 			curAlti = Number(pos.ele);	//고도
 
 			if(flag) { //다음값을 비교하기 위한 플래그
-				currentTime = new Date('2018-01-01T00:00:00Z');
-				nextTime = new Date('2018-01-01T00:00:00Z');
 				minAlti = curAlti;
 				maxAlti = curAlti;
 
@@ -310,7 +306,6 @@ $(document).ready(function() {
 				nextLat = pos.lat;
 				nextLng = pos.lng;
 			} else {
-				nextTime = appendTime(spentTime);
 				nextLat = pos.lat;
 				nextLng = pos.lng;
 			}
@@ -318,15 +313,15 @@ $(document).ready(function() {
 			if(curAlti >= maxAlti) maxAlti = curAlti; //전체 경로에서 최대높이
 			if(curAlti <= minAlti) minAlti = curAlti; //전체 경로에서 최저높이
 
-			lastDistance = getDistanceFromLatLon(currentLat, currentLng, nextLat, nextLng);
+			lastDistance = getDistance(new Point3D(currentLat, currentLng),
+				new Point3D(nextLat, nextLng));
 			totalDistance += Number(lastDistance);
 			
-			spentTime = lastDistance / 3.6;
+			//spentTime = lastDistance / 3.6;
 			
 			//누적거리와 고도정보
-			_eleArray.push([totalDistance/1000, Number(pos.ele)]);
+			_eleArray.push([totalDistance, Number(pos.ele)]);
 			if(flag === false) {
-				currentTime = nextTime;
 				currentLat = nextLat;
 				currentLng = nextLng;
 			}
@@ -339,13 +334,13 @@ $(document).ready(function() {
 		//http://www.flotcharts.org/flot/examples/annotating/index.html
 		//http://www.flotcharts.org/flot/examples/basic-options/index.html
 		//plot = $.plot("#elevationImage", [{ data: _eleArray}, { data: horiArray}]
-		plot = $.plot("#elevationImage", [{ data: _eleArray}]
+		let plot = $.plot("#elevationImage", [{ data: _eleArray}]
 			, {
 			series: { lines: { show: true }},
 			crosshair: { mode: "x"},
 			grid: {	clickable:true, hoverable: true, show:true, aboveData : true
 				, markings: _markings/*getWaypointPositionInfo()*/},
-			yaxis: { min: minAlti * 0.7, max: maxAlti * 1.2, auto:'none'} //위/아래에 약간의 여유
+			yaxis: { min: minAlti * 0.7, max: maxAlti * 1.2, auto:'none'} //위/아래 여백
 		});
 		
 		function updateLegend() {
@@ -363,23 +358,15 @@ $(document).ready(function() {
 				//console.info(seriesIndex);
 				//고도차트에서 마무스를 따라 움직이는 지도상의 마커
 				cursorMarker.setMap(null);	//마커를 삭제하고
-				cursorMarker = new kakao.maps.Marker({
-					position: new kakao.maps.LatLng(_gpxTrkseqArray[seriesIndex].lat, _gpxTrkseqArray[seriesIndex].lng)
-				});
-				//console.info(cursorMarker.getPosition());
-				cursorMarker.setMap(_map);
-				
-				//경사도를 구해보자...적당한 계산 방식을 어떻게 할지????,
-				let distance = getDistanceFromLatLon(
-						_gpxTrkseqArray[seriesIndex].lat, _gpxTrkseqArray[seriesIndex].lng
-					, _gpxTrkseqArray[seriesIndex - 1].lat, _gpxTrkseqArray[seriesIndex - 1].lng);
-				//_gpxTrkseqArray[seriesIndex - 1].getAttribute('lat'), _gpxTrkseqArray[seriesIndex - 1].getAttribute('lon'));
-				//var hcurAlti = Number($_gpxTrkseqArray[seriesIndex].find('ele').text());	//고도
-				let delTaHeight = Number(_gpxTrkseqArray[seriesIndex].ele) - Number(_gpxTrkseqArray[seriesIndex - 1].ele);
+				try {
+					//마지막 포인트는 예외로 처리한다.
+					cursorMarker = new kakao.maps.Marker({
+						position: new kakao.maps.LatLng(_gpxTrkseqArray[seriesIndex].lat, _gpxTrkseqArray[seriesIndex].lng)
+					});
+				} catch (e) {
 
-				//- Number(_gpxTrkseqArray[seriesIndex - 1].find('ele').text());
-				let slope = delTaHeight * 100 / distance;
-				$('#slope').val(slope.toFixed(2) + '%');
+				}
+				cursorMarker.setMap(_map);
 			}
 		}
 		
@@ -465,7 +452,6 @@ $(document).ready(function() {
 		*/
 		let endPosition = _gpxTrkseqArray[_gpxTrkseqArray.length - 1];
 
-		//var newStartPosition = new daum.maps.LatLng();
 		let nearDistance = 100000;	//최단거리
 		let currDistance = 0;	//현재거리
 		let startIndex = 0;
@@ -478,8 +464,9 @@ $(document).ready(function() {
 			//직전 경로의 마지막 위치와 현재 업로드된 경로에서 가장 가까운 위치를 찾아서 시작 위치로 한다. 이게 필요할까????
 			let trkSeqArray = _xmlData.find('trkpt');
 			for(let i = 0; i < trkSeqArray.length; i++) {
-				currDistance = getDistanceFromLatLon(endPosition.lat, endPosition.lng
-						, $(trkSeqArray[i]).attr('lat'), $(trkSeqArray[i]).attr('lon'));
+				currDistance = getDistance(new Point3D(endPosition.lat, endPosition.lng),
+					new Point3D($(trkSeqArray[i]).attr('lat'), $(trkSeqArray[i]).attr('lon')));
+
 				console.info(
 					endPosition,
 					$(trkSeqArray[i]).attr('lat'), $(trkSeqArray[i]).attr('lon'),
@@ -519,7 +506,7 @@ $(document).ready(function() {
 				//gpx파일 로딩시 waypoint가 있으면 그려준다.
 				addWaypoint(item);
 			});
-		} else if(_fileExt == 'tcx') {
+		} else if(_fileExt == 'tcx') {	//tcx를 빼고 할까????
 			var trkSeqArray = _xmlData.find('Trackpoint');
 			for(var i = 0; i < trkSeqArray.length; i++) {
 				var temp = $(trkSeqArray[i]);
@@ -542,8 +529,7 @@ $(document).ready(function() {
 				polyline.push(new daum.maps.LatLng($(this).find('LatitudeDegrees').text()
 						, $(this).find('LongitudeDegrees').text()));
 			});
-			
-	
+
 			//waypoint가 있는경우 
 			$.each(_xmlData.find('CoursePoint'), function() {		
 				var wptitem = new Object();
@@ -567,7 +553,6 @@ $(document).ready(function() {
 		drawPolyline(polyline);
 
 		drawPlot();
-		
 	}	
 	
 	function drawPolyline(polyline) {
@@ -592,19 +577,14 @@ $(document).ready(function() {
 			alert('경로가 없습니다.');
 			return;
 		}
+
+		//결로, 웨이포인트 재계산 해야 함
 		_gpxTrkseqArray = _gpxTrkseqArray.reverse();
 		_wayPointArray = _wayPointArray.reverse();
 		
 		////getWaypointInfo();
 	});
 
-	$('#start').click(function(){
-		$.each(_gpxTrkseqArray, function() {
-			var center = new daum.maps.LatLng($(this)[0].lat, $(this)[0].lon);
-			console.log(center);
-			_map.setCenter(center);
-		});
-	});
 
 	/**
 	 * 시작위치에서 목표위치까지의 경로를 찾는다..
@@ -654,7 +634,6 @@ $(document).ready(function() {
 			}
 		});
 	}
-
 
 	//경로탐색의 마크를 사용
 	function makeMarkerRoute(latlon, image) {
@@ -832,14 +811,47 @@ $(document).ready(function() {
 			console.info(nearPoint.toString());
 		}
 		console.info(waypointSortList.toString());
+		//웨이포인트를 index 기준으로 정렬한다.
 		let waypointSortByDistance = waypointSortList.sort(function(a, b){
 			return a.index - b.index;
 		});
 
 		///정렬된 각각의 웨이포인트까지 거리와 소요시간을 계산해서 추가해야 한다.
+		let fromPoint = _gpxTrkseqArray[0];	//시작 위치
+		let distance = 0;
+		let wayIndex = 0;
+		let v = Number($('#averageV').val());
+		let currentTime = new Date();
+		currentTime.setDate(1);
+		currentTime.setHours(0);
+		currentTime.setMinutes(0);
+		currentTime.setSeconds(0);
 
+		for(let i = 0; i < waypointSortByDistance.length; i++) {
+			for(; wayIndex <= waypointSortByDistance[i].index; wayIndex++) {
+				distance += getDistance(fromPoint, _gpxTrkseqArray[wayIndex]);
+				//console.info('i:' + i
+				//	+ ', wayIndex:'+ wayIndex
+				//	+ ', distance:' + distance);
+				fromPoint = _gpxTrkseqArray[wayIndex];
+			}
+			waypointSortByDistance[i].distance = Number(distance.toFixed(1));
+			let second = distance * 1000 / v;//거리(M), 경과시간
+			let time = '';
 
-		console.info(waypointSortByDistance);
+			if(second >= 3600 * 24) {	//24시간이 초과되면 닐짜를 추가해야 힌다..
+				time += currentTime.getDate() + 'D';
+			} else {
+				currentTime.setSeconds(currentTime.getSeconds() + second);
+				time += currentTime.getHours() < 10 ? '0' + currentTime.getHours() : currentTime.getHours();
+				time += ':';
+				time += currentTime.getMinutes() < 10 ? '0' + currentTime.getMinutes() : currentTime.getMinutes();
+
+				waypointSortByDistance[i].time = time;
+			}
+			console.info('Time:' + currentTime);
+		}
+		console.info('waypointSortByDistance:' + waypointSortByDistance.toString());
 
 		//우측에 웨이포인트를 출력하고, 엑셀로 저장할때도 사용한다.
 		let waypointinfo = '';
@@ -867,12 +879,11 @@ $(document).ready(function() {
 		$('#waypointinfoViewTable').html(waypointinfo);
 
 		console.info(waypointinfo);
-
+		drawPlot();
+/*
 		//var upElev = data.distance + ', ' + data.upElevation + data.downElevation;
 		var upElev = 'D:' + data.distance + ', ' + data.upElevation + 'm';
 		$("label[for = 'upElevation']").text(upElev);
-
-
 
 		jsonBody.trackPoint = _gpxTrkseqArray;
 		//jsonBody.wpt = JSON.stringify(getWaypointList());
@@ -900,6 +911,7 @@ $(document).ready(function() {
 				$('#blockingAds').hide();
 			}
 		});
+*/
 	}
 
 });
