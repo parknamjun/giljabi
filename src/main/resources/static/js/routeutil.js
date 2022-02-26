@@ -1,39 +1,34 @@
-/**
- * Degree to radian
- * @param deg
- * @returns {number}
- */
+
     function deg2rad(deg) {
         return deg * (Math.PI/180);
     }
-
-/**
-     * 위경도 좌표를 이용하여 거리를 Meter 단위로 변환
-     * @param lat1
-     * @param lng1
-     * @param lat2
-     * @param lng2
-     * @returns
-     */
+/*
     function getDistanceFromLatLon(lat1, lng1, lat2, lng2) {
-        let R = 6371; 					// Radius of the earth in km
+        let R = 6371; 	// Radius of the earth in km
         let dLat = deg2rad(lat2-lat1);
         let dLon = deg2rad(lng2-lng1);
-        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) *
+            Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon/2) *
+            Math.sin(dLon/2);
         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         let d = R * c * 1000; 			// Distance in meter
         return Number(d.toFixed(3));
     }
-
+*/
+    //return km
     function getDistance(fromPoint, toPoint) {
-        let R = 6371; 					// Radius of the earth in km
+        let R = 6371;
         let dLat = deg2rad(toPoint.lat - fromPoint.lat);
         let dLon = deg2rad(toPoint.lng - fromPoint.lng);
-        let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(deg2rad(fromPoint.lat)) * Math.cos(deg2rad(toPoint.lat)) * Math.sin(dLon/2) * Math.sin(dLon/2);
-        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        let d = R * c * 1000; 			// Distance in meter
-        return Number(d.toFixed(3));
+        let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(fromPoint.lat)) *
+            Math.cos(deg2rad(toPoint.lat)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
     }
 
     /**
