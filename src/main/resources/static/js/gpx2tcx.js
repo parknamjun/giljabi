@@ -413,7 +413,7 @@ $(document).ready(function() {
 */
 	$('#reset').click(function(){
 		if(confirm('초기화 할까요?'))
-			location.href='/gpx2tcx.html';
+			location.href='/giljabi.html';
 	});
 	
 	$('#waypointinfo').click(function(){

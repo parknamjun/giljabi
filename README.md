@@ -1,40 +1,31 @@
-# giljabi
 
 # [http://giljabi.kr](http://giljabi.kr/)
 
-
 ## openrouteservice, google elevation api
-경로탐색을 위한 api, 구글 고도정보를 가져오는 api 사용하는 방법을 공유합니다
-나중에는 경로탐색도 구글을 사용하게 변경할 예정입니다.
+* 경로탐색을 위한 api, 구글 고도정보를 가져오는 api 사용하는 방법을 공유합니다
+  나중에는 경로탐색도 구글을 사용하게 변경할 예정입니다.
 
-# [giljabi.tistory.com](https://giljabi.tistory.com/) 소스 공유
-# [gpxtcx.tistory.com](https://gpxtcx.tistory.com/) 다양한 경로 공유
+
+## 소스 공유
+### Tistory : [giljabi.tistory.com](https://giljabi.tistory.com/) 소스 공유
+### github : [https://github.com/parknamjun/giljabi](https://github.com/parknamjun/giljabi)
+* 사용법 http://localhost:8080/giljabi.html
+
+## [gpxtcx.tistory.com](https://gpxtcx.tistory.com/) 다양한 경로 공유
 
 * [openrouteservice.org](https://openrouteservice.org/)
 * [openrouteservice-docs](https://github.com/GIScience/openrouteservice-docs)
 * [google elevation api](https://developers.google.com/maps/documentation/elevation/start)
 
-테스트 방법
+API 테스트 방법
 1. 경로탐색
-
 .http 파일의 내용을 참고
-profile : cycling-road, cycling-mountain, driving-car, foot-walking외 다양한 경로를 찾을 수 있습니다. 
-GET http://localhost:8090/api/1.0/route
-
+GET http://localhost:8080/api/1.0/route?start=127.01117,37.5555&target=126.99448,37.54565&direction=cycling-road
 Content-Type: application/json
+   
 
-{
-"start_lat": 37.58052832938857,
-"start_lng": 127.021374295649,
-"target_lat": 37.58340695922779,
-"target_lng": 127.0391273352651,
-"profile": "cycling-road"
-}
-
-2. 높이정보
-
+2. 높이정보 
 POST http://localhost:8090/api/1.0/elevation
-
 Content-Type: application/json
 
 {
