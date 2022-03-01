@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Open Route Service를 이용한 경로탐색
  * @author eahn.park@gmail.com
- * 2019-11-03 Initialize
+ * 2018.10.26 gpx to tcx Project start....
  * 2021.01.10 openrouteapi license 변경
  * 2021.09.17 Spring boot 2.5.4
  */
@@ -38,7 +38,8 @@ public class RouterController {
         ArrayList<Geometry3DPoint> list = new ArrayList<>();
         try {
             RouteData routeData = new RouteData(start, target, direction);
-
+/*
+openroute service는 일 호출건수 제약이 있어 임의의 데이터를 응답데이터로 만들어 사용한다.
 list.add(new Geometry3DPoint(127.01117, 37.5555, 42));
 list.add(new Geometry3DPoint(127.01105, 37.55554, 42));
 list.add(new Geometry3DPoint(127.01085, 37.55519, 42));
@@ -139,10 +140,10 @@ list.add(new Geometry3DPoint(126.99582, 37.54523, 169));
 list.add(new Geometry3DPoint(126.99566, 37.54528, 169));
 list.add(new Geometry3DPoint(126.99522, 37.54537, 171));
 list.add(new Geometry3DPoint(126.99448, 37.54565, 175));
-
-            //list = geometryService.getOpenRouteService(routeData);
-        //} catch(GiljabiException e) {
-        //    return Response.of(e);
+*/
+            list = geometryService.getOpenRouteService(routeData);
+        } catch(GiljabiException e) {
+            return Response.of(e);
         } catch(Exception e) {
             return Response.of(new GiljabiException(9001, e.getMessage()));
         }

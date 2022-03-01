@@ -19,8 +19,9 @@ import java.util.ArrayList;
 /**
  * gpx, tcx xml create...
  * @author eahn.park@gmail.com
- * date   2018-11-24
  * 2021.09.17 Spring boot 2.5.4
+ *
+ * 지금은 사용하지 않음
  */
 
 @Slf4j

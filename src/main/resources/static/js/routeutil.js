@@ -111,7 +111,7 @@
     }
 
     /**
-     *
+     * 입력값이 문자일수도 있어 Number로 변환
      * @param lat
      * @param lon
      * @param ele
@@ -119,9 +119,9 @@
      * getGpxTrk
      */
     function Point3D(lat, lng, ele) {
-        this.lat = lat;
-        this.lng = lng;
-        this.ele = ele;
+        this.lat = Number(lat);
+        this.lng = Number(lng);
+        this.ele = Number(ele);
     }
     Point3D.prototype.toString = function toString() {
         return JSON.stringify($(this)[0], null, 2);
@@ -134,14 +134,143 @@
             return 'generic';
     }
 
-    function WayPointInfo(index, distance, time, point, symbol, symbolName) {
+    function WayPointInfo(index, distance, time, point, symbol, symbolName, laptime) {
         this.index = index;
         this.distance = distance;
         this.time = time;
         this.point = point;
         this.symbol = symbol;
         this.symbolName = symbolName;
+        this.laptime = laptime;
     }
     WayPointInfo.prototype.toString = function toString() {
         return JSON.stringify($(this)[0], null, 2);
+    }
+
+
+    /**
+     *
+     * @param waypointSortByDistance
+     * @returns {string}
+     */
+    function getWaypointToHtml(waypointSortByDistance) {
+        //우측에 웨이포인트를 출력하고, 엑셀로 저장할때도 사용한다.
+        let waypointinfo = '';
+        waypointinfo += '<table border=\"0\" style=\"border-collapse: collapse;\">';
+        for (let i = 0; i < waypointSortByDistance.length; i++) {
+            let sym = waypointSortByDistance[i].symbol.toLowerCase();
+            waypointinfo += '<tr onclick=\"javascript:goCenter(' +
+                waypointSortByDistance[i].point.lat + ',' + waypointSortByDistance[i].point.lng +
+                ', 5);\">';
+            waypointinfo += '<td ';
+            if (sym == 'food') {
+                waypointinfo += 'bgcolor=\"#FF0000\">';
+            } else if (sym == 'water') {
+                waypointinfo += 'bgcolor=\"#00FF00\">';
+            } else
+                waypointinfo += '>';
+            waypointinfo += '<img src=\"/images/' + sym + '.png\" width=\"15\" height=\"18\"></td>';
+            waypointinfo += '<td width=\'110px\' class=\'timeClass\'>' + waypointSortByDistance[i].symbolName + '</td>';
+            waypointinfo += '<td width=\'20px\' align=\'right\' class=\'timeClass\'>' + waypointSortByDistance[i].distance + '</td>';
+            waypointinfo += '<td width=\'70px\' align=\'right\' class=\'timeClass\'>' + waypointSortByDistance[i].laptime + '</td>';
+            waypointinfo += '</tr>';
+        }
+        waypointinfo += '</table>';
+        return waypointinfo;
+    }
+
+    /**
+     * excel 저장을 위한 데이터
+     * @param waypointSortByDistance
+     * @returns {[]}
+     */
+    function getWaypointToExcel(waypointSortByDistance) {
+        let waypointinfo = [];
+        waypointinfo.push(['번호', '기호','웨이포인트','거리(km)','통과시간'])
+        for (let i = 0; i < waypointSortByDistance.length; i++) {
+            waypointinfo.push([
+                (i + 1),
+                waypointSortByDistance[i].symbol,
+                waypointSortByDistance[i].symbolName,
+                waypointSortByDistance[i].distance,
+                waypointSortByDistance[i].time]);
+        }
+        return waypointinfo;
+    }
+
+    /**
+     * 웨이포인트의 정확한 위치를 경로상에서 찾는디ㅏ
+     * @param wpt
+     * @returns {this}
+     */
+    function makeWaypointInfo(wpt) {
+        let nearPoint;
+        let waypointSortList = [];
+
+        //경로의 시작점을 웨이포인트의 시작위치로 추가
+        nearPoint = new WayPointInfo(0, 0, '0',
+            _gpxTrkseqArray[0], 'start', 'START', '');
+        waypointSortList.push(nearPoint);
+
+        for (let indexWpt = 0; indexWpt < wpt.length; indexWpt++) {
+            let compareDistance = 0;
+            let trackIndex = 0;
+            let fromPoint = new Point3D(wpt[indexWpt].lat, wpt[indexWpt].lng, 0);
+            //경로상에 있는 포인트들과 각각의 웨이포인트의 거리를 비교하여 가장 가까운 거리에
+            //있는 포인트를 웨이포인트의 좌표로 설정하여 웨이포인트의 순서를 정렬한다.
+            for (let index = 0; index < _gpxTrkseqArray.length; index++) {
+                let toPoint = _gpxTrkseqArray[index];
+                let trackDistance = getDistance(fromPoint, toPoint);
+                if (index == 0)
+                    compareDistance = trackDistance;
+
+                //웨이포인트에서 가장 가까이 위치한 포인트
+                if (trackDistance <= compareDistance) {
+                    compareDistance = trackDistance;
+                    trackIndex = index;
+                    //console.info('distance:' + trackDistance);
+                }
+            }
+            nearPoint = new WayPointInfo(trackIndex, 0, '0',
+                _gpxTrkseqArray[trackIndex], wpt[indexWpt].sym, wpt[indexWpt].name);
+            waypointSortList.push(nearPoint);
+            console.info(nearPoint.toString());
+        }
+        console.info(waypointSortList.toString());
+        //웨이포인트를 index 기준으로 정렬한다.
+        let waypointSortByDistance = waypointSortList.sort(function (a, b) {
+            return a.index - b.index;
+        });
+
+        //경로의 마지막 위치는 웨이포인트이 마지막 위치로 추가
+        nearPoint = new WayPointInfo(_gpxTrkseqArray.length - 1, 0, '0',
+            _gpxTrkseqArray[_gpxTrkseqArray.length - 1], 'end', 'END', '');
+        waypointSortByDistance.push(nearPoint);
+        return waypointSortByDistance;
+    }
+
+    function excelFileExport(filename, excelData) {
+        let sheetName = 'waypoint';
+        let wb = XLSX.utils.book_new();
+        wb.SheetNames.push(sheetName);
+        wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(excelData);
+
+        let wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+
+        saveAs(new Blob([s2ab(wbout)],{
+            type:"application/octet-stream"}), filename + '.xlsx');
+    }
+
+    function s2ab(s) {
+        let buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+        let view = new Uint8Array(buf);  //create uint8array as viewer
+        for (let i = 0; i < s.length; i++)
+            view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+        return buf;
+    }
+
+    //지도의 중심으로 이동, _map global 변수 사용
+    function goCenter(lat, lng, level) {
+        _map.setLevel(5);
+        _map.setCenter(new kakao.maps.LatLng(lat, lng));
     }
