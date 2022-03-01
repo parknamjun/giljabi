@@ -23,7 +23,7 @@
  Simple Type: degreesType
  Simple Type: fixType
  Simple Type: dgpsStationType
-
+test
  */
 
 let _newPosition;
