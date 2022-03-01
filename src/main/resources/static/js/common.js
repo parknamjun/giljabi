@@ -43,7 +43,11 @@ let _cvsFlag = false;	//편의점 POI
 	}
 */
 
-	//특수문자 체크
+/**
+ * 파일명에 특수문자가 있을 경우에 사용하려는데....
+ * @param str
+ * @returns {boolean}
+ */
 	function checkSpecial(str) { 
 		let pattern = /[`<~!@#$%^&*|\\'\";:\/?]/gi;
 		return pattern.test(str);
@@ -65,6 +69,12 @@ let _cvsFlag = false;	//편의점 POI
 	}
 */
 
+/**
+ * url parameter를 사용할때...
+ * @param name
+ * @param url
+ * @returns {null|string}
+ */
 	function getParam(name, url ) {
 	    if(!url)
 	    	url = location.href;
@@ -74,6 +84,14 @@ let _cvsFlag = false;	//편의점 POI
 	    return results == null ? null : results[1];
 	}
 
+/**
+ * 다음 버전에 추가
+ * 지도상의 시설물정보....
+ * @param map
+ * @param bounds
+ * @param level
+ */
+/*
 	function getPoi(map, bounds, level) {
 		$.ajax({
 			type: 'post',
@@ -129,7 +147,8 @@ let _cvsFlag = false;	//편의점 POI
 			}
 		});
 	}
-	
+	*/
+
 	/*
 	var regExp = /\s/g; //모든 공백 체크 정규식
 	var regExp = /^[0-9]+$/; //숫자만 체크 정규식
@@ -165,7 +184,7 @@ let _cvsFlag = false;	//편의점 POI
 	    (adsbygoogle = window.adsbygoogle || []).push({});  
 	}
 */
-	//첫 화면에서 서울시청의 취이정보
+	//첫 화면에서 서울 위치, 우리집으로 할까나..
 	function getLocation() {
 		return new kakao.maps.LatLng(37.56683546665817, 126.9786607449023);
 	}

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Gpx track 정보를 tcx 변환
  * @author eahn.park@gmail.com
- * date   2018-11-24
+ * 2018.10.26 gpx to tcx Project start....
  * 2021.09.17 Spring boot 2.5.4
  */
 

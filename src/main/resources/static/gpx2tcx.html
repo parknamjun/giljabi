@@ -10,32 +10,24 @@
 
 <meta name="description" content="tcx, gpx 경로만들기">
 <meta name="keyword" content="가민 tcx, garmin tcx, gpx, tcx,웨이포인트,waypoint,그란폰도,메디오폰도">
-        
-<meta property="og:title" content="giljabi, 가민tcx, gpx">
-<meta property="og:type" content="website">
-<meta property="og:url" content="http://www.giljabi.kr/gpx2tcx.html/">
-<meta property="og:site_name" content="가민 TCX,GPX,ROUTE,WAYPOINT,웨이포인트 만들기">
-<meta property="og:description" content="자전거,걷기 경로편집프로그램">
-<meta property="og:image" content="http://www.giljabi.kr/images/giljabi-logo.png">
-<meta property="og:image:width" content="144">
-<meta property="og:image:height" content="144">
-        
-<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache">
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131114801-1"></script>
-<script type="text/javascript" src="/js/google.js"></script>
-<!-- google -->
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=27f606d8edf497ab495f16d1d983047f&libraries=services"></script>
 <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.js"></script>
 <script type="text/javascript" src="/js/jquery.flot.js"></script>
 <script type="text/javascript" src="/js/jquery.flot.crosshair.js"></script>
 <script type="text/javascript" src="/js/jquery-plugin/jquery.jqGrid.min.js"></script>
+
+<!-- SheetJS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+<!--FileSaver [savaAs 함수 이용] -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
 <script type="text/javascript" src="/js/common.js"></script>
-<script type="text/javascript" src="/js/detect.js"></script>
 <script type="text/javascript" src="/js/routeutil.js"></script>
 <script type="text/javascript" src="/js/waypoint.js"></script>
 <script type="text/javascript" src="/js/xmlwriter.js"></script>
@@ -106,6 +98,7 @@
 			<div class="map_wrap">
 				<div id="map" style="width:940px;height:500px;"></div>
 				<p class="modes">
+					<!--
 					<input type="text" value="" id="keyword" placeholder="검색" size="15"> 
 				    <input class='mapType' type="checkbox" id="chkTerrain"/><label for="chkTerrain">지형정보</label> 
 			    	<input class="mapType" type="checkbox" id="chkBicycle"/><label for="chkBicycle">자전거도로</label> 
@@ -114,7 +107,7 @@
 			    	<input type="radio" name="daumpoi" value="CS2">편의점
 					<input type="radio" name="daumpoi" value="AD5">숙박
 					<input type="radio" name="daumpoi" value="">없음
-					&nbsp;&nbsp;&nbsp;&nbsp;
+					-->
 					<select id="direction" >
 					<option value="waypoint">웨이포인트</option>
 					<option value="cycling-road">cycling-road</option>
@@ -148,7 +141,7 @@
 	</tr>
 </table>
 
-<table border="0" style="width:1179;">
+<table border="0" style="width:1179px;">
 	<tr>
 		<td colspan="2">
 			<div id="page-wrapper">
@@ -156,10 +149,11 @@
 					<table border="0" style="border-collapse: collapse;table-layout: fixed;">
 					<tr>
 						<td width="320px" style="vertical-align: middle;">
-				GPX/TCX: <input type="file" id="fileInput" accept=".gpx,.tcx">
+				<!-- 지금은 gpx만 사용 -->
+				GPX: <input type="file" id="fileInput" accept=".gpx">
 						</td>
-						<td width="150px" style="vertical-align: middle;">
-				경사도: <input type="text" id="slope" size="8">
+						<td width="150px" style="vertical-align: middle;">&nbsp;
+							<!-- 경사도 -->
 						</td>
 						<td width="150px;" style="vertical-align: middle;">
 				평속(Km/H) : <input type="text" id="averageV" value="15" style="width:30px;">
@@ -173,16 +167,12 @@
 				경로명 : <input type="text" id="gpx_metadata_name" size="20">
 						</td>
 						<td style="vertical-align: middle;">
-				저장:<input type="radio" name="filetype" value="tcx" checked="checked">tcx
-					<input type="radio" name="filetype" value="gpx">gpx
+				저장:
+					<input type="radio" name="filetype" value="gpx" checked="checked">gpx
 						</td>
-						<td>
-						<div class="tooltip">
-						<span class="tooltiptext" style="width:120px;">단순참고용, 구간 경사도 4.2% 미만은 획득고도에서 제외 되었습니다.</span>
-						<label for="upElevation"></label>
-						</div>
+						<td>&nbsp;
 						</td>
-						<td><font color='red'<b>크롬으로 개발/테스트하였습니다.  크롬을 사용해주세요</b></font>
+						<td style="color: red"><b>크롬으로 개발/테스트하였습니다.  크롬을 사용해주세요</b>
 						</td>
 					</tr>
 					</table>	
@@ -243,8 +233,6 @@
 	</div>
 </div>
 
-<div id="waypointinfoViewTable" class='tableView'></div>
-
 	<!-- 서버에 정보 요청 후 기다리는 UI-->
 <div id="blockingAds" class="blockUI" style="display:none">
 	<div class="blockUI blockOverlay" style="z-index: 1000; border: none; 
@@ -252,7 +240,7 @@
 	background-color: rgb(0, 0, 0); opacity: 0.6; cursor: wait; position: absolute;">
 	</div>
 	<div class="blockUI blockMsg blockElement" style="z-index: 1011; 
-	position: absolute; padding: 0px; margin: 0px; height:120px; width: 920px; top: 30%; left: 150; 
+	position: absolute; padding: 0px; margin: 0px; height:120px; width: 920px; top: 30%; left: 150px;
 	text-align: center; color: rgb(0, 0, 0); border: 3px solid rgb(170, 0, 0); 
 	background-color: rgb(255, 255, 255); cursor: wait;">
 	 <div>
@@ -263,12 +251,6 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-    <!--
-	includeHTML();
-    -->
-    $('#blogrss').attr('src', '/blog/blogrss.html?' + (new Date()).getTime());
-</script>
 </form>
 
 </body>

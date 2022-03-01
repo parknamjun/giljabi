@@ -1,5 +1,10 @@
 package kr.giljabi.api.utils;
 
+/**
+ * @author eahn.park@gmail.com
+ * 2022-02-20 javascript에서 처리하게 개선
+ *
+ */
 public class WaypointSort implements Comparable<WaypointSort> {
 	private int index;
 	private double distance;

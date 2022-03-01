@@ -36,11 +36,12 @@ let _chkRoute = false;
 let _lastPoint;		//경로탐색을 위한 마지막 포인트
 let _routeMarkerArray = [];	//경로탐색을 위한 마커
 let _polyline = [];	//2개 이상의 경로를 배열로 보관
-let _place;	//장소 검색 객체
+//let _place;	//장소 검색 객체
 //let contentNode = document.createElement('div'); // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다
 let _keywordMarker = new kakao.maps.Marker();
 let _mapLevel = 3;	//검색 후 지도 스케일
 let _markings = [];	//고도차트를 그리기 위한 데이터리스트
+let waypointSortByDistance = [];	//웨이포인트를 거리별로 정열된 배열
 
 $(document).ready(function() {
 	//지도초기화
@@ -64,8 +65,12 @@ $(document).ready(function() {
 		
 		////searchPlaces();
 	});
-	
-	// 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+
+
+	/**
+	 * 	 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+	 * 	 나중에 추가...
+
 	kakao.maps.event.addListener(_map, 'zoom_changed', function() {
 	    // 지도의 현재 레벨을 얻어옵니다
 	    let level = _map.getLevel();
@@ -76,6 +81,7 @@ $(document).ready(function() {
 		
 		////searchPlaces();
 	});
+	*/
 
 	function makeWaypointObject(latlng) {
 		_microTime++;
@@ -332,7 +338,7 @@ $(document).ready(function() {
 			series: { lines: { show: true }},
 			crosshair: { mode: "x"},
 			grid: {	clickable:true, hoverable: true, show:true, aboveData : true
-				, markings: _markings/*getWaypointPositionInfo()*/},
+				, markings: _markings/*getWaypointPositionInfo() 나중에 추가 */},
 			yaxis: { min: minAlti * 0.7, max: maxAlti * 1.2, auto:'none'} //위/아래 여백
 		});
 		
@@ -445,7 +451,7 @@ $(document).ready(function() {
 		*/
 		let endPosition = _gpxTrkseqArray[_gpxTrkseqArray.length - 1];
 
-		let nearDistance = 100000;	//최단거리
+		let nearDistance = 0;	//최단거리
 		let currDistance = 0;	//현재거리
 		let startIndex = 0;
 		let polyline = new Array();	//추가된 선을 그린다.
@@ -527,7 +533,7 @@ $(document).ready(function() {
 			$.each(_xmlData.find('CoursePoint'), function() {		
 				var wptitem = new Object();
 				wptitem.uid = _microTime++;
-				wptitem.position = new daum.maps.LatLng($(this).find('LatitudeDegrees').text()
+				wptitem.position = new kakao.maps.LatLng($(this).find('LatitudeDegrees').text()
 						, $(this).find('LongitudeDegrees').text());
 				wptitem.ele = '';
 				wptitem.name = $(this).find('Name').text();		//웨이포인트 이름
@@ -571,11 +577,11 @@ $(document).ready(function() {
 			return;
 		}
 
-		//결로, 웨이포인트 재계산 해야 함
+		//경로, 웨이포인트 재계산 해야 함
 		_gpxTrkseqArray = _gpxTrkseqArray.reverse();
 		_wayPointArray = _wayPointArray.reverse();
 		
-		////getWaypointInfo();
+		getWaypointInfo();
 	});
 
 
@@ -639,7 +645,6 @@ $(document).ready(function() {
 		markerObject.currPosition = _gpxTrkseqArray.length;
 		markerObject.prevPosition = _routeMarkerArray.length > 0 ? _routeMarkerArray[_routeMarkerArray.length - 1].currPosition : 0;
 
-
 		let imageSize = new kakao.maps.Size(50, 45);
 		let startOption = {
 			offset: new kakao.maps.Point(35, 0) // 출발 마커이미지에서 마커의 좌표에 일치시킬 좌표를 설정, 기본값은 이미지의 가운데 아래
@@ -700,64 +705,14 @@ $(document).ready(function() {
 		} 
 		$('#blockingAds').show();
 
-		//
-		console.info(JSON.stringify(getWaypointList()));
-		console.info(JSON.stringify(_wayPointArray));
+		excelFileExport($('#gpx_metadata_name').val(),
+			getWaypointToExcel(waypointSortByDistance));
 
-
-
-
-
-		$.ajax({
-			type: 'post',
-			url : '/gpx2tcx.do', 
-			dataType:'json',
-			contentType : 'application/json; charset=UTF-8;',
-			data: {
-				 trkseq : JSON.stringify(_gpxTrkseqArray)
-				, wpt : JSON.stringify(wpt)
-				, velocity : $('#averageV').val()
-				, courseName : $('#gpx_metadata_name').val()
-				, fileName : _uploadFilename
-				, command : 'waypointexcelsave'
-			},
-			async : true,
-			success:function(result, status) {
-			    let waypointinfo = '';
-				waypointinfo += '<html>\n';
-				waypointinfo += '<meta http-equiv=\"content-type\" content=\"application/vnd.ms-excel; charset=UTF-8\">\n';
-				waypointinfo += '<table border=\"1\">\n';
-				waypointinfo += '<tr>';
-				waypointinfo += '<td>번호</td>';
-				waypointinfo += '<td>기호</td>';
-				waypointinfo += '<td>웨이포인트</td>';
-				waypointinfo += '<td>거리(km)</td>';
-				waypointinfo += '<td>통과시간</td>';
-				waypointinfo += '</tr>\n';
-				for(let i = 0; i < result.resultlist.length; i++){
-					//let sym = result.resultlist[i].sym.toLowerCase();
-					waypointinfo += '<tr>';
-					waypointinfo += '<td>' + (i + 1) + '</td>';
-					waypointinfo += '<td>' + result.resultlist[i].sym + '</td>';
-					waypointinfo += '<td>' + result.resultlist[i].name + '</td>';
-					waypointinfo += '<td>' + result.resultlist[i].distance + '</td>';
-					waypointinfo += '<td>' + result.resultlist[i].time + '</td>';
-					waypointinfo += '</tr>\n';
-				}
-				waypointinfo += '</table>\n';
-				waypointinfo += '</html>\n';
-
-				let blob = new Blob([waypointinfo]);
-				let link = document.createElement('a');
-				link.href = window.URL.createObjectURL(blob);
-				link.download = $('#gpx_metadata_name').val() + ".xls";
-				link.click();
-				$('#blockingAds').hide();
-			}
-		});
+		$('#blockingAds').hide();
 	});
 
-	//Waypoint info
+
+//Waypoint info
 	function getWaypointInfo() {
 		////gpxHeader();
 		////gpxMetadata($('#gpx_metadata_name').val(), $('#averageV').val());
@@ -775,61 +730,38 @@ $(document).ready(function() {
 				name: _wayPointArray[i].waypointname,
 				sym: _wayPointArray[i].sym});
 		}
-
-		//20220222
-		let nearPoint;
-		let waypointSortList = [];
-		for(let indexWpt = 0; indexWpt < wpt.length; indexWpt++) {
-			let compareDistance = 0;
-			let trackIndex = 0;
-			let fromPoint = new Point3D(wpt[indexWpt].lat, wpt[indexWpt].lng, 0);
-			//경로상에 있는 포인트들과 각각의 웨이포인트의 거리를 비교하여 가장 가까운 거리에
-			//있는 포인트를 웨이포인트의 좌표로 설정하여 웨이포인트의 순서를 정렬한다.
-			for(let index = 0; index < _gpxTrkseqArray.length; index++) {
-				let toPoint = _gpxTrkseqArray[index];
-				let trackDistance = getDistance(fromPoint, toPoint);
-				if(index == 0)
-					compareDistance = trackDistance;
-
-				//웨이포인트에서 가장 가까이 위치한 포인트
-				if(trackDistance <= compareDistance) {
-					compareDistance = trackDistance;
-					trackIndex = index;
-					//console.info('distance:' + trackDistance);
-				}
-			}
-			nearPoint = new WayPointInfo(trackIndex, compareDistance, 'time',
-				_gpxTrkseqArray[trackIndex], wpt[indexWpt].sym, wpt[indexWpt].name);
-				waypointSortList.push(nearPoint);
-			console.info(nearPoint.toString());
-		}
-		console.info(waypointSortList.toString());
-		//웨이포인트를 index 기준으로 정렬한다.
-		let waypointSortByDistance = waypointSortList.sort(function(a, b){
-			return a.index - b.index;
-		});
+		waypointSortByDistance = makeWaypointInfo(wpt);
 
 		///정렬된 각각의 웨이포인트까지 거리와 소요시간을 계산해서 추가해야 한다.
 		let fromPoint = _gpxTrkseqArray[0];	//시작 위치
 		let distance = 0;
+		let cumDistance = 0; //wpt 누적거리
 		let wayIndex = 0;
 		let v = Number($('#averageV').val());
 		let currentTime = new Date();
-		currentTime.setDate(1);
+		//console.info('1 currentTime:' + currentTime.toISOString());
+
 		currentTime.setHours(0);
 		currentTime.setMinutes(0);
 		currentTime.setSeconds(0);
+		//console.info('2 currentTime:' + currentTime.toISOString());
 
 		for(let i = 0; i < waypointSortByDistance.length; i++) {
 			for(; wayIndex <= waypointSortByDistance[i].index; wayIndex++) {
+				//각 wpt[0] 다음 wpt[1]까지 거리
 				distance += getDistance(fromPoint, _gpxTrkseqArray[wayIndex]);
-				//console.info('i:' + i
-				//	+ ', wayIndex:'+ wayIndex
-				//	+ ', distance:' + distance);
 				fromPoint = _gpxTrkseqArray[wayIndex];
 			}
-			waypointSortByDistance[i].distance = Number(distance.toFixed(1));
-			let second = distance * 1000 / v;//거리(M), 경과시간
+			cumDistance += distance;	//wpt의 누적거리...
+
+			//각 웨이포인트까지 거리...
+			waypointSortByDistance[i].distance = cumDistance.toFixed(1);
+			let second = distance * 3600 / v;//거리(M), 경과시간
+			//console.info('3 currentTime:' + currentTime.toISOString() +
+			//	' distance:' + distance +
+			//	' second:' + second +
+			//	' waypoint:' + waypointSortByDistance[i]);
+
 			let time = '';
 
 			if(second >= 3600 * 24) {	//24시간이 초과되면 닐짜를 추가해야 힌다..
@@ -840,72 +772,41 @@ $(document).ready(function() {
 				time += ':';
 				time += currentTime.getMinutes() < 10 ? '0' + currentTime.getMinutes() : currentTime.getMinutes();
 
-				waypointSortByDistance[i].time = time;
+				//각 웨이포인트까지 예상시간...
+				waypointSortByDistance[i].time = currentTime.toISOString();
+				waypointSortByDistance[i].laptime = time;
 			}
-			console.info('Time:' + currentTime);
+			//console.info('Time:' + currentTime);
+			distance = 0;
 		}
-		console.info('waypointSortByDistance:' + waypointSortByDistance.toString());
-
-		//우측에 웨이포인트를 출력하고, 엑셀로 저장할때도 사용한다.
-		let waypointinfo = '';
-		waypointinfo += '<table border=\"0\" style=\"border-collapse: collapse;\">';
-		for(let i = 0; i < waypointSortByDistance.length; i++){
-			let sym = waypointSortByDistance[i].symbol.toLowerCase();
-			waypointinfo += '<tr onclick=\"javascript:goWaypointPosition('
-				+ waypointSortByDistance[i].point.lat + ','
-				+ waypointSortByDistance[i].point.lng + ')\">';
-			waypointinfo += '<td ';
-			if(sym == 'food') {
-				waypointinfo += 'bgcolor=\"#FF0000\">';
-			} else if(sym == 'water') {
-				waypointinfo += 'bgcolor=\"#00FF00\">';
-			} else
-				waypointinfo += '>';
-			waypointinfo += '<img src=\"/images/' + sym + '.png\" width=\"15\" height=\"18\"></td>';
-			waypointinfo += '<td width=\'110px\' class=\'timeClass\'>' + waypointSortByDistance[i].symbolName + '</td>';
-			waypointinfo += '<td width=\'20px\' align=\'right\' class=\'timeClass\'>' + waypointSortByDistance[i].distance + '</td>';
-			waypointinfo += '<td width=\'70px\' align=\'right\' class=\'timeClass\'>' + waypointSortByDistance[i].time + '</td>';
-			waypointinfo += '</tr>';
-
-		}
-		waypointinfo += '</table>';
+		//console.info('waypointSortByDistance:' + waypointSortByDistance.toString());
+		let waypointinfo = getWaypointToHtml(waypointSortByDistance);
 		$('#waypointinfoViewTable').html(waypointinfo);
+		//console.info(waypointinfo);
 
-		console.info(waypointinfo);
 		drawPlot();
-/*
-		//var upElev = data.distance + ', ' + data.upElevation + data.downElevation;
-		var upElev = 'D:' + data.distance + ', ' + data.upElevation + 'm';
-		$("label[for = 'upElevation']").text(upElev);
-
-		jsonBody.trackPoint = _gpxTrkseqArray;
-		//jsonBody.wpt = JSON.stringify(getWaypointList());
-		jsonBody.velocity = $('#averageV').val();
-		jsonBody.courseName = $('#gpx_metadata_name').val();
-		jsonBody.fileName = _uploadFilename;
-		jsonBody.fileExtenstion = _fileExt;
-		jsonBody.chkShare = $('input:checkbox[id="chkShare"]').is(":checked");
-		console.info(JSON.stringify(jsonBody));
-
-		$.ajax({
-			type: 'post',
-			url : '/api/1.0/gpxinfo',
-			dataType:'json',
-			contentType : 'application/json; charset=UTF-8;',
-			data: JSON.stringify(jsonBody),
-			async : true,
-			success:function(response, status) {
-				if(response.status == 200) {
-					if(response.length == 0) {
-					} else {
-					}
-					////drawPlot();
-				}
-				$('#blockingAds').hide();
-			}
-		});
-*/
 	}
+
+
+	$('#gpx2tcx').click(function(e) {
+		if(_gpxTrkseqArray.length === 0) {
+			alert('경로 정보가 없습니다.');
+			return;
+		}
+		$('#blockingAds').show();
+		gpxHeader();
+		gpxMetadata(_uploadFilename, Number($('#averageV').val()));
+		gpxWaypoint(waypointSortByDistance);
+		gpxTrack(_gpxTrkseqArray);
+
+		console.info(xmlData);
+
+		saveAs(new Blob([xmlData],{
+			type:"application/xml"}), 'hello' + '.xml');
+
+		$('#blockingAds').hide();
+	});
+
 
 });
 
