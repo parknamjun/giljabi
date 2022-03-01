@@ -10,6 +10,11 @@
 ### Tistory : [giljabi.tistory.com](https://giljabi.tistory.com/) 소스 공유
 ### github : [https://github.com/parknamjun/giljabi](https://github.com/parknamjun/giljabi)
 * 사용법 http://localhost:8080/giljabi.html
+* Frontend 부분은 제일 아렵습니다. 그래서 UI가 매우 과거형입니다. 
+  원래 사용목적이 경로만 만드는것이라 기본에는 충실하고자 하였습니다.
+* 다음 버전은 경로를 직접 그리고 다음지도에서 제공하지 않는 높이정보을 구글지도 API에서 가져와서 gpx 파일을 만드는 방법을 
+  하려고 합니다.
+  
 
 ## [gpxtcx.tistory.com](https://gpxtcx.tistory.com/) 다양한 경로 공유
 
