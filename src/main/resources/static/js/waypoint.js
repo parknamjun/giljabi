@@ -7,7 +7,7 @@
  * @param {*} wayName 
  * @param {*} uniqueId 
  */
-var id;
+let id;
 function Waypoint(mymap, wayPosition, waypointName, uniqueId, waypointIcon) {
 	// 커스텀 오버레이 엘리먼트를 만들고, 컨텐츠를 추가합니다
     //var position = wayPosition;
@@ -18,7 +18,7 @@ function Waypoint(mymap, wayPosition, waypointName, uniqueId, waypointIcon) {
 
 	content.innerHTML = '<img src=\"images/'+ waypointIcon.toLowerCase() +'.png\" class=\"pointImage\"><span class=\"pointText\">' + waypointName + '</span>';
 	 // 커스텀 오버레이를 생성합니다 
-	let customoverlay = new daum.maps.CustomOverlay({
+	let customoverlay = new kakao.maps.CustomOverlay({
         map: mymap,
         clickable: false,
         content: content,
@@ -126,7 +126,7 @@ function Waypoint(mymap, wayPosition, waypointName, uniqueId, waypointIcon) {
 														// 가져옵니다
 	
 		// 커스텀오버레이에서 마우스 관련 이벤트가 발생해도 지도가 움직이지 않도록 합니다
-		daum.maps.event.preventMap();
+		kakao.maps.event.preventMap();
 	
 		// mousedown된 좌표를 설정합니다
 		startX = e.clientX;
@@ -154,7 +154,7 @@ function Waypoint(mymap, wayPosition, waypointName, uniqueId, waypointIcon) {
 	        deltaX = startX - e.clientX, // mousedown한 픽셀좌표에서 mousemove한 좌표를 빼서 실제로 마우스가 이동된 픽셀좌표를 구합니다 
 	        deltaY = startY - e.clientY,
 	        // mousedown됐을 때의 커스텀 오버레이의 좌표에 실제로 마우스가 이동된 픽셀좌표를 반영합니다 
-	        newPoint = new daum.maps.Point(startOverlayPoint.x - deltaX, startOverlayPoint.y - deltaY), 
+	        newPoint = new kakao.maps.Point(startOverlayPoint.x - deltaX, startOverlayPoint.y - deltaY),
 	        // 계산된 픽셀 좌표를 지도 컨테이너에 해당하는 지도 좌표로 변경합니다 
 	        newPos = proj.coordsFromContainerPoint(newPoint);
 
@@ -169,7 +169,7 @@ function Waypoint(mymap, wayPosition, waypointName, uniqueId, waypointIcon) {
 	function onMouseUp(e) {
 		$.each(_wayPointArray, function(index, ele) {
 			if(id == ele.uid) {
-				if(_newPosition instanceof daum.maps.LatLng) {
+				if(_newPosition instanceof kakao.maps.LatLng) {
 			    	if(!_customPverlay) {	//웨이포인트의 이동이 없다면 위치 변경은 필요없다.
 						_wayPointArray[index].position = _newPosition;
 			    	}

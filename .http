@@ -1,15 +1,9 @@
 ###
-GET http://localhost:8090/api/1.0/route
+GET http://localhost:8080/api/1.0/route?start=127.01117,37.5555&target=126.99448,37.54565&direction=cycling-road
 Content-Type: application/json
 
-{
-  "start": [127.021374295649,37.58052832938857],
-  "target": [127.0391273352651,37.58340695922779],
-  "profile": "cycling-road"
-}
-
-###
-POST http://localhost:8090/api/1.0/elevation
+### 사용법은 2차 버전에서...
+POST http://localhost:8080/api/1.0/elevation
 Content-Type: application/json
 
 {

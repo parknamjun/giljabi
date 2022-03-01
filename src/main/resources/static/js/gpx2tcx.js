@@ -57,6 +57,9 @@ $(document).ready(function() {
 	let mapTypeControl = new kakao.maps.MapTypeControl();
 	_map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
+	/**
+	 * 	 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+	 * 	 나중에 추가...
 	kakao.maps.event.addListener(_map, 'dragend', function() {
 		console.log(_certiFlag);
 		removePoi(_markerList);
@@ -65,11 +68,6 @@ $(document).ready(function() {
 		
 		////searchPlaces();
 	});
-
-
-	/**
-	 * 	 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
-	 * 	 나중에 추가...
 
 	kakao.maps.event.addListener(_map, 'zoom_changed', function() {
 	    // 지도의 현재 레벨을 얻어옵니다
