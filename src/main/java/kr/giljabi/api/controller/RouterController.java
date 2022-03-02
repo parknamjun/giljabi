@@ -39,7 +39,7 @@ public class RouterController {
         try {
             RouteData routeData = new RouteData(start, target, direction);
 /*
-openroute service는 일 호출건수 제약이 있어 임의의 데이터를 응답데이터로 만들어 사용한다.
+//openroute service는 일 호출건수 제약이 있어 임의의 데이터를 응답데이터로 만들어 사용한다.
 list.add(new Geometry3DPoint(127.01117, 37.5555, 42));
 list.add(new Geometry3DPoint(127.01105, 37.55554, 42));
 list.add(new Geometry3DPoint(127.01085, 37.55519, 42));

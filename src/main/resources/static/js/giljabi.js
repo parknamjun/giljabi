@@ -23,7 +23,7 @@
  Simple Type: degreesType
  Simple Type: fixType
  Simple Type: dgpsStationType
-test
+
  */
 
 let _newPosition;
@@ -563,7 +563,7 @@ $(document).ready(function() {
 		});
 		// 지도에 선을 표시합니다 
 		lineStyle.setMap(_map);
-		_polyline.push(polyline);
+		_polyline.push(lineStyle);
 	}
 
 	//경로 뒤집기...
@@ -589,7 +589,7 @@ $(document).ready(function() {
 	 */
 	function getRoute(route) {
 		$('#blockingAds').show();
-		var polyline = new Array();	//추가된 선을 그린다.
+		let polyline = new Array();	//추가된 선을 그린다.
 		$.ajax({
 			type: 'get',
 			url : '/api/1.0/route',
