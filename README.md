@@ -26,12 +26,15 @@ API 테스트 방법
 1. 경로탐색
 .http 파일의 내용을 참고
 GET http://localhost:8080/api/1.0/route?start=127.01117,37.5555&target=126.99448,37.54565&direction=cycling-road
+
 Content-Type: application/json
    
 
 2. 높이정보 
 POST http://localhost:8090/api/1.0/elevation
+
 Content-Type: application/json
+
 
 {
 "trackPoint":[
