@@ -17,8 +17,6 @@
 * 다음 버전은 경로를 직접 그리고 다음지도에서 제공하지 않는 높이정보을 구글지도 API에서 가져와서 gpx 파일을 만드는 방법을 
   하려고 합니다.
   
-
-## [gpxtcx.tistory.com](https://gpxtcx.tistory.com/) 다양한 경로 공유
 ![메인화면](./images/image01.png)
 
 * [openrouteservice.org](https://openrouteservice.org/)
