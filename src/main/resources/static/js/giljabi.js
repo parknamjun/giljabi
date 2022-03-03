@@ -95,7 +95,7 @@ $(document).ready(function() {
 
 	//마우스 click event
 	//var markersId = 0;
-	let route = [];
+	let route = [];	//route api에서 사용하는 시작과 끝 위치정보
 	kakao.maps.event.addListener(_map, 'click', function(mouseEvent) {
 		if(_chkRoute) {	//waypoint ?, cycling/hiking ?
 			if(route.length === 0)
@@ -687,7 +687,7 @@ $(document).ready(function() {
 				
 			} else {
 				_polyline.splice(_polyline.length - 1, 1);
-				var temp  = _gpxTrkseqArray[_gpxTrkseqArray.length - 1];
+				let temp  = _gpxTrkseqArray[_gpxTrkseqArray.length - 1];
 				route[0] = new kakao.maps.LatLng(temp.lat, temp.lon);
 				drawPlot();
 				getWaypointInfo();
