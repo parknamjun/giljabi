@@ -786,21 +786,29 @@ $(document).ready(function() {
 	}
 
 
-	$('#gpx2tcx').click(function(e) {
+	$('#saveas').click(function(e) {
+		if($('#gpx_metadata_name').val() === '') {
+			alert('경로명이 없습니다.');
+			return;
+		}
 		if(_gpxTrkseqArray.length === 0) {
 			alert('경로 정보가 없습니다.');
 			return;
 		}
 		$('#blockingAds').show();
 		gpxHeader();
+
+		if(_uploadFilename === '')
+			_uploadFilename = $('#gpx_metadata_name').val();
 		gpxMetadata(_uploadFilename, Number($('#averageV').val()));
+
 		gpxWaypoint(waypointSortByDistance);
 		gpxTrack(_gpxTrkseqArray);
 
 		console.info(xmlData);
 
 		saveAs(new Blob([xmlData],{
-			type:"application/xml"}), 'hello' + '.xml');
+			type:"application/xml"}), $('#gpx_metadata_name').val() + '.gpx');
 
 		$('#blockingAds').hide();
 	});
