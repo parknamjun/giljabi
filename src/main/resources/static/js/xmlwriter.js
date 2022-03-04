@@ -1,8 +1,9 @@
 
-	let xmlData = '';
+	let xmlData;
 	let NEWLINE = '\n';
 
 	function gpxHeader() {
+		xmlData = '';	//저장할떼마다 초기화
 		xmlData += '<?xml version="1.0" encoding="UTF-8"?>' + NEWLINE;
 		xmlData += '<gpx xmlns="http://www.topografix.com/GPX/1/1" ' + NEWLINE;
 		xmlData += ' creator="giljabi" version="1.1"' + NEWLINE;
@@ -22,7 +23,7 @@
 
 	/**
 	 * 전체 경로에서 각 웨이포인트와 가장 가까운 위치로 변경한다.
-	 * 웨이포인트를 경로상의 포인트로 이동할 필요는 없는거 같다...
+	 * 웨이포인트를 경로상의 포인트로 변경할 필요는 없는거 같다...
 	 * @param waypoint
 	 */
 	/*
