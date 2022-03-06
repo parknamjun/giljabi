@@ -137,7 +137,7 @@
 					<tr>
 						<td width="320px" style="vertical-align: middle;">
 				<!-- 지금은 gpx만 사용 -->
-				GPX: <input type="file" id="fileInput" accept=".gpx">
+				파일종류: <input type="file" id="fileInput" accept=".gpx">
 						</td>
 						<td width="150px" style="vertical-align: middle;">&nbsp;
 							<!-- 경사도 -->
@@ -151,11 +151,12 @@
 					</tr>
 					<tr>
 						<td style="vertical-align: middle;">
-				경로명 : <input type="text" id="gpx_metadata_name" size="20">
+				경로/파일명 : <input type="text" id="gpx_metadata_name" size="20">
 						</td>
 						<td style="vertical-align: middle;">
 				저장:
 					<input type="radio" name="filetype" value="gpx" checked="checked">gpx
+					<input type="radio" name="filetype" value="tcx">tcx
 						</td>
 						<td>&nbsp;
 						</td>
