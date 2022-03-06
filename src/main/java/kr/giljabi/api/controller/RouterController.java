@@ -38,7 +38,7 @@ public class RouterController {
         ArrayList<Geometry3DPoint> list = new ArrayList<>();
         try {
             RouteData routeData = new RouteData(start, target, direction);
-
+/*
 //openroute service는 일 호출건수 제약이 있어 임의의 데이터를 응답데이터로 만들어 사용한다.
 list.add(new Geometry3DPoint(127.01117, 37.5555, 42));
 list.add(new Geometry3DPoint(127.01105, 37.55554, 42));
@@ -50,7 +50,6 @@ list.add(new Geometry3DPoint(127.0103, 37.55523, 42));
 list.add(new Geometry3DPoint(127.01021, 37.55535, 42));
 list.add(new Geometry3DPoint(127.01006, 37.55556, 42));
 list.add(new Geometry3DPoint(127.01, 37.55564, 42));
-/*
 list.add(new Geometry3DPoint(127.00993, 37.55575, 43));
 list.add(new Geometry3DPoint(127.00956, 37.55625, 44));
 list.add(new Geometry3DPoint(127.00931, 37.55662, 45));
@@ -142,9 +141,9 @@ list.add(new Geometry3DPoint(126.99566, 37.54528, 169));
 list.add(new Geometry3DPoint(126.99522, 37.54537, 171));
 list.add(new Geometry3DPoint(126.99448, 37.54565, 175));
 */
-            //list = geometryService.getOpenRouteService(routeData);
-        //} catch(GiljabiException e) {
-        //    return Response.of(e);
+            list = geometryService.getOpenRouteService(routeData);
+        } catch(GiljabiException e) {
+            return Response.of(e);
         } catch(Exception e) {
             return Response.of(new GiljabiException(9001, e.getMessage()));
         }
