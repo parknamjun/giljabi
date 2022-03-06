@@ -42,6 +42,9 @@ let _keywordMarker = new kakao.maps.Marker();
 let _mapLevel = 3;	//검색 후 지도 스케일
 let _markings = [];	//고도차트를 그리기 위한 데이터리스트
 let waypointSortByDistance = [];	//웨이포인트를 거리별로 정열된 배열
+let _filetype = '';	//gpx, tcx 구분
+
+let BASETIME = '2022-01-01T00:00:00Z';
 
 $(document).ready(function() {
 	//지도초기화
@@ -712,13 +715,6 @@ $(document).ready(function() {
 
 //Waypoint info
 	function getWaypointInfo() {
-		////gpxHeader();
-		////gpxMetadata($('#gpx_metadata_name').val(), $('#averageV').val());
-		////gpxWaypoint(_wayPointArray, _gpxTrkseqArray);
-
-		console.log(_wayPointArray);
-		console.log(_routeMarkerArray);
-
 		//서버에 요청할 웨이포인트 정보를 조립, _wayPointArray에서 필요한 정보만 사용
 		let wpt = [];
 		for(let i = 0; i < _wayPointArray.length; i++) {
@@ -736,13 +732,8 @@ $(document).ready(function() {
 		let cumDistance = 0; //wpt 누적거리
 		let wayIndex = 0;
 		let v = Number($('#averageV').val());
-		let currentTime = new Date();
-		//console.info('1 currentTime:' + currentTime.toISOString());
-
+		let currentTime = new Date(BASETIME);
 		currentTime.setHours(0);
-		currentTime.setMinutes(0);
-		currentTime.setSeconds(0);
-		//console.info('2 currentTime:' + currentTime.toISOString());
 
 		for(let i = 0; i < waypointSortByDistance.length; i++) {
 			for(; wayIndex <= waypointSortByDistance[i].index; wayIndex++) {
@@ -755,11 +746,6 @@ $(document).ready(function() {
 			//각 웨이포인트까지 거리...
 			waypointSortByDistance[i].distance = cumDistance.toFixed(1);
 			let second = distance * 3600 / v;//거리(M), 경과시간
-			//console.info('3 currentTime:' + currentTime.toISOString() +
-			//	' distance:' + distance +
-			//	' second:' + second +
-			//	' waypoint:' + waypointSortByDistance[i]);
-
 			let time = '';
 
 			if(second >= 3600 * 24) {	//24시간이 초과되면 닐짜를 추가해야 힌다..
@@ -777,14 +763,11 @@ $(document).ready(function() {
 			//console.info('Time:' + currentTime);
 			distance = 0;
 		}
-		//console.info('waypointSortByDistance:' + waypointSortByDistance.toString());
 		let waypointinfo = getWaypointToHtml(waypointSortByDistance);
 		$('#waypointinfoViewTable').html(waypointinfo);
-		//console.info(waypointinfo);
 
 		drawPlot();
 	}
-
 
 	$('#saveas').click(function(e) {
 		if($('#gpx_metadata_name').val() === '') {
@@ -796,6 +779,9 @@ $(document).ready(function() {
 			return;
 		}
 		$('#blockingAds').show();
+
+		_filetype = $(':radio[name="filetype"]:checked').val();
+
 		gpxHeader();
 
 		if(_uploadFilename === '')
@@ -803,16 +789,52 @@ $(document).ready(function() {
 		gpxMetadata(_uploadFilename, Number($('#averageV').val()));
 
 		gpxWaypoint(waypointSortByDistance);
-		gpxTrack(_gpxTrkseqArray);
+
+		if(_filetype === 'gpx')
+			gpxTrack(_gpxTrkseqArray);
+		else
+			gpxTrack(makeTcxTrackPoint());
 
 		console.info(xmlData);
 
 		saveAs(new Blob([xmlData],{
-			type:"application/xml"}), $('#gpx_metadata_name').val() + '.gpx');
+			type:"application/xml"}), $('#gpx_metadata_name').val() + '.' + _filetype);
 
 		$('#blockingAds').hide();
+
 	});
 
+	function makeTcxTrackPoint() {
+		let tcxTrackPoint = [];
+   		let cumDistance = 0; //누적거리
+
+		console.info('_gpxTrkseqArray length :' + _gpxTrkseqArray.length);
+		let trackDistance = 0;
+		let v = Number($('#averageV').val());
+		let currentTime = new Date(BASETIME);
+
+		tcxTrackPoint.push(new TrackPoint(_gpxTrkseqArray[0], currentTime.toISOString(), 0));
+
+		//누적거리, 시간 계산
+		for (let index = 0; index < _gpxTrkseqArray.length - 1; index++) {
+			let fromPoint = _gpxTrkseqArray[index];
+			let toPoint = _gpxTrkseqArray[index + 1];
+			trackDistance = getDistance(fromPoint, toPoint) * 1000;//meter
+			cumDistance += trackDistance;//누적거리 --> 누적시간 계산에 사용
+
+			let second = trackDistance * 3.6 / v;
+			currentTime.setSeconds(currentTime.getSeconds() + second);
+			tcxTrackPoint.push(new TrackPoint(_gpxTrkseqArray[index + 1],
+				currentTime.toISOString(), cumDistance));
+
+			console.info(index + ' :' + trackDistance + ', ' + 	cumDistance + ', ' + currentTime.toISOString());
+		}
+		let diff = currentTime - new Date(BASETIME);
+		console.info('diff:' + diff / 1000);
+
+		console.info(tcxTrackPoint.toString());
+		return tcxTrackPoint;
+	}
 
 });
 

@@ -274,3 +274,21 @@
         _map.setLevel(5);
         _map.setCenter(new kakao.maps.LatLng(lat, lng));
     }
+
+    /**
+     * tcx 파일을 만들때 사용
+     * @param point
+     * @param time
+     * @param dist
+     * @constructor
+     */
+    function TrackPoint(point, time, dist) {
+        this.time = time;
+        this.position = new Point3D(point.lat, point.lng, point.ele.toFixed(0));
+        this.distance = dist.toFixed(0);      //meter
+    }
+    TrackPoint.prototype.toString = function toString() {
+        return JSON.stringify($(this)[0], null, 2);
+    }
+
+
