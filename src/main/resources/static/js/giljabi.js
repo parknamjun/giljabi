@@ -784,9 +784,16 @@ $(document).ready(function() {
 
 		gpxHeader();
 
+		//파일명이 없으면 새로 만들어진 경로를 파일명으로 처
 		if(_uploadFilename === '')
 			_uploadFilename = $('#gpx_metadata_name').val();
-		gpxMetadata(_uploadFilename, Number($('#averageV').val()));
+
+		if($('#gpx_metadata_name').val() === '') {
+			alert('경로명으로 파일을 저장합니다. 경로명을 입력하세요');
+			return;
+		}
+		//파일명을 경로명으로 한다.
+		gpxMetadata($('#gpx_metadata_name').val(), Number($('#averageV').val()));
 
 		gpxWaypoint(waypointSortByDistance);
 

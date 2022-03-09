@@ -12,15 +12,15 @@
 			xmlData += 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' + NEWLINE;
 		} else {
 			xmlData += '<TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2"' + NEWLINE;
-			xmlData += 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' + NEWLINE;
-			xmlData += 'xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd">' + NEWLINE;
+			xmlData += ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' + NEWLINE;
+			xmlData += ' xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd">' + NEWLINE;
 		}
 	}
 
-	function gpxMetadata(courseName, velocity) {
+	function gpxMetadata(filename, velocity) {
 		if (_filetype === 'gpx') {
 			xmlData += '<metadata>' + NEWLINE;
-			xmlData += '  <name>' + courseName + '</name>' + NEWLINE;
+			xmlData += '  <name>' + filename + '</name>' + NEWLINE;
 			xmlData += '  <link href="http://www.giljabi.kr" />' + NEWLINE;
 			xmlData += '  <desc>giljabi</desc>' + NEWLINE;
 			xmlData += '  <copyright>giljabi.kr</copyright>' + NEWLINE;
@@ -31,7 +31,7 @@
 			xmlData += '	<Courses>' + NEWLINE;
 			xmlData += '		<CourseFolder Name="giljabi.kr">' + NEWLINE;
 			xmlData += '			<CourseNameRef>' + NEWLINE;
-			xmlData += '				<Id>' + courseName + '</Id>' + NEWLINE;
+			xmlData += '				<Id>' + filename + '</Id>' + NEWLINE;
 			xmlData += '				<Author>Giljabi</Author>' + NEWLINE;
 			xmlData += '			</CourseNameRef>' + NEWLINE;
 			xmlData += '		</CourseFolder>' + NEWLINE;
@@ -44,12 +44,18 @@
 
 	/**
 	 * 소수점 자리수는 6자리를 사용, xml 파일 크기를 줄이기 위함
+	 * 웨이포인트를 계산할때는 시작과 끝을 보여주지만 실제 가민에서는 사용하면 시작과 끝을 추가해서 보여주므로
+	 * 저잘할때는 제거하고 저장한다.
 	 * @param waypoint
 	 */
 	function gpxWaypoint(waypoint) {
 		if (_filetype === 'gpx') {
 			for (let i = 0; i < waypoint.length; i++) {
 				let wpt = waypoint[i];
+
+				if(i == 0 || i == waypoint.length - 1) //Remove at first and last
+					continue;
+
 				xmlData += '	<wpt lat="' + wpt.point.lat.toFixed(6) +
 					'" lon="' + wpt.point.lng.toFixed(6) + '">' + NEWLINE;
 				xmlData += '		<name>' + wpt.symbolName + '</name>' + NEWLINE;
@@ -60,6 +66,10 @@
 		} else {
 			for (let i = 0; i < waypoint.length; i++) {
 				let wpt = waypoint[i];
+
+				if(i == 0 || i == waypoint.length - 1) //Remove at first and last
+					continue;
+
 				xmlData += '		<CoursePoint>' + NEWLINE;
 				xmlData += '			<Name>' + wpt.symbolName + '</Name>' + NEWLINE;
 				xmlData += '			<Time>' + wpt.time+ '</Time>' + NEWLINE;
@@ -67,7 +77,7 @@
 				xmlData += '				<LatitudeDegrees>'+ wpt.point.lat.toFixed(6) +'</LatitudeDegrees>' + NEWLINE;
 				xmlData += '				<LongitudeDegrees>'+ wpt.point.lng.toFixed(6) +'</LongitudeDegrees>' + NEWLINE;
 				xmlData += '			</Position>' + NEWLINE;
-				xmlData += '			<PointType>'+ wpt.symbol+'</PointType>' + NEWLINE;
+				xmlData += '			<PointType>'+ wpt.symbol.charAt(0).toUpperCase()+wpt.symbol.slice(1)+'</PointType>' + NEWLINE;
 				xmlData += '		</CoursePoint>' + NEWLINE;
 			}
 		}
