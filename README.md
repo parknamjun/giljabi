@@ -3,6 +3,7 @@
 ### [https://giljabi.tistory.com/](https://giljabi.tistory.com/)
 ### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//)
 
+## since 2018.10.26
 ## 로컬 환경에서 사용가능
 * PC에서 java만 설치되어 있으면 누구나 사용 가능합니다.
 * gpx, tcx 파일 만드는 것을 javascript로 구현하여 java만 설치되아 있으면 사용할 수 있습니다.
