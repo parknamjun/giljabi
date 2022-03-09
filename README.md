@@ -3,6 +3,12 @@
 ### [https://giljabi.tistory.com/](https://giljabi.tistory.com/)
 ### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//)
 
+## 로컬 환경에서 사용가능
+* PC에서 java만 설치되어 있으면 누구나 사용 가능합니다.
+* gpx, tcx 파일 만드는 것을 javascript로 구현하여 java만 설치되아 있으면 사용할 수 있습니다.
+* openrouteservice apikey가 없어도 웨이포인트 작성은 문제 없습니다.
+
+
 ## openrouteservice, google elevation api
 * 경로탐색을 위한 api, 구글 고도정보를 가져오는 api 사용하는 방법을 공유합니다
   나중에는 경로탐색도 구글을 사용하게 변경할 예정입니다.
