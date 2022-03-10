@@ -6,9 +6,9 @@
 
 ## since 2018.10.26
 ## 로컬 환경에서 사용가능
-* PC에서 java만 설치되어 있으면 누구나 사용 가능합니다.
-* gpx, tcx 파일 만드는 것을 javascript로 구현하여 java만 설치되아 있으면 사용할 수 있습니다.
-* openrouteservice apikey가 없어도 웨이포인트 작성은 문제 없습니다.
+* spring boot 기반으로 tomcat이 내장되어 있어 java만 설치되어 있으면 사용 가능합니다.
+* gpx, tcx 파일 만드는 것을 javascript로 구현하여 openrouteservice apikey가 없어도 웨이포인트 작성해서 가민등에서 사용할 수 있습니다.
+* api key 노출이 되면 안되는 openrouteservice, google api를 사용하는 것만 api로 작성되어 있습니다.
 
 
 ## openrouteservice, google elevation api
