@@ -1,7 +1,7 @@
 
-## [http://giljabi.kr](http://giljabi.kr/)
-### [https://giljabi.tistory.com/](https://giljabi.tistory.com/)
-### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//)
+## [http://giljabi.kr](http://giljabi.kr/) 초기버전 서비스 중
+### [https://giljabi.tistory.com/](https://giljabi.tistory.com/) 소스공유 설명 블로그
+### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//) 경로공유 블로그 
 
 
 ## since 2018.10.26
@@ -17,11 +17,10 @@
 
 
 ## 소스 공유
-### Tistory : [giljabi.tistory.com](https://giljabi.tistory.com/) 소스 공유
 ### github : [https://github.com/parknamjun/giljabi](https://github.com/parknamjun/giljabi)
 * 사용법 http://localhost:8080/giljabi.html
-* Frontend 부분은 역시나 어렵네요 그래서 UI가 매우 과거형입니다. 
-  원래 사용목적이 경로만 만드는것이라 기본에는 충실하고자 하였습니다.
+* Frontend 부분은 역시나 어렵네요, UI를 구성하는 방법과 구현방법이 최근 유행하는 방법과 프레임워크를 사용하지 않았습니다.  
+  원래 사용목적이 경로를 만들고 사용하는 것이 주된 용도이므로 기본에는 충실하고자 하였습니다.
   
 ![메인화면](./images/image01.png)
 
