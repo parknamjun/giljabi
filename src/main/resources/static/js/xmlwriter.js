@@ -37,9 +37,37 @@
 			xmlData += '		</CourseFolder>' + NEWLINE;
 			xmlData += '	</Courses>' + NEWLINE;
 			xmlData += '</Folders>' + NEWLINE;
+
 			xmlData += '<Courses>' + NEWLINE;	//여러 코스중에서 하나
 			xmlData += '	<Course>' + NEWLINE;	//여러 코스중에서 하나
+			xmlData += '		<Speed>'+ $('#averageV').val() +'</Speed>' + NEWLINE;
+			xmlData += '		<Name>'+ $('#gpx_metadata_name').val()+'</Name>' + NEWLINE;
+
 		}
+	}
+
+
+	/**
+	 * tcx lap
+	 * @param firstPoint
+	 * @param lastPoint
+	 */
+	function makeTcxLap(firstPoint, lastPoint) {
+		let diff = new Date(lastPoint.time) - new Date(BASETIME);
+		xmlData += '		<Lap>' + NEWLINE;
+		xmlData += '			<TotalTimeSeconds>' + diff / 1000 +'</TotalTimeSeconds>' + NEWLINE;
+		xmlData += '			<DistanceMeters>' + lastPoint.distance + '</DistanceMeters>' + NEWLINE;
+		xmlData += '			<BeginPosition>' + NEWLINE;
+		xmlData += '				<LatitudeDegrees>' + firstPoint.position.lat.toFixed(6) + '</LatitudeDegrees>' + NEWLINE;
+		xmlData += '				<LongitudeDegrees>' + firstPoint.position.lng.toFixed(6) + '</LongitudeDegrees>' + NEWLINE;
+		xmlData += '			</BeginPosition>' + NEWLINE;
+		xmlData += '			<EndPosition>' + NEWLINE;
+		xmlData += '				<LatitudeDegrees>' + lastPoint.position.lat.toFixed(6) + '</LatitudeDegrees>' + NEWLINE;
+		xmlData += '				<LongitudeDegrees>' + lastPoint.position.lng.toFixed(6) + '</LongitudeDegrees>' + NEWLINE;
+		xmlData += '			</EndPosition>' + NEWLINE;
+		xmlData += '			<Intensity>Active</Intensity>' + NEWLINE;
+		xmlData += '		</Lap>' + NEWLINE;
+		//xmlData += '		<Track>' + NEWLINE;
 	}
 
 	/**
@@ -70,9 +98,11 @@
 				if(i == 0 || i == waypoint.length - 1) //Remove at first and last
 					continue;
 
+				//milisecond 제거
+				let time = wpt.time.substr(0, wpt.time.length - 5) + 'Z';
 				xmlData += '		<CoursePoint>' + NEWLINE;
 				xmlData += '			<Name>' + wpt.symbolName + '</Name>' + NEWLINE;
-				xmlData += '			<Time>' + wpt.time+ '</Time>' + NEWLINE;
+				xmlData += '			<Time>' + time + '</Time>' + NEWLINE;
 				xmlData += '			<Position>' + NEWLINE;
 				xmlData += '				<LatitudeDegrees>'+ wpt.point.lat.toFixed(6) +'</LatitudeDegrees>' + NEWLINE;
 				xmlData += '				<LongitudeDegrees>'+ wpt.point.lng.toFixed(6) +'</LongitudeDegrees>' + NEWLINE;
@@ -98,27 +128,13 @@
 			xmlData += '	</trk>' + NEWLINE;
 			xmlData += '</gpx>' + NEWLINE;
 		} else {
-			let diff = new Date(trackArray[trackArray.length - 1].time) - new Date(BASETIME);
-			xmlData += '		<Speed>'+ $('#averageV').val() +'</Speed>' + NEWLINE;
-			xmlData += '		<Name>'+ $('#gpx_metadata_name').val()+'</Name>' + NEWLINE;
-			xmlData += '		<Lap>' + NEWLINE;
-			xmlData += '			<TotalTimeSeconds>' + diff / 1000 +'</TotalTimeSeconds>' + NEWLINE;
-			xmlData += '			<DistanceMeters>' + trackArray[trackArray.length - 1].distance + '</DistanceMeters>' + NEWLINE;
-			xmlData += '			<BeginPosition>' + NEWLINE;
-			xmlData += '				<LatitudeDegrees>' + trackArray[0].position.lat.toFixed(6) + '</LatitudeDegrees>' + NEWLINE;
-			xmlData += '				<LongitudeDegrees>' + trackArray[0].position.lng.toFixed(6) + '</LongitudeDegrees>' + NEWLINE;
-			xmlData += '			</BeginPosition>' + NEWLINE;
-			xmlData += '			<EndPosition>' + NEWLINE;
-			xmlData += '				<LatitudeDegrees>' + trackArray[trackArray.length - 1].position.lat.toFixed(6) + '</LatitudeDegrees>' + NEWLINE;
-			xmlData += '				<LongitudeDegrees>' + trackArray[trackArray.length - 1].position.lat.toFixed(6) + '</LongitudeDegrees>' + NEWLINE;
-			xmlData += '			</EndPosition>' + NEWLINE;
-			xmlData += '			<Intensity>Active</Intensity>' + NEWLINE;
-			xmlData += '		</Lap>' + NEWLINE;
 			xmlData += '		<Track>' + NEWLINE;
 			for (let i = 0; i < trackArray.length; i++) {
 				let track = trackArray[i];
+				let time = track.time.substr(0, track.time.length - 5) + 'Z';
+
 				xmlData += '			<Trackpoint>' + NEWLINE;
-				xmlData += '				<Time>'+ track.time+'</Time>' + NEWLINE;
+				xmlData += '				<Time>'+ time +'</Time>' + NEWLINE;
 				xmlData += '				<Position>' + NEWLINE;
 				xmlData += '					<LatitudeDegrees>' + track.position.lat.toFixed(6) + '</LatitudeDegrees>' + NEWLINE;
 				xmlData += '					<LongitudeDegrees>' + track.position.lng.toFixed(6) + '</LongitudeDegrees>' + NEWLINE;
@@ -128,9 +144,11 @@
 				xmlData += '			</Trackpoint>' + NEWLINE;
 			}
 			xmlData += '		</Track>' + NEWLINE;
-			xmlData += '	</Course>' + NEWLINE;
-			xmlData += '</Courses>' + NEWLINE;
-			xmlData += '</TrainingCenterDatabase>' + NEWLINE;
-
 		}
+	}
+
+	function tcxClose() {
+		xmlData += '	</Course>' + NEWLINE;
+		xmlData += '</Courses>' + NEWLINE;
+		xmlData += '</TrainingCenterDatabase>' + NEWLINE;
 	}
