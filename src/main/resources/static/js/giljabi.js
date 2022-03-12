@@ -44,7 +44,8 @@ let _markings = [];	//고도차트를 그리기 위한 데이터리스트
 let waypointSortByDistance = [];	//웨이포인트를 거리별로 정열된 배열
 let _filetype = '';	//gpx, tcx 구분
 
-let BASETIME = '2022-01-01T00:00:00Z';
+//'2022-01-01T00:00:00Z';
+let BASETIME = (new Date()).toISOString().split('T')[0];
 
 $(document).ready(function() {
 	//지도초기화
@@ -733,7 +734,6 @@ $(document).ready(function() {
 		let wayIndex = 0;
 		let v = Number($('#averageV').val());
 		let currentTime = new Date(BASETIME);
-		currentTime.setHours(0);
 
 		for(let i = 0; i < waypointSortByDistance.length; i++) {
 			for(; wayIndex <= waypointSortByDistance[i].index; wayIndex++) {
@@ -778,6 +778,10 @@ $(document).ready(function() {
 			alert('경로 정보가 없습니다.');
 			return;
 		}
+
+		//저장할때 포인트를 생성한다.
+		getWaypointInfo();
+
 		$('#blockingAds').show();
 
 		_filetype = $(':radio[name="filetype"]:checked').val();
@@ -793,14 +797,18 @@ $(document).ready(function() {
 			return;
 		}
 		//파일명을 경로명으로 한다.
-		gpxMetadata($('#gpx_metadata_name').val(), Number($('#averageV').val()));
+		gpxMetadata($('#gpx_metadata_name').val(), Number($('#averageV').val()), );
 
-		gpxWaypoint(waypointSortByDistance);
-
-		if(_filetype === 'gpx')
+		if(_filetype === 'gpx') {
+			gpxWaypoint(waypointSortByDistance);
 			gpxTrack(_gpxTrkseqArray);
-		else
-			gpxTrack(makeTcxTrackPoint());
+		} else {
+			let tcxTrackPoint = makeTcxTrackPoint();
+			makeTcxLap(tcxTrackPoint[0], tcxTrackPoint[tcxTrackPoint.length - 1]);
+			gpxTrack(tcxTrackPoint);
+			gpxWaypoint(waypointSortByDistance);
+			tcxClose();
+		}
 
 		console.info(xmlData);
 

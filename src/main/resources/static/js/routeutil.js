@@ -242,13 +242,18 @@
             return a.index - b.index;
         });
 
-        //경로의 마지막 위치는 웨이포인트이 마지막 위치로 추가
+        //경로의 마지막 위치는 웨이포인트이 마지막 위치로 추가, 엑셀 저장에서만 사용한다
         nearPoint = new WayPointInfo(_gpxTrkseqArray.length - 1, 0, '0',
             _gpxTrkseqArray[_gpxTrkseqArray.length - 1], 'end', 'END', '');
         waypointSortByDistance.push(nearPoint);
         return waypointSortByDistance;
     }
 
+    /**
+     * 웨이포인트를 엑셆파일로 저장한다.
+     * @param filename
+     * @param excelData
+     */
     function excelFileExport(filename, excelData) {
         let sheetName = 'waypoint';
         let wb = XLSX.utils.book_new();
@@ -285,7 +290,7 @@
     function TrackPoint(point, time, dist) {
         this.time = time;
         this.position = new Point3D(point.lat, point.lng, point.ele.toFixed(0));
-        this.distance = dist.toFixed(0);      //meter
+        this.distance = dist.toFixed(2);      //meter
     }
     TrackPoint.prototype.toString = function toString() {
         return JSON.stringify($(this)[0], null, 2);
