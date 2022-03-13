@@ -813,7 +813,7 @@ $(document).ready(function() {
 		console.info(xmlData);
 
 		saveAs(new Blob([xmlData],{
-			type:"application/xml"}), $('#gpx_metadata_name').val() + '.' + _filetype);
+			type:"application/vnd.garmin.tcx+xml"}), $('#gpx_metadata_name').val() + '.' + _filetype);
 
 		$('#blockingAds').hide();
 
