@@ -29,14 +29,29 @@
 * [google elevation api](https://developers.google.com/maps/documentation/elevation/start)
 
 API 테스트 방법
-1. 경로탐색
+1. API key 설정 
+   
+   application.yml에 위 사이트에서 발급받은 key 값을 각각 넣어줍니다.
+```
+giljabi:
+  openrouteservice:
+    apikey: 1234567890.....
+    directionUrl: https://api.openrouteservice.org/v2/directions/%s/json
+  google:
+    elevation:
+      googleGetCount: 400
+      apikey: ABCDEFGH..........
+      elevationUrl: https://maps.googleapis.com/maps/api/elevation/json
+```
+
+2. 경로탐색
 .http 파일의 내용을 참고
 ```
 GET http://localhost:8080/api/1.0/route?start=127.01117,37.5555&target=126.99448,37.54565&direction=cycling-road
 Content-Type: application/json
 ```   
 
-2. 높이정보 
+3. 높이정보 
 ```
 POST http://localhost:8090/api/1.0/elevation
 Content-Type: application/json
