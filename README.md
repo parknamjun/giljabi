@@ -76,6 +76,11 @@ Content-Type: application/json
 }
 ```
 
+## GPX & TCX 사양
+* [https://en.wikipedia.org/wiki/Training_Center_XML](https://en.wikipedia.org/wiki/Training_Center_XML)
+* [https://en.wikipedia.org/wiki/GPS_Exchange_Format](https://en.wikipedia.org/wiki/GPS_Exchange_Format)
+
+
 ## gpx
 ```
 ?xml version="1.0" encoding="UTF-8"?>
