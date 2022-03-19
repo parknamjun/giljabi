@@ -29,9 +29,9 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class XmlWriterController {
 
-    @PostMapping("/api/1.0/gpxinfo")
+    @PostMapping("/api/1.0/gpxwriter")
     @ApiOperation(value = "", notes = "gpx xml 정보 만들기")
-    public Response makeGpxinfo(@RequestBody XmlWriterRequest request) {
+    public Response gpxWriter(@RequestBody XmlWriterRequest request) {
         ArrayList<Geometry3DPoint> list = null;
         try {
             log.info("request:{1}", request);
