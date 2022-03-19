@@ -819,6 +819,9 @@ $(document).ready(function() {
 
 	});
 
+	/**
+	 * 이동경로를 저장하기 위해 시간, 거리정보를 추가한다.
+	 */
 	function makeTcxTrackPoint() {
 		let tcxTrackPoint = [];
    		let cumDistance = 0; //누적거리

@@ -1,5 +1,7 @@
 package kr.giljabi.api.request;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class RequestElevationData {
 
         public Geometry2DPoint(double lng, double lat) {
             //소수점 이하 5자리로 제한
-            DecimalFormat decimalFormat = new DecimalFormat("#.#####");
+            DecimalFormat decimalFormat = new DecimalFormat("#.######");
 
             this.lng = Double.parseDouble(decimalFormat.format(lng));
             this.lat = Double.parseDouble(decimalFormat.format(lat));
