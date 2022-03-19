@@ -9,6 +9,7 @@
 ### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//) 경로공유 블로그 
 
 
+
 ## since 2018.10.26
 블로그 첫글(https://gpxtcx.tistory.com/1)에도 있습니다먼, 개인적으로 불편함이 시작이었습니다.
 가민520 사용하면서 제대로 사용하려면 tcx/gpx등의 파일을 만들어서 사용해야 하는데 기의 툴들이
@@ -25,6 +26,8 @@
 JPA 온라인 강의도 들었고, DB는 mysql/h2를 이용할 계획입니다.
 
 현재 운영중인 (http://giljabi.kr)은 mysql, struts를 기반으로 개벌되었습니다.
+
+
 
 ## 로컬 환경에서 사용가능
 * spring boot 기반으로 tomcat이 내장되어 있어 java(1.8 권장)만 설치되어 있으면 사용 가능합니다.
@@ -48,6 +51,8 @@ JPA 온라인 강의도 들었고, DB는 mysql/h2를 이용할 계획입니다.
 * [openrouteservice.org](https://openrouteservice.org/)
 * [openrouteservice-docs](https://github.com/GIScience/openrouteservice-docs)
 * [google elevation api](https://developers.google.com/maps/documentation/elevation/start)
+
+
 
 API 테스트 방법
 1. API key 설정 
