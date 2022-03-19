@@ -1,7 +1,10 @@
 
 #### 파일을 지도에 올리는 것은 gpx 파일만 사용 가능하고, 저장은 gpx, tcx 가능합니다. tcx 파일 올리는 것은 준비중입니다.  
 
-## [http://giljabi.kr](http://giljabi.kr/) 초기버전 서비스 중
+### [http://giljabi.kr](http://giljabi.kr/) 초기버전은 AWS Light sail를 사용하고 있으며 아래에 설명이 있습니다.
+* [AWS Lightsail apache tomcat 설치 그리고 운영](https://gpxtcx.tistory.com/11)
+* [gpx2tcx 변환/병합과 웨이포인트 작성 웹 소개](https://gpxtcx.tistory.com/3)
+
 ### [https://giljabi.tistory.com/](https://giljabi.tistory.com/) 소스공유 설명 블로그
 ### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//) 경로공유 블로그 
 
