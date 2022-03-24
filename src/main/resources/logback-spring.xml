@@ -1,0 +1,89 @@
+<configuration>
+    <springProperty scope="context" name="port" source="server.port"/>
+    <springProperty scope="context" name="profile" source="spring.profiles.active"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- Local -->
+    <springProfile name="local">
+
+        <logger name="org.springframework" level="INFO"/>
+        <logger name="org.springframework.security" level="INFO"/>
+        <logger name="com.zaxxer.hikari" level="INFO"/>
+        <logger name="org.hibernate.SQL" level="INFO"/>
+        <logger name="org.hibernate.type" level="INFO"/>
+        <logger name="org.hibernate" level="INFO"/>
+        <logger name="org.apache.zookeeper" level="INFO"/>
+        <logger name="org.apache.http" level="INFO"/>
+
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>./logs/giljabi.log</file>
+
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>./logs/giljabi.%d{yyyy-MM-dd}_%i.log.gz</fileNamePattern>
+                <maxHistory>30</maxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+
+    </springProfile>
+
+    <springProfile name="real">
+
+        <logger name="org.springframework" level="INFO"/>
+        <logger name="org.springframework.security" level="INFO"/>
+        <logger name="com.zaxxer.hikari" level="INFO"/>
+        <logger name="org.hibernate.SQL" level="INFO"/>
+        <logger name="org.hibernate" level="INFO"/>
+        <logger name="org.apache.zookeeper" level="INFO"/>
+        <logger name="org.apache.http" level="INFO"/>
+        <logger name="org.thymeleaf.TemplateEngine" level="INFO"/>
+
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>./logs/giljabi.log</file>
+
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>./logs/giljabi.%d{yyyy-MM-dd}_%i.log.gz</fileNamePattern>
+                <maxHistory>30</maxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>100MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+
+    </springProfile>
+
+</configuration>
