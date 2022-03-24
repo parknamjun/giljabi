@@ -4,6 +4,7 @@
 ### [http://giljabi.kr](http://giljabi.kr/) 초기버전은 AWS Light sail를 사용하고 있으며 아래에 설명이 있습니다.
 * [AWS Lightsail apache tomcat 설치 그리고 운영](https://gpxtcx.tistory.com/11)
 * [gpx2tcx 변환/병합과 웨이포인트 작성 웹 소개](https://gpxtcx.tistory.com/3)
+* [giljabi 시작과 현재 소개글](https://gpxtcx.tistory.com/13)
 
 ### [https://giljabi.tistory.com/](https://giljabi.tistory.com/) 소스공유 설명 블로그
 ### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//) 경로공유 블로그 
@@ -52,6 +53,8 @@ JPA 온라인 강의도 들었고, DB는 mysql/h2를 이용할 계획입니다.
 * [openrouteservice-docs](https://github.com/GIScience/openrouteservice-docs)
 * [google elevation api](https://developers.google.com/maps/documentation/elevation/start)
 
+* [지도 경로탐색 오픈API 소개(OpenRouteService)](https://gpxtcx.tistory.com/38)
+* [openrouteservice api 사용](https://giljabi.tistory.com/2)
 
 
 API 테스트 방법
