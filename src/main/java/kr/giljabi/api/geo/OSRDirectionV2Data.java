@@ -2,6 +2,7 @@ package kr.giljabi.api.geo;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
  * 2020.11.15
  */
 @Setter @Getter
+@ToString
 public class OSRDirectionV2Data {
 	public ArrayList<Routes> routes = new ArrayList<Routes>();
 	public ArrayList<Object> bbox = new ArrayList<Object>();
@@ -19,16 +21,18 @@ public class OSRDirectionV2Data {
 	}
 
 	@Setter @Getter
+	@ToString
 	public class Metadata {
 		private String attribution;
 		private String service;
-		private float timestamp;
+		private double timestamp;
 		private Query query;
 		private Engine engine;
 	
 	}
 
 	@Setter @Getter
+	@ToString
 	public class Engine {
 		private String version;
 		private String build_date;
@@ -36,6 +40,7 @@ public class OSRDirectionV2Data {
 	}
 
 	@Setter @Getter
+	@ToString
 	public class Query {
 		 ArrayList < Object > coordinates = new ArrayList < Object > ();
 		 private String profile;
@@ -44,8 +49,9 @@ public class OSRDirectionV2Data {
 	}
 
 	@Setter @Getter
+	@ToString
 	public class Routes {
-		private Summary SummaryObject;
+		private Summary summary;
 		private ArrayList < Object > segments = new ArrayList < Object > ();
 		private ArrayList < Object > bbox = new ArrayList < Object > ();
 		private String geometry;
@@ -53,10 +59,11 @@ public class OSRDirectionV2Data {
 	}
 
 	@Setter @Getter
+	@ToString
 	public class Summary {
-		private float distance;
-		private float duration;
-		private float ascent;
-		private float descent;
+		private double distance;
+		private double duration;
+		private double ascent;
+		private double descent;
 	}
 }
