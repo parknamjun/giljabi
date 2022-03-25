@@ -3,13 +3,14 @@ package kr.giljabi.api.controller;
 import io.swagger.annotations.ApiOperation;
 import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.geo.Geometry3DPoint;
-import kr.giljabi.api.geo.RouteService;
 import kr.giljabi.api.request.RouteData;
 import kr.giljabi.api.response.Response;
+import kr.giljabi.api.service.RouteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +35,11 @@ public class RouterController {
     public Response getRoute(
             @RequestParam(name = "start") Double[] start,
             @RequestParam(name = "target") Double[] target,
-            @RequestParam(name = "direction") String direction) {
+            @RequestParam(name = "direction") String direction,
+            HttpServletRequest request) {
         ArrayList<Geometry3DPoint> list = new ArrayList<>();
         try {
-            RouteData routeData = new RouteData(start, target, direction);
+            RouteData routeData = new RouteData(start, target, direction, request.getRemoteAddr());
 /*
 //openroute service는 일 호출건수 제약이 있어 임의의 데이터를 응답데이터로 만들어 사용한다.
 list.add(new Geometry3DPoint(127.01117, 37.5555, 42));

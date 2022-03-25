@@ -17,10 +17,12 @@ public class RouteData {
     private Double[] start;
     private Double[] target;
     private String profile;
+    private String clientIp;
 
-    public RouteData(Double[] start, Double[] target, String profile) {
+    public RouteData(Double[] start, Double[] target, String profile, String clientIp) {
         this.start = start;
         this.target = target;
         this.profile = profile;
+        this.clientIp = clientIp;
     }
 }
