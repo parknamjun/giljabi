@@ -105,6 +105,20 @@ Content-Type: application/json
 }
 ```
 
+4. 테이블 생성
+ 테이블은 현재 사용한 사용자의 IP를 기준으로 이력을 저장하는 테이블을 2개 사용합니다. 사용이력 테이블(api_call_info), IP별 누적 사용현황(client_info)을 사용합니다.
+ 
+ mybtis등을 사용하면 간편하지만, 학습중인 JPA를 사용하였습니다. 기본 기능인 insert/update를 사용하고 있습니다.
+ 
+ 
+ docs/script/schema.sql을 mysql or h2에 생성합니다. 아니면
+``` 
+ hibernate:
+   ddl-auto: create
+```
+이렇게 설정되어 있으면 drop table 후 create table을 해줍니다.
+
+
 ## GPX & TCX 사양
 * [https://en.wikipedia.org/wiki/Training_Center_XML](https://en.wikipedia.org/wiki/Training_Center_XML)
 * [https://en.wikipedia.org/wiki/GPS_Exchange_Format](https://en.wikipedia.org/wiki/GPS_Exchange_Format)
