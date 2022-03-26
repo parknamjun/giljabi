@@ -119,6 +119,7 @@ Content-Type: application/json
 이렇게 설정되어 있으면 drop table 후 create table을 해줍니다.
 
  Audit 정보는 공통으로 사용되는 부분이라 테이블을 표현으로만 분리되어 있습니다.
+
 ![images/table1.png](images/table1.png)
 
 ## GPX & TCX 사양
