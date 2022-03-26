@@ -40,7 +40,6 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class RouteService {
     @Value("${giljabi.openrouteservice.apikey}")
@@ -49,13 +48,21 @@ public class RouteService {
     @Value("${giljabi.openrouteservice.directionUrl}")
     private String directionUrl;
 
-    //
-    @Autowired
     private final ApiCallInfoRepository apiCallInfoRepository;
-
-    @Autowired
     private final ClientInfoRepository clientInfoRepository;
 
+    /**
+     * 생상자 주입방식을 권장
+     * @param apiCallInfoRepository
+     * @param clientInfoRepository
+     */
+    @Autowired
+    public RouteService (ApiCallInfoRepository apiCallInfoRepository,
+                         ClientInfoRepository clientInfoRepository) {
+        this.apiCallInfoRepository = apiCallInfoRepository;
+        this.clientInfoRepository = clientInfoRepository;
+
+    }
     /**
      * openrouteservice를 사용하지만, google direction를 사용하는 것도 고려할 필요 있음
      */
@@ -131,13 +138,15 @@ public class RouteService {
         apiCallInfoRepository.save(apiCallInfo);
         log.info("apiCallInfo.id={}", apiCallInfo.getId());
 
-        saveClientInfo(request, direction, resultList, apiCallInfo);
+        saveClientInfo(apiCallInfo);
 
     }
 
-    private void saveClientInfo(RouteData request, OSRDirectionV2Data direction,
-                                ArrayList<Geometry3DPoint> resultList,
-                                ApiCallInfo apiCallInfo) {
+    /**
+     * 사용자는 IP로 구분하고, IP를 기준으로 insert/update 한다.
+     * @param apiCallInfo
+     */
+    private void saveClientInfo(ApiCallInfo apiCallInfo) {
         ClientInfo findClientInfo = clientInfoRepository.findByClientIp(apiCallInfo.getCreateBy());
         log.info("findClientInfo={}", findClientInfo);
 
@@ -161,6 +170,14 @@ public class RouteService {
         }
     }
 
+    /**
+     *
+     * @param httpPost
+     * @param json
+     * @return
+     * @throws GiljabiException
+     * @throws IOException
+     */
     private String requestOpenRouteService(HttpPost httpPost, JSONObject json) throws GiljabiException, IOException {
         StringEntity postEntity = new StringEntity(json.toString());
         httpPost.setEntity(postEntity);
@@ -182,7 +199,5 @@ public class RouteService {
         log.info(result);
         return result;
     }
-
-    /////////////////////////////////////////////////////////////
 
 }
