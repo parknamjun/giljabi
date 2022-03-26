@@ -13,6 +13,7 @@ import kr.giljabi.api.repository.ClientInfoRepository;
 import kr.giljabi.api.request.RouteData;
 import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.utils.GeometryDecoder;
+import kr.giljabi.api.utils.MyHttpUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.ResponseHandler;
@@ -77,12 +78,8 @@ public class RouteService {
         log.info(json.toString());
 
         directionUrl = String.format(directionUrl, request.getProfile());
-        HttpPost httpPost = new HttpPost(directionUrl); //POST call
-        httpPost.setHeader("Authorization", apikey);
-        httpPost.setHeader("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8");
-        httpPost.setHeader("Content-Type", "application/json; charset=utf-8");
 
-        String body = requestOpenRouteService(httpPost, json);
+        String body = MyHttpUtils.httpPostMethod(directionUrl, json, apikey);
 
         Gson gson = new GsonBuilder().create();
         OSRDirectionV2Data direction = gson.fromJson(body, OSRDirectionV2Data.class);

@@ -3,8 +3,6 @@ package kr.giljabi.api.controller;
 import io.swagger.annotations.ApiOperation;
 import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.geo.Geometry3DPoint;
-import kr.giljabi.api.geo.GoogleService;
-import kr.giljabi.api.request.RequestElevationData;
 import kr.giljabi.api.request.XmlWriterRequest;
 import kr.giljabi.api.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 
 /**
