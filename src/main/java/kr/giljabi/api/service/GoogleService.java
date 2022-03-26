@@ -1,7 +1,9 @@
-package kr.giljabi.api.geo;
+package kr.giljabi.api.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import kr.giljabi.api.geo.Geometry3DPoint;
+import kr.giljabi.api.geo.GoogleElevationData;
 import kr.giljabi.api.request.RequestElevationData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

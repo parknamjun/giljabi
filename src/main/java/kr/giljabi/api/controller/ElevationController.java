@@ -1,10 +1,9 @@
 package kr.giljabi.api.controller;
 
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.geo.Geometry3DPoint;
-import kr.giljabi.api.geo.GoogleService;
+import kr.giljabi.api.service.GoogleService;
 import kr.giljabi.api.request.RequestElevationData;
 import kr.giljabi.api.response.Response;
 import lombok.RequiredArgsConstructor;
