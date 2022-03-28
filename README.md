@@ -17,17 +17,18 @@
 불편하고 한글문제등의 많은 이슈가 있더군요
 
 그래서 파일을 열어보니 그냥 xml 파일이라 이거 한번 해볼까해서 하다보니 웹페이지도 만들고 
-구글 애드센스, 카카오애드핏도 해보고 다양한 경험을 하게 되었습니다. 아직 수익 전환기준이 안되어 그림의 떡입니다. 
+구글 애드센스, 카카오애드핏도 해보고 다양한 경험을 하게 되었습니다. 굉고는 있는데 아직 수익 전환기준이 언제 될지 까마득합니다. 
 
-공개를 하려니 막 코딩 부분정리가 아직도 잘 안됩니다. 특히 javascript는 요즘 유행하는 프레임워크를 쓰면 
-좋겠습니다만, react, vue등을 볼 여유가 없네요
+개인적으로 사용하던것을 공개를 하려니 막 코딩 부분정리가 아직도 잘 안됩니다. 특히 javascript는 요즘 유행하는 프레임워크를 쓰면 
+좋겠습니다만 볼 여유가 없어 그냥 에전 방법으로 사용합니다.
 
-진행 예정인 부분은 UI부분에서 tcx loagin 그리고 elevation, route api 호출시 경로정보를 DB에 저장하는 것을 JPA를 이용하는 것을 추가하는 것입니다. 
-오래전 struts 기반으로 만든 프레임워크에 너무 익숙해서 spring의 어노테이션을 보면서 당황스러웠지만 세상이 변했으니 함께 변해야겠습니다. 
-JPA 온라인 강의도 들었고, DB는 mysql/h2를 이용할 계획입니다.
+진행 예정인 부분은 UI부분에서 tcx 파일업로드 추가할 예정이고 
+elevation, route api 호출시 경로정보를 DB에 저장하는 것을 JPA를 이용하는 것을 추가할 예정입니다.
+
+DB는 H2를 사용할 예정입니다.
+
 
 현재 운영중인 (http://giljabi.kr)은 mysql, struts를 기반으로 개벌되었습니다.
-
 
 
 ## 로컬 환경에서 사용가능
@@ -44,8 +45,8 @@ JPA 온라인 강의도 들었고, DB는 mysql/h2를 이용할 계획입니다.
 ## 소스 공유
 ### github : [https://github.com/parknamjun/giljabi](https://github.com/parknamjun/giljabi)
 * 사용법 http://localhost:8080/giljabi.html
-* Frontend 부분은 역시나 어렵네요, UI를 구성하는 방법과 구현방법이 최근 유행하는 방법과 프레임워크를 사용하지 않았습니다.  
-  원래 사용목적이 경로를 만들고 사용하는 것이 주된 용도이므로 기본에는 충실하고자 하였습니다.
+* Frontend 부분은 역시나 어렵네요, 원래 사용목적이 경로를 만들고 사용하는 것이 주된 용도이므로 기본에는 충실하고자 하였습니다.
+
   
 ![메인화면](./images/image01.png)
 
@@ -219,9 +220,4 @@ xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 h
 	</Course>
 </Courses>
 </TrainingCenterDatabase>
-    		
-		
-		
-
-
 ```
