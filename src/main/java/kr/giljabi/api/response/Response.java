@@ -24,7 +24,7 @@ public class Response {
     }
 
     public static Response of(Exception e) {
-        return new Response(STATUS_FAILURE, e.getMessage());
+        return new Response(STATUS_FAILURE, "알 수 없는 장애가 발생하였습니다." + e.getMessage());
     }
 
     public Response addObject(Object data) {
