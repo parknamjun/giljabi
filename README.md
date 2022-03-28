@@ -23,9 +23,7 @@
 좋겠습니다만 볼 여유가 없어 그냥 에전 방법으로 사용합니다.
 
 진행 예정인 부분은 UI부분에서 tcx 파일업로드 추가할 예정이고 
-elevation, route api 호출시 경로정보를 DB에 저장하는 것을 JPA를 이용하는 것을 추가할 예정입니다.
-
-DB는 H2를 사용할 예정입니다.
+elevation, route api 호출시 경로정보를 DB에 저장하는 것은 H2 Database와 JPA를 이용하는 것을 추가할 예정입니다
 
 
 현재 운영중인 (http://giljabi.kr)은 mysql, struts를 기반으로 개벌되었습니다.
