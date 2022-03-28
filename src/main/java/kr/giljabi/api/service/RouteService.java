@@ -75,7 +75,7 @@ public class RouteService {
         JSONObject json = new JSONObject();
         json.put("coordinates", coordinates);   //좌표 배열로 입력 가능....
         json.put("elevation", "true");
-        log.info(json.toString());
+        //log.info(json.toString());
 
         directionUrl = String.format(directionUrl, request.getProfile());
 
@@ -86,9 +86,8 @@ public class RouteService {
         ArrayList<OSRDirectionV2Data.Routes> routes = direction.getRoutes();
         ArrayList<Geometry3DPoint> resultList = GeometryDecoder.decodeGeometry(routes.get(0).getGeometry(), true);
 
-        log.info(direction.toString());
-        log.info(resultList.toString());
-
+        //log.info(direction.toString());
+        //log.info(resultList.toString());
 
         saveApiCallInfo(request, direction, resultList);
 
@@ -153,18 +152,14 @@ public class RouteService {
         clientInfo.setProfileCode(apiCallInfo.getProfileCode());
 
         if(findClientInfo == null) {
-            //insert
-            clientInfo.setAccumulate_distance(apiCallInfo.getDistance());    //누적 거리
-            clientInfo.setAccumulate_count(1);       //누적 사용건수
-            clientInfoRepository.save(clientInfo);
+            clientInfo.setAccumulate_distance(apiCallInfo.getDistance());   //누적 거리
+            clientInfo.setAccumulate_count(1);                              //누적 사용건수
         } else {
-            //update
             clientInfo.setAccumulate_distance(findClientInfo.getAccumulate_distance() +
                     apiCallInfo.getDistance());
             clientInfo.setAccumulate_count(findClientInfo.getAccumulate_count() + 1);
-            clientInfoRepository.save(clientInfo);
-            log.info("exist");
         }
+        clientInfoRepository.save(clientInfo);
     }
 
     /**
