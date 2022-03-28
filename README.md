@@ -55,7 +55,7 @@ JPA 온라인 강의도 들었고, DB는 mysql/h2를 이용할 계획입니다.
 * [https://developers.google.com/maps/documentation/elevation/start](https://developers.google.com/maps/documentation/elevation/start)
 
 
-### 블로그 작성글 참 
+### 블로그 작성글
 * [지도 경로탐색 오픈API 소개(OpenRouteService)](https://gpxtcx.tistory.com/38)
 * [openrouteservice api 사용](https://giljabi.tistory.com/2)
 
