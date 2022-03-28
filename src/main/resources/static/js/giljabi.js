@@ -45,7 +45,7 @@ let waypointSortByDistance = [];	//웨이포인트를 거리별로 정열된 배
 let _filetype = '';	//gpx, tcx 구분
 
 //'2022-01-01T00:00:00Z';
-let BASETIME = (new Date()).toISOString().split('T')[0];
+let BASETIME = new Date('2022-01-01T15:00:00Z');
 
 $(document).ready(function() {
 	//지도초기화
@@ -609,6 +609,7 @@ $(document).ready(function() {
 				
 			},
 			success:function(response, status) {
+				//status : success
 				if(response.status == 200) {
 					//_gpxTrkseqArray = []; //chkRoute의 체크 유무에 따라 초기화를 결정해야 한다.
 					//eleFalg = true;
@@ -629,7 +630,8 @@ $(document).ready(function() {
 					makeMarkerRoute(_lastPoint, 'daumend.png');
 				} else {
 					//eleFalg = false;
-					alert(data.resultmessage);
+					alert(response.status);
+					alert(response.message);
 				}
 				$('#blockingAds').hide();
 			}
@@ -692,7 +694,7 @@ $(document).ready(function() {
 			} else {
 				_polyline.splice(_polyline.length - 1, 1);
 				let temp  = _gpxTrkseqArray[_gpxTrkseqArray.length - 1];
-				route[0] = new kakao.maps.LatLng(temp.lat, temp.lon);
+				route[0] = new kakao.maps.LatLng(temp.lat, temp.lng);
 				drawPlot();
 				getWaypointInfo();
 			}
