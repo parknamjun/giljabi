@@ -149,6 +149,7 @@ list.add(new Geometry3DPoint(126.99448, 37.54565, 175));
         } catch(Exception e) {
             return Response.of(new GiljabiException(9001, e.getMessage()));
         }
+
         return Response.of().addObject(list);
     }
 

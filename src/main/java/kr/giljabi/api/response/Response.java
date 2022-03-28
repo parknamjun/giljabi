@@ -2,8 +2,10 @@ package kr.giljabi.api.response;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter @Setter
+@ToString
 public class Response {
     private static final short STATUS_SUCCESS = 200;
     private static final short STATUS_FAILURE = -1;
