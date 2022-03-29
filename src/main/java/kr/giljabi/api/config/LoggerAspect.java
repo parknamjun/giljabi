@@ -14,6 +14,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
+/**
+ * request, response 로그
+ * @author eahn.park@gmail.com
+ * @date 2022.03.29
+ *
+ */
 @Aspect
 @Component
 @Slf4j
@@ -32,13 +38,13 @@ public class LoggerAspect {
 
         long startAt = System.currentTimeMillis();
 
-        log.info("REQUEST Start ==========================================================");
+        log.info("===== REQUEST Start Request URL : {} ===========================", request.getRequestURI());
         log.info("Controller : {}", controllerName);
         log.info("method : {}", methodName);
-        log.info("Request URL : {}", request.getRequestURI());
+        //log.info("Request URL : {}", request.getRequestURI());
         log.info("Http Method : {}", request.getMethod());
         log.info("params : {}", getParams(request));
-        log.info("REQUEST End ==========================================================");
+        log.info("===== REQUEST End Request URL : {} ===========================", request.getRequestURI());
 
         Object result = pjp.proceed();
 
@@ -47,10 +53,10 @@ public class LoggerAspect {
 
         long endAt = System.currentTimeMillis();
 
-        log.info("RESPONSE Start ==========================================================");
+        log.info("===== RESPONSE Start Request URL : {} ===========================", request.getRequestURI());
         log.info("Response : {}", resultJson);
         log.info("Time Required : {}ms", endAt - startAt);
-        log.info("RESPONSE End ==========================================================");
+        log.info("===== RESPONSE End Request URL : {} ===========================", request.getRequestURI());
 
         return result;
     }
