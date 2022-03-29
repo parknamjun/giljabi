@@ -1,5 +1,5 @@
 
-#### 파일을 지도에 올리는 것은 gpx 파일만 사용 가능하고, 저장은 gpx, tcx 가능합니다. tcx 파일 올리는 것은 준비중입니다.  
+#### 파일을 지도에 올리는 것은 gpx 파일만 사용 가능하고, 저장은 gpx, tcx 가능합니다. tcx 파일 올리는 것은 준비중입니다.
 
 ### [http://giljabi.kr](http://giljabi.kr/) 초기버전은 AWS Light sail를 사용하고 있으며 아래에 설명이 있습니다.
 * [AWS Lightsail apache tomcat 설치 그리고 운영](https://gpxtcx.tistory.com/11)
@@ -7,23 +7,24 @@
 * [giljabi 시작과 현재 소개글](https://gpxtcx.tistory.com/13)
 
 ### [https://giljabi.tistory.com/](https://giljabi.tistory.com/) 소스공유 설명 블로그
-### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//) 경로공유 블로그 
-
+### [https://gpxtcx.tistory.com/](https://gpxtcx.tistory.com//) 경로공유 블로그
 
 
 ## since 2018.10.26
 블로그 첫글(https://gpxtcx.tistory.com/1)에도 있습니다먼, 개인적으로 불편함이 시작이었습니다.
-가민520 사용하면서 제대로 사용하려면 tcx/gpx등의 파일을 만들어서 사용해야 하는데 가민에서 제공하는 것과 다른 툴들이
-불편하고 한글문제등의 많은 이슈가 있더군요
+가민520 사용하면서 제대로 사용하려면 tcx/gpx등의 파일을 만들어서 사용해야 하는데 가민에서 제공하는거는 너무 불편하고 해외 사이트에서 제공하는 것은 한글문제가 있더군요
 
-그래서 파일을 열어보니 그냥 xml 파일이라 이거 한번 해볼까해서 하다보니 웹페이지도 만들고 
-구글 애드센스, 카카오애드핏도 해보고 다양한 경험을 하게 되었습니다. 굉고는 있는데 아직 수익 전환기준이 언제 될지 까마득합니다. 
+그래서 파일을 열어보니 그냥 xml 파일이라 이거 한번 해볼까해서 하다보니 웹페이지도 만들고
+구글 애드센스, 카카오애드핏도 해보고 다양한 경험을 하게 되었습니다. 광고는 있는데 아직 수익 전환기준이 언제 될지 까마득합니다.
 
-개인적으로 사용하던것을 공개를 하려니 막 코딩 부분정리가 아직도 잘 안됩니다. 특히 javascript는 요즘 유행하는 프레임워크를 쓰면 
-좋겠습니다만 볼 여유가 없어 그냥 에전 방법으로 사용합니다.
+개인적으로 사용하던것을 공개를 하려니 정리가 아직도 잘 안됩니다.
+특히 javascript는 요즘 유행하는 프레임워크는 안쓰고 jquery정도만 사용합니다.
 
-진행 예정인 부분은 UI부분에서 tcx 파일업로드 추가할 예정이고 
-elevation, route api 호출시 경로정보를 DB에 저장하는 것을 JPA를 이용하는 것을 추가할 예정입니다.
+진행 예정인 부분은 UI부분에서 tcx 파일업로드 추가할 예정이고
+elevation, route api 호출시 간단한 경로정보를 DB에 저장하는데 최근 유행하는 JPA를 이용하려합니다.
+
+JPA는 트랜잭션에 특화해서 사용하면 상당히 편리해보이는데 다양한 리포팅을 위해 사용하기에는 고민이 좀 됩니다.
+quertdsl를 사용할수도 있겠지만, 리포팅 부분은 mybatis같은 매퍼를 사용하는게 생산성이 좋은것 같습니다.
 
 DB는 H2를 사용할 예정입니다.
 
@@ -45,12 +46,12 @@ DB는 H2를 사용할 예정입니다.
 ## 소스 공유
 ### github : [https://github.com/parknamjun/giljabi](https://github.com/parknamjun/giljabi)
 * 사용법 http://localhost:8080/giljabi.html
-* Frontend 부분은 역시나 어렵네요, 원래 사용목적이 경로를 만들고 사용하는 것이 주된 용도이므로 기본에는 충실하고자 하였습니다.
+* 사용목적이 경로를 만들고 사용하는 것이 주된 용도이므로 기본에는 충실하고자 하였습니다.
 
-  
+
 ![메인화면](./images/image01.png)
 
-### Open api 참고글 
+### Open api 참고글
 * [https://openrouteservice.org/](https://openrouteservice.org/)
 * [https://github.com/GIScience/openrouteservice-docs](https://github.com/GIScience/openrouteservice-docs)
 * [https://developers.google.com/maps/documentation/elevation/start](https://developers.google.com/maps/documentation/elevation/start)
@@ -62,8 +63,8 @@ DB는 H2를 사용할 예정입니다.
 
 
 API 테스트 방법
-1. API key 설정 
-   
+1. API key 설정
+
    application.yml에 위 사이트에서 발급받은 key 값을 각각 넣어줍니다.
 ```
 giljabi:
@@ -78,13 +79,13 @@ giljabi:
 ```
 
 2. 경로탐색
-.http 파일의 내용을 참고
+   .http 파일의 내용을 참고
 ```
 GET http://localhost:8080/api/1.0/route?start=127.01117,37.5555&target=126.99448,37.54565&direction=cycling-road
 Content-Type: application/json
 ```   
 
-3. 높이정보 
+3. 높이정보
 ```
 POST http://localhost:8090/api/1.0/elevation
 Content-Type: application/json
@@ -111,18 +112,18 @@ Content-Type: application/json
 
 4. 테이블 생성
 
- 테이블은 현재 사용한 사용자의 IP를 기준으로 이력을 저장하는 테이블을 2개 사용합니다. 사용이력 테이블(api_call_info), IP별 누적 사용현황(client_info)을 사용합니다.
- 
- mybtis등을 사용하면 간편하지만, 학습중인 JPA를 사용하였습니다. 기본 기능인 insert/update를 사용하고 있습니다.
-  
- docs/script/schema.sql을 mysql or h2에 생성합니다. 아니면
+테이블은 현재 사용한 사용자의 IP를 기준으로 이력을 저장하는 테이블을 2개 사용합니다. 사용이력 테이블(api_call_info), IP별 누적 사용현황(client_info)을 사용합니다.
+
+mybtis등을 사용하면 간편하지만, 학습중인 JPA를 사용하였습니다. 기본 기능인 insert/update를 사용하고 있습니다.
+
+docs/script/schema.sql을 mysql or h2에 생성합니다. 아니면
 ``` 
  hibernate:
    ddl-auto: create
 ```
 이렇게 설정되어 있으면 drop table 후 create table을 해줍니다.
 
- Audit 정보는 공통으로 사용되는 부분이라 테이블을 표현으로만 분리되어 있습니다.
+Audit 정보는 공통으로 사용되는 부분이라 테이블을 표현으로만 분리되어 있습니다.
 
 ![images/table1.png](images/table1.png)
 
