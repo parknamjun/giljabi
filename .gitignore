@@ -6,6 +6,7 @@ target/
 
 ### 공유하면 안되는 giljabi 정보, openrouteservice, google elevation apikey
 application-local.yml
+giljabidb.db
 
 ### STS ###
 .apt_generated
