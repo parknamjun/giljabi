@@ -610,7 +610,7 @@ $(document).ready(function() {
 			},
 			success:function(response, status) {
 				//status : success
-				if(response.status == 200) {
+				if(response.status === 0) {	//정상
 					//_gpxTrkseqArray = []; //chkRoute의 체크 유무에 따라 초기화를 결정해야 한다.
 					//eleFalg = true;
 					///////var jsonList = JSON.parse(response.data);
@@ -630,8 +630,7 @@ $(document).ready(function() {
 					makeMarkerRoute(_lastPoint, 'daumend.png');
 				} else {
 					//eleFalg = false;
-					alert(response.status);
-					alert(response.message);
+					alert(response.status + ',' + response.message);
 				}
 				$('#blockingAds').hide();
 			}

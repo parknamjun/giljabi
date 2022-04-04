@@ -1,11 +1,11 @@
 package kr.giljabi.api.controller;
 
 import io.swagger.annotations.ApiOperation;
-import kr.giljabi.api.exception.GiljabiException;
 import kr.giljabi.api.geo.Geometry3DPoint;
 import kr.giljabi.api.service.GoogleService;
 import kr.giljabi.api.request.RequestElevationData;
 import kr.giljabi.api.response.Response;
+import kr.giljabi.api.utils.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +33,7 @@ public class ElevationController {
     @ApiOperation(value = "", notes = "google elevation api 이용하여 고도정보를 받아오는 api")
     public Response getElevation(final @Valid @RequestBody RequestElevationData request) {
         ArrayList<Geometry3DPoint> list;
+        Response response;
         try {
             if (request.getTrackPoint().size() == 0)
                 new Exception("입력된 트랙정보가 없습니다.");
@@ -41,12 +42,9 @@ public class ElevationController {
             //googleService.checkGoogle();
 
             list =  googleService.getElevation(request);
+            return new Response(list);
         } catch (Exception e) {
-            return Response.of(new GiljabiException(9001, e.getMessage()));
+            return new Response(ErrorCode.STATUS_EXCEPTION.getStatus(), e.getMessage());
         }
-        return Response.of().addObject(list);
     }
-
-
-
 }
