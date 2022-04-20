@@ -1,4 +1,7 @@
 
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fparknamjun%2Fgiljabi&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
+
 #### 파일을 지도에 올리는 것은 gpx 파일만 사용 가능하고, 저장은 gpx, tcx 가능합니다. tcx 파일 올리는 것은 준비중입니다.
 
 ### [http://giljabi.kr](http://giljabi.kr/) 초기버전은 AWS Light sail를 사용하고 있으며 아래에 설명이 있습니다.
