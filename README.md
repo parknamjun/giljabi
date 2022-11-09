@@ -64,7 +64,7 @@ querydsl를 사용할수도 있겠지만, 리포팅 부분은 mybatis같은 매�
 * [지도 경로탐색 오픈API 소개(OpenRouteService)](https://gpxtcx.tistory.com/38)
 * [openrouteservice api 사용](https://giljabi.tistory.com/2)
 
-
+### swagger http://localhost:8080/swagger-ui.html
 API 테스트 방법
 1. API key 설정
 
