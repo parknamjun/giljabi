@@ -417,7 +417,7 @@ $(document).ready(function() {
 */
 	$('#reset').click(function(){
 		if(confirm('초기화 할까요?'))
-			location.href='/giljabi.html';
+			location.href='/index.html';
 	});
 	
 	$('#waypointinfo').click(function(){
