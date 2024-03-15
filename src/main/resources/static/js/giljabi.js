@@ -758,7 +758,7 @@ $(document).ready(function () {
         //for (let trkptIndex = 1; trkptIndex <= waypointSortByDistance[wayIndex].index; trkptIndex++) {
         for (let trkptIndex = 1; trkptIndex < _gpxTrkseqArray.length; trkptIndex++) {
             let distance = getDistance(_gpxTrkseqArray[trkptIndex - 1], _gpxTrkseqArray[trkptIndex]);
-            _gpxTrkseqArray[trkptIndex].dist = Number((_gpxTrkseqArray[trkptIndex - 1].dist + distance).toFixed(2));
+            _gpxTrkseqArray[trkptIndex].dist = Number((_gpxTrkseqArray[trkptIndex - 1].dist + distance).toFixed(3));
             let ptSecond = distance / speed * 3600;
             ptDateTime.setSeconds(ptDateTime.getSeconds() + ptSecond);
             _gpxTrkseqArray[trkptIndex].time = ptDateTime.toISOString();
