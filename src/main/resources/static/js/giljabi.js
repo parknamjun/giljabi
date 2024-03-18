@@ -758,7 +758,7 @@ $(document).ready(function () {
         //for (let trkptIndex = 1; trkptIndex <= waypointSortByDistance[wayIndex].index; trkptIndex++) {
         for (let trkptIndex = 1; trkptIndex < _gpxTrkseqArray.length; trkptIndex++) {
             let distance = getDistance(_gpxTrkseqArray[trkptIndex - 1], _gpxTrkseqArray[trkptIndex]);
-            _gpxTrkseqArray[trkptIndex].dist = Number((_gpxTrkseqArray[trkptIndex - 1].dist + distance).toFixed(3));
+            _gpxTrkseqArray[trkptIndex].dist = Number((_gpxTrkseqArray[trkptIndex - 1].dist + distance).toFixed(1));
             let ptSecond = distance / speed * 3600;
             ptDateTime.setSeconds(ptDateTime.getSeconds() + ptSecond);
             _gpxTrkseqArray[trkptIndex].time = ptDateTime.toISOString();
@@ -772,7 +772,9 @@ $(document).ready(function () {
             let diff = endTime - ptDateTime;
             //diff를 시간, 분으로 변환
             waypointSortByDistance[wayIndex].laptime = convertSecondsToDaysHoursMinutes(diff / 1000);
-            waypointSortByDistance[wayIndex].time = _gpxTrkseqArray[waypointSortByDistance[wayIndex].index].time;
+
+            //데이타 있으면 잘못된 파일, from fenix 6
+            //waypointSortByDistance[wayIndex].time = _gpxTrkseqArray[waypointSortByDistance[wayIndex].index].time;
             waypointSortByDistance[wayIndex].distance = _gpxTrkseqArray[waypointSortByDistance[wayIndex].index].dist;
         }
 
