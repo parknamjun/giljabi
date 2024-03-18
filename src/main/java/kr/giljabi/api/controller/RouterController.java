@@ -29,7 +29,7 @@ public class RouterController {
     private final RouteService geometryService;
 
     @GetMapping("/api/1.0/route")
-    @ApiOperation(value="", notes = "openrouterservice에서 경로정보를 받아오는 api")
+    @ApiOperation(value="경로정보", notes = "openrouterservice에서 경로정보를 받아오는 api")
     public Response getRoute(
             @RequestParam(name = "start") Double[] start,
             @RequestParam(name = "target") Double[] target,
@@ -53,7 +53,7 @@ public class RouterController {
 
     /**
      * openroute service는 일 호출건수 제약이 있어 임의의 데이터를 응답데이터로 만들어 사용한다.
-     * @return
+     * @return Object
      */
     private ArrayList<Geometry3DPoint> getOpenRouteServiceTest() {
         ArrayList<Geometry3DPoint> list = new ArrayList<>();

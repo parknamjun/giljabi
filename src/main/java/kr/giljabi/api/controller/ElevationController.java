@@ -30,7 +30,7 @@ public class ElevationController {
     private final GoogleService googleService;
 
     @PostMapping("/api/1.0/elevation")
-    @ApiOperation(value = "", notes = "google elevation api 이용하여 고도정보를 받아오는 api")
+    @ApiOperation(value = "고도정보", notes = "google elevation api 이용하여 고도정보를 받아오는 api")
     public Response getElevation(final @Valid @RequestBody RequestElevationData request) {
         ArrayList<Geometry3DPoint> list;
         Response response;
