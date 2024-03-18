@@ -32,7 +32,7 @@ querydsl를 사용할수도 있겠지만, 리포팅 부분은 mybatis같은 매�
 개발 DB는 H2를 사용할 예정입니다. 실제 운영되는 DB는 mysql을 사용하고 있습니다.
 
 
-현재 운영중인 (http://giljabi.kr)은 mysql, struts를 기반으로 개발 되었습니다.
+현재 운영중인 [http://giljabi.kr](http://giljabi.kr)는 mysql, struts를 기반으로 개발 되었습니다.
 
 
 ## 로컬 환경에서 사용가능
@@ -64,7 +64,7 @@ querydsl를 사용할수도 있겠지만, 리포팅 부분은 mybatis같은 매�
 * [지도 경로탐색 오픈API 소개(OpenRouteService)](https://gpxtcx.tistory.com/38)
 * [openrouteservice api 사용](https://giljabi.tistory.com/2)
 
-
+### swagger http://localhost:8080/swagger-ui.html
 API 테스트 방법
 1. API key 설정
 
