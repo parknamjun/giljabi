@@ -1,11 +1,11 @@
-var _globalMap;
+let _globalMap;
 
-var _drawingManagerOption;
-var _drawingManager;
+let _drawingManagerOption;
+let _drawingManager;
 
-var overlays = []; // 지도에 그려진 도형을 담을 배열
+let overlays = []; // 지도에 그려진 도형을 담을 배열
 
-var _gpxTrkseqArray = new Array();		//gpx/trk/trkseq
+let _gpxTrkseqArray = new Array();		//gpx/trk/trkseq
 
 function getGpxTrk(lat, lon, ele) {
     var trkpt = new Object();
@@ -15,19 +15,19 @@ function getGpxTrk(lat, lon, ele) {
     return trkpt;
 }
 
-var eleFalg = false;	//고도정보를 받아온 경우 true
+let eleFalg = false;	//고도정보를 받아온 경우 true
 $(document).ready(function () {
-    var options = {
+    let options = {
         center: getLocation(), //Seoul city hall
         level: 8
     };
     _globalMap = new kakao.maps.Map(document.getElementById('map'), options);
 
-    var mapTypeControl = new kakao.maps.MapTypeControl(); // 지도타입 컨트롤
+    let mapTypeControl = new kakao.maps.MapTypeControl(); // 지도타입 컨트롤
     _globalMap.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
     // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
-    var zoomControl = new kakao.maps.ZoomControl();
+    let zoomControl = new kakao.maps.ZoomControl();
     _globalMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
     // 지도 클릭 이벤트를 등록한다 (좌클릭 : click, 우클릭 : rightclick, 더블클릭 : dblclick)
@@ -55,7 +55,9 @@ $(document).ready(function () {
             editable: true, // 그린 후 수정할 수 있도록 설정합니다
             strokeColor: '#ff0000', // 선 색
             hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
-            hintStrokeOpacity: 0.5  // 그리중 마우스를 따라다니는 보조선의 투명도
+            hintStrokeOpacity: 0.5,  // 그리중 마우스를 따라다니는 보조선의 투명도
+            strokeWeight: 3
+
         }
     };
 
@@ -63,7 +65,6 @@ $(document).ready(function () {
     _drawingManager = new kakao.maps.drawing.DrawingManager(_drawingManagerOption);
 
     kakao.maps.event.addListener(_globalMap, 'dragend', function () {
-        console.log(_certiFlag);
         removePoi(_markerList);
         var bounds = _globalMap.getBounds();
         //getPoi(_globalMap, bounds, _globalMap.getLevel());
@@ -73,7 +74,7 @@ $(document).ready(function () {
     kakao.maps.event.addListener(_globalMap, 'zoom_changed', function () {
         // 지도의 현재 레벨을 얻어옵니다
         var level = _globalMap.getLevel();
-        console.log('현재 지도 레벨은 ' + level + '입니다');
+        //console.log('현재 지도 레벨은 ' + level + '입니다');
 
         //var bounds = _globalMap.getBounds();
         //getPoi(_globalMap, bounds, _globalMap.getLevel());
@@ -127,7 +128,6 @@ $(document).ready(function () {
 
         reader.onload = function (e) {
             basePathLoadGpx(reader.result);
-            console.log(reader.result);	//필요하면 디버깅으로...
         };
 
         reader.readAsText(file);
@@ -222,7 +222,6 @@ $(document).ready(function () {
 
         }
     */
-    /*
     $('#getElevation').click(function () {
         //$('#editinfo').block({ message: '<h4>Processing</h1>',
         //    css: { border: '3px solid #a00', width:'600px' }
@@ -239,7 +238,6 @@ $(document).ready(function () {
             }
         }
 
-        //console.log(JSON.stringify(trkseq));
         $.ajax({
             type: 'post',
             url: '/elevation.do',
@@ -266,9 +264,8 @@ $(document).ready(function () {
                 }
             }
         });
-
     });
-*/
+
     $('#tcxsave').click(function () {
         if (!confirm('tcx파일로 저장할까요?')) {
             return;
@@ -338,7 +335,7 @@ var _gpx = new Object();				//gpx
 var _gpxMetadata = new Object();		//gpx/metadata
 var _gpxWptArray = new Array();			//허수, gpx/wpt, gpx웨이포인트
 var _gpxTrkArray = new Array();			//허수, gpx/trk
-var _gpxTrkseqArray = new Array();		//gpx/trk/trkseq
+//var _gpxTrkseqArray = new Array();		//gpx/trk/trkseq
 
 var _tcx = new Object();				//gpx
 var _tcxMetadata = new Object();		//tcx Folder
@@ -362,14 +359,6 @@ function makeObject(xml) {
 
     //drawPolyline(_trkPoly); //경로를 그린다.
     var style = _drawingManagerOption.polylineOptions;
-    var polyline = new kakao.maps.Polyline({
-        map: _globalMap,
-        path: _trkPoly,
-        strokeColor: style.strokeColor,
-        strokeOpacity: style.strokeOpacity,
-        strokeStyle: style.strokeStyle,
-        strokeWeight: style.strokeWeight
-    });
     _drawingManager.put(kakao.maps.drawing.OverlayType.POLYLINE, _trkPoly);
 
     var trkpt = _gpxTrkseqArray[parseInt(_gpxTrkseqArray.length / 2)];
@@ -436,7 +425,7 @@ function pointsToPath(points) {
     for (; i < len; i++) {
         var latlng = new kakao.maps.LatLng(points[i].y, points[i].x);
         path.push(latlng);
-        console.log(latlng);
+        //console.log(latlng);
     }
 
     return path;
@@ -454,14 +443,11 @@ function selectOverlay(type) {
 
 // 로딩된 경로를 삭제 후 그린다
 let baseTrkList = [];
+let baseWptList = [];
 let basePolyline = [];
 
 function basePathLoadGpx(gpxfile) {
-    //basePolyline.setMap(null);
-    //basePolyline = [];
-
     let reader = $($.parseXML(gpxfile));
-
     $.each(reader.find('gpx').find('trk'), function () {
         let item = new Object();
         item.name = $(this).find('name').text();
@@ -473,7 +459,7 @@ function basePathLoadGpx(gpxfile) {
             );
         });
         item.trkseg = trkptList;
-        baseTrkList.push(item);
+        baseTrkList.push(item); //삭제하기 위한 데이터, 삭제할 필요가 있을까??? 계속 추가해도 좋을듯
 
         let lineStyle = new kakao.maps.Polyline({
             map: _globalMap,
@@ -481,18 +467,142 @@ function basePathLoadGpx(gpxfile) {
             strokeColor: '#A52A2A', // 선의 색깔
             strokeOpacity: 1, // 선의 불투명도, 1에서 0 사이의 값이며 0에 가까울수록 투명
             strokeStyle: 'solid', // 선의 스타일
-            strokeWeight: 3
+            strokeWeight: 2
         });
-
-        // 지도에 선을 표시합니다
-        //lineStyle.setMap(_globalMap);
         basePolyline.push(lineStyle);
     });
-    //console.info(baseTrkList);
 
-    /*    $.each(x.find('gpx').find('trk').find('trkseg').find('trkpt'), function () {
-            let trkpt = getGpxTrk($(this).attr('lat'), $(this).attr('lon'), $(this).find('ele').text());
-            trkList.push(trkpt);
-            trkPolyline.push(new kakao.maps.LatLng($(this).attr('lat'), $(this).attr('lon')));
-        });*/
+    $.each(reader.find('gpx').find('wpt'), function () {
+        let item = new GpxWaypoint(
+            Number($(this).attr('lat')),
+            Number($(this).attr('lon')),
+            Number($(this).find('ele')),
+            $(this).find('name').text(),
+            $(this).find('desc').text(),
+            $(this).find('type').text(),
+            getIconString($(this).find('sym').text())
+        );
+        //new WaypointMark(item.position, item.name, item.sym);
+        new WaypointMark(item.position, item.name, item.uid, item.sym);
+    });
 }
+
+
+function WaypointMark(wayPosition, waypointName, uniqueId, waypointIcon) {
+    let iconId;
+    let content = document.createElement('div');
+
+    content.innerHTML = '<img src=\"images/' + waypointIcon.toLowerCase() + '.png\" class=\"pointImage\"><span class=\"pointText\">' + waypointName + '</span>';
+    // 커스텀 오버레이를 생성합니다
+    let customoverlay = new kakao.maps.CustomOverlay({
+        map: _globalMap,
+        clickable: false,
+        content: content,
+        position: wayPosition
+    });
+
+    //customoverlay에 이벤트를 추가한다.
+    addEvent();
+
+    function addEvent() {
+        //아이콘 클릭, 드래그 이동
+        addEventHandle(content, 'mousedown', onMouseDown);
+
+        //아이콘 이동 후 위치
+        addEventHandle(document, 'mouseup', onMouseUp);
+    }
+
+    // 커스텀 오버레이에 mousedown 했을 때 호출되는 핸들러 입니다
+    function onMouseDown(e) {
+        //console.log('onMouseDown');
+        iconId = uniqueId;
+
+        _customPverlay = true;
+        // 커스텀 오버레이를 드래그 할 때, 내부 텍스트가 영역 선택되는 현상을 막아줍니다.
+        if (e.preventDefault) {
+            e.preventDefault();
+        } else {
+            e.returnValue = false;
+        }
+
+        var proj = _globalMap.getProjection(); // 지도 객체로 부터 화면픽셀좌표, 지도좌표간 변환을 위한
+        // MapProjection 객체를 얻어옵니다
+        var overlayPos = customoverlay.getPosition(); // 커스텀 오버레이의 현재 위치를
+        // 가져옵니다
+
+        // 커스텀오버레이에서 마우스 관련 이벤트가 발생해도 지도가 움직이지 않도록 합니다
+        kakao.maps.event.preventMap();
+
+        // mousedown된 좌표를 설정합니다
+        startX = e.clientX;
+        startY = e.clientY;
+
+        // mousedown됐을 때의 커스텀 오버레이의 좌표를
+        // 지도 컨테이너내 픽셀 좌표로 변환합니다
+        startOverlayPoint = proj.containerPointFromCoords(overlayPos);
+
+        // document에 mousemove 이벤트를 등록합니다
+        addEventHandle(document, 'mousemove', onMouseMove);
+    }
+
+    // 커스텀 오버레이에 mousedown 한 상태에서
+    // mousemove 하면 호출되는 핸들러 입니다
+    function onMouseMove(e) {
+        // 커스텀 오버레이를 드래그 할 때, 내부 텍스트가 영역 선택되는 현상을 막아줍니다.
+        if (e.preventDefault) {
+            e.preventDefault();
+        } else {
+            e.returnValue = false;
+        }
+
+        var proj = _globalMap.getProjection(),// 지도 객체로 부터 화면픽셀좌표, 지도좌표간 변환을 위한 MapProjection 객체를 얻어옵니다
+            deltaX = startX - e.clientX, // mousedown한 픽셀좌표에서 mousemove한 좌표를 빼서 실제로 마우스가 이동된 픽셀좌표를 구합니다
+            deltaY = startY - e.clientY,
+            // mousedown됐을 때의 커스텀 오버레이의 좌표에 실제로 마우스가 이동된 픽셀좌표를 반영합니다
+            newPoint = new kakao.maps.Point(startOverlayPoint.x - deltaX, startOverlayPoint.y - deltaY),
+            // 계산된 픽셀 좌표를 지도 컨테이너에 해당하는 지도 좌표로 변경합니다
+            newPos = proj.coordsFromContainerPoint(newPoint);
+
+        _newPosition = newPos;
+        customoverlay.setPosition(_newPosition);
+        //console.log('uniqueId:' + uniqueId + ', newPos:' + customoverlay.getPosition());
+
+        _customPverlay = false;
+    }
+
+    // mouseup 했을 때 호출되는 핸들러 입니다
+    function onMouseUp(e) {
+        $.each(_wayPointArray, function (index, ele) {
+            if (iconId == ele.uid) {
+                if (_newPosition instanceof kakao.maps.LatLng) {
+                    if (!_customPverlay) {	//웨이포인트의 이동이 없다면 위치 변경은 필요없다.
+                        _wayPointArray[index].position = _newPosition;
+                    }
+                }
+                return false;
+            }
+        });
+
+        // 등록된 mousemove 이벤트 핸들러를 제거합니다
+        removeEventHandle(document, 'mousemove', onMouseMove);
+    }
+
+    // target node에 이벤트 핸들러를 등록하는 함수힙니다
+    function addEventHandle(target, type, callback) {
+        if (target.addEventListener) {
+            target.addEventListener(type, callback);
+        } else {
+            target.attachEvent('on' + type, callback);
+        }
+    }
+
+    // target node에 등록된 이벤트 핸들러를 제거하는 함수힙니다
+    function removeEventHandle(target, type, callback) {
+        if (target.removeEventListener) {
+            target.removeEventListener(type, callback);
+        } else {
+            target.detachEvent('on' + type, callback);
+        }
+    }
+}
+
