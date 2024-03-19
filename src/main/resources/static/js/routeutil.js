@@ -213,11 +213,6 @@ function makeWaypointInfo(wpt) {
     let nearPoint;
     let waypointSortList = [];
 
-    //경로의 시작점을 웨이포인트의 시작위치로 추가
-    nearPoint = new WayPointInfo(0, 0, '0',
-        _gpxTrkseqArray[0], 'start', 'START', '');
-    waypointSortList.push(nearPoint);
-
     for (let indexWpt = 0; indexWpt < wpt.length; indexWpt++) {
         let compareDistance = 0;
         let trackIndex = 0;
@@ -240,18 +235,14 @@ function makeWaypointInfo(wpt) {
         nearPoint = new WayPointInfo(trackIndex, 0, '0',
             _gpxTrkseqArray[trackIndex], wpt[indexWpt].sym, wpt[indexWpt].name);
         waypointSortList.push(nearPoint);
-        console.info(nearPoint.toString());
+        //console.info(nearPoint.toString());
     }
-    console.info(waypointSortList.toString());
+    //console.info(waypointSortList.toString());
     //웨이포인트를 index 기준으로 정렬한다.
     let waypointSortByDistance = waypointSortList.sort(function (a, b) {
         return a.index - b.index;
     });
 
-    //경로의 마지막 위치는 웨이포인트이 마지막 위치로 추가, 엑셀 저장에서만 사용한다
-    nearPoint = new WayPointInfo(_gpxTrkseqArray.length - 1, 0, '0',
-        _gpxTrkseqArray[_gpxTrkseqArray.length - 1], 'end', 'END', '');
-    waypointSortByDistance.push(nearPoint);
     return waypointSortByDistance;
 }
 
