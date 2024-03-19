@@ -870,6 +870,6 @@ $(document).ready(function () {
         console.info(tcxTrackPoint.toString());
         return tcxTrackPoint;
     }
-
 });
+
 
