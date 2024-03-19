@@ -64,7 +64,7 @@ let _fileExt;	//_ft 파일종류 gpx, tcx
 //시작, 도착 마커
 function makeMarkerPoint(mymap, iconName, latlon) {
     let marker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(latlon.lat, latlon.lon),
+        position: new kakao.maps.LatLng(latlon.lat, latlon.lng),
         image: new kakao.maps.MarkerImage(
             'images/' + iconName + '.png',
             new kakao.maps.Size(17, 22))
