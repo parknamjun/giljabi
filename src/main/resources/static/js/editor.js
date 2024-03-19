@@ -465,7 +465,7 @@ function basePathLoadGpx(gpxfile) {
             strokeColor: '#A52A2A', // 선의 색깔
             strokeOpacity: 1, // 선의 불투명도, 1에서 0 사이의 값이며 0에 가까울수록 투명
             strokeStyle: 'solid', // 선의 스타일
-            strokeWeight: 2
+            strokeWeight: 5
         });
         basePolyline.push(lineStyle);
     });
