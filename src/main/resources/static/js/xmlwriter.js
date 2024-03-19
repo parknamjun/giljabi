@@ -86,7 +86,7 @@ function gpxWaypoint(waypoint) {
                 '" lon="' + wpt.point.lng.toFixed(6) + '">' + NEWLINE;
             xmlData += '		<name>' + wpt.symbolName + '</name>' + NEWLINE;
             xmlData += '		<sym>' + wpt.symbol + '</sym>' + NEWLINE;
-            xmlData += '		<time>' + wpt.time + '</time>' + NEWLINE;
+            //xmlData += '		<time>' + wpt.time + '</time>' + NEWLINE;
             xmlData += '	</wpt>' + NEWLINE;
         }
     } else {
