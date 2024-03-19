@@ -3,10 +3,13 @@ let _fileOpen = false;
 let _fileName = '';
 let _drawingManagerOption;
 let _drawingManager;
-
 let overlays = []; // 지도에 그려진 도형을 담을 배열
-
 let _gpxTrkseqArray = new Array();		//gpx/trk/trkseq
+
+// 배경으로 사용할 GPX 파일을 로드한다.
+let baseTrkList = [];
+let baseWptList = [];
+let basePolyline = [];
 
 function getGpxTrk(lat, lon, ele) {
     let trkpt = new Object();
@@ -322,6 +325,18 @@ $(document).ready(function () {
         if (confirm('초기화 할까요?'))
             location.reload();
     });
+    $('#wptIcon').click(function () {
+        if ($(this).prop('checked')) {
+            //웨이포인트를 삭제하자...
+            console.log('Checkbox is checked.');
+            baseWptList.forEach(function (item) {
+                item.setMap(null);
+            });
+        } else {
+            console.log('Checkbox is unchecked.');
+        }
+    });
+
 });
 
 
@@ -429,12 +444,6 @@ function selectOverlay(type) {
     _drawingManager.select(kakao.maps.drawing.OverlayType[type]);
 }
 
-
-// 배경으로 사용할 GPX 파일을 로드한다.
-let baseTrkList = [];
-let baseWptList = [];
-let basePolyline = [];
-
 function basePathLoadGpx(gpxfile) {
     let reader = $($.parseXML(gpxfile));
     $.each(reader.find('gpx').find('trk'), function () {
@@ -473,7 +482,7 @@ function basePathLoadGpx(gpxfile) {
         );
 
         //wpt를 필요에 따라 삭제할 경우에 사용
-        baseWptList.push = new WaypointMark(item.position, item.name, item.uid, item.sym);
+        baseWptList.push(new WaypointMark(item.position, item.name, item.uid, item.sym));
     });
 }
 
@@ -593,5 +602,7 @@ function WaypointMark(wayPosition, waypointName, uniqueId, waypointIcon) {
             target.detachEvent('on' + type, callback);
         }
     }
+
+    return customoverlay;
 }
 
