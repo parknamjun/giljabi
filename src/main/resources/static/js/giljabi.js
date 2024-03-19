@@ -115,11 +115,10 @@ $(document).ready(function () {
         } else {
             let info = makeWaypointObject(mouseEvent.latLng);
             addWaypoint(info);
-            console.log('kakao.maps.event.addListener click:' + info.position.toString());	//icon 좌표
+            //console.log('kakao.maps.event.addListener click:' + info.position.toString());	//icon 좌표
         }
     });
 
-    //만약, 웨이포인트가 start, end와 동일한 위치인 경우는 웨이포인트를 그리지 않는다.
     function addWaypoint(info) {
         info.sym = info.sym === '' ? 'Generic' : info.sym;	//Symbol이 없는 경우
         let myWayPoint = new Waypoint(_map, info.position, info.name, info.uid, info.sym);
@@ -139,7 +138,7 @@ $(document).ready(function () {
         $('#selectWaypointIcon').attr('src', 'images/' + _pointIcon + '.png');
 
         let name = $('#waypointName').val().toLowerCase();
-        console.log(this.id + ',' + _waypointIcons.indexOf(name));
+        //console.log(this.id + ',' + _waypointIcons.indexOf(name));
         //사용자가 입력한 웨이포인트 이름은 변경하지 않는다..
         if (_waypointIcons.indexOf(name) >= 0)
             $('#waypointName').val(capitalizeFirstLetter(_pointIcon));
@@ -149,7 +148,7 @@ $(document).ready(function () {
     $('#direction').change(function () {
         let test = $("#direction option:selected").val();
         _chkRoute = test !== "waypoint";
-        console.log('direction flag:' + _chkRoute);
+        //console.log('direction flag:' + _chkRoute);
     });
 
     //=======================================================================
@@ -169,7 +168,7 @@ $(document).ready(function () {
 
             reader.onload = function (e) {
                 fileLoadAndDraw(reader.result);
-                console.log('fileInput filename :' + _uploadFilename);	//필요하면 디버깅으로...
+                //console.log('fileInput filename :' + _uploadFilename);	//필요하면 디버깅으로...
             };
         }
     });
@@ -178,7 +177,7 @@ $(document).ready(function () {
     //makeObject
     function fileLoadAndDraw(xml) {
         let readXmlfile = $($.parseXML(xml.replace(/&/g, "&amp;")));
-        console.log('fileLoadAndDraw:' + readXmlfile);
+        //console.log('fileLoadAndDraw:' + readXmlfile);
 
         if (_fileExt == 'gpx') {
             loadGpx(readXmlfile);
@@ -474,10 +473,10 @@ $(document).ready(function () {
                 currDistance = getDistance(new Point3D(endPosition.lat, endPosition.lng),
                     new Point3D($(trkSeqArray[i]).attr('lat'), $(trkSeqArray[i]).attr('lon')));
 
-                console.info(
-                    endPosition,
-                    $(trkSeqArray[i]).attr('lat'), $(trkSeqArray[i]).attr('lon'),
-                    currDistance);
+                /*                console.info(
+                                    endPosition,
+                                    $(trkSeqArray[i]).attr('lat'), $(trkSeqArray[i]).attr('lon'),
+                                    currDistance);*/
                 if (currDistance <= nearDistance) {
                     nearDistance = currDistance;
                     startIndex = i;
@@ -578,7 +577,7 @@ $(document).ready(function () {
 
     //경로 뒤집기...
     $('#reverse').click(function () {
-        console.info('reverse');
+        //console.info('reverse');
 
         if (_gpxTrkseqArray.length == 0) {
             alert('경로가 없습니다.');
@@ -645,7 +644,7 @@ $(document).ready(function () {
 
     //경로탐색의 마크를 사용
     function makeMarkerRoute(latlon, image) {
-        console.info('makeMarkerRoute:' + latlon + ', image:' + image);
+        //console.info('makeMarkerRoute:' + latlon + ', image:' + image);
 
         let currentMarkerPosition = _routeMarkerArray.length;
 
@@ -743,43 +742,44 @@ $(document).ready(function () {
         }
         waypointSortByDistance = makeWaypointInfo(wpt);
 
-        let sumDistance = 0;
         _gpxTrkseqArray[0].time = (new Date(BASETIME)).toISOString();
         _gpxTrkseqArray[0].dist = 0;
 
-        //waypointSortByDistance[START], waypointSortByDistance[END] 2개는 사용하지 않음
-        waypointSortByDistance[1].time = (new Date(BASETIME)).toISOString();
-        waypointSortByDistance[1].distance = 0;
+        /*
+                //START, END 2개는 사용하지 않으나 우측의 wpt정보에서 보여주는 용도임
+                waypointSortByDistance[0].time = (new Date(BASETIME)).toISOString();
+                waypointSortByDistance[0].distance = 0;
+
+                //실제 사용되는 wpt 시작정보
+                waypointSortByDistance[1].time = (new Date(BASETIME)).toISOString();
+                waypointSortByDistance[1].distance = 0;
+        */
 
         let ptDateTime = new Date(BASETIME);
 
         //시간 = 거리 / 속도
         let speed = Number($('#averageV').val());
-        //for (let trkptIndex = 1; trkptIndex <= waypointSortByDistance[wayIndex].index; trkptIndex++) {
         for (let trkptIndex = 1; trkptIndex < _gpxTrkseqArray.length; trkptIndex++) {
             let distance = getDistance(_gpxTrkseqArray[trkptIndex - 1], _gpxTrkseqArray[trkptIndex]);
-            _gpxTrkseqArray[trkptIndex].dist = Number((_gpxTrkseqArray[trkptIndex - 1].dist + distance).toFixed(1));
+            _gpxTrkseqArray[trkptIndex].dist = (Number(_gpxTrkseqArray[trkptIndex - 1].dist) + distance).toFixed(2);
             let ptSecond = distance / speed * 3600;
             ptDateTime.setSeconds(ptDateTime.getSeconds() + ptSecond);
             _gpxTrkseqArray[trkptIndex].time = ptDateTime.toISOString();
-            console.log(_gpxTrkseqArray[trkptIndex]);
+            //console.log(_gpxTrkseqArray[trkptIndex]);
         }
 
         ptDateTime = new Date(BASETIME);
-        for (let wayIndex = 1; wayIndex < waypointSortByDistance.length; wayIndex++) {
-            console.info(waypointSortByDistance[wayIndex]);
+        for (let wayIndex = 0; wayIndex < waypointSortByDistance.length; wayIndex++) {
+            //console.info(waypointSortByDistance[wayIndex]);
             let endTime = new Date(_gpxTrkseqArray[waypointSortByDistance[wayIndex].index].time);
             let diff = endTime - ptDateTime;
             //diff를 시간, 분으로 변환
             waypointSortByDistance[wayIndex].laptime = convertSecondsToDaysHoursMinutes(diff / 1000);
 
-            //Garmin6에서 wpt에 시간정보가 있으면 오류가 발생함
-            //waypointSortByDistance[wayIndex].time = _gpxTrkseqArray[waypointSortByDistance[wayIndex].index].time;
+            //Garmin에서는 사용하면 에러...excel저장에서 사용됨
+            waypointSortByDistance[wayIndex].time = _gpxTrkseqArray[waypointSortByDistance[wayIndex].index].time;
             waypointSortByDistance[wayIndex].distance = _gpxTrkseqArray[waypointSortByDistance[wayIndex].index].dist;
         }
-
-        //START, END는 사용하지 않음
-        waypointSortByDistance = waypointSortByDistance.slice(1, waypointSortByDistance.length - 1);
 
         let waypointinfo = getWaypointToHtml(waypointSortByDistance);
         $('#waypointinfoViewTable').html(waypointinfo);
@@ -843,7 +843,7 @@ $(document).ready(function () {
         let tcxTrackPoint = [];
         let cumDistance = 0; //누적거리
 
-        console.info('_gpxTrkseqArray length :' + _gpxTrkseqArray.length);
+        //console.info('_gpxTrkseqArray length :' + _gpxTrkseqArray.length);
         let trackDistance = 0;
         let v = Number($('#averageV').val());
         let currentTime = new Date(BASETIME);
@@ -862,14 +862,14 @@ $(document).ready(function () {
             tcxTrackPoint.push(new TrackPoint(_gpxTrkseqArray[index + 1],
                 currentTime.toISOString(), cumDistance));
 
-            console.info(index + ' :' + trackDistance + ', ' + cumDistance + ', ' + currentTime.toISOString());
+            //console.info(index + ' :' + trackDistance + ', ' + cumDistance + ', ' + currentTime.toISOString());
         }
         let diff = currentTime - new Date(BASETIME);
-        console.info('diff:' + diff / 1000);
+        //console.info('diff:' + diff / 1000);
 
-        console.info(tcxTrackPoint.toString());
+        //console.info(tcxTrackPoint.toString());
         return tcxTrackPoint;
     }
-});
 
+});
 
