@@ -186,11 +186,11 @@ $(document).ready(function () {
             //loadTcx(readXmlfile); gpx 포맷을 끝내고 진행...
         }
 
+        drawPolyline(_trkPoly); //경로를 그린다.
+
         //시작과 끝 표시
         makeMarkerPoint(_map, 'start', _gpxTrkseqArray[0]);
         makeMarkerPoint(_map, 'end', _gpxTrkseqArray[_gpxTrkseqArray.length - 1]);
-
-        drawPolyline(_trkPoly); //경로를 그린다.
 
         let midPoint = _gpxTrkseqArray[parseInt(_gpxTrkseqArray.length / 2)];
         _map.setCenter(new kakao.maps.LatLng(midPoint.lat, midPoint.lng)); //중심점을 경로상의 중간을 설정한다.
@@ -773,7 +773,7 @@ $(document).ready(function () {
             //diff를 시간, 분으로 변환
             waypointSortByDistance[wayIndex].laptime = convertSecondsToDaysHoursMinutes(diff / 1000);
 
-            //데이타 있으면 잘못된 파일, from fenix 6
+            //Garmin6에서 wpt에 시간정보가 있으면 오류가 발생함
             //waypointSortByDistance[wayIndex].time = _gpxTrkseqArray[waypointSortByDistance[wayIndex].index].time;
             waypointSortByDistance[wayIndex].distance = _gpxTrkseqArray[waypointSortByDistance[wayIndex].index].dist;
         }
@@ -870,7 +870,6 @@ $(document).ready(function () {
         console.info(tcxTrackPoint.toString());
         return tcxTrackPoint;
     }
-  
 });
 
 
