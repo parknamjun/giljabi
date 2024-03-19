@@ -1,5 +1,6 @@
 let _globalMap;
-
+let _fileOpen = false;
+let _fileName = '';
 let _drawingManagerOption;
 let _drawingManager;
 
@@ -8,9 +9,10 @@ let overlays = []; // 지도에 그려진 도형을 담을 배열
 let _gpxTrkseqArray = new Array();		//gpx/trk/trkseq
 
 function getGpxTrk(lat, lon, ele) {
-    var trkpt = new Object();
+    let trkpt = new Object();
     trkpt.lat = lat;
-    trkpt.lon = lon;
+    //trkpt.lon = lon; //20240319 lng로 변경
+    trkpt.lng = lon;
     trkpt.ele = ele;
     return trkpt;
 }
@@ -29,12 +31,6 @@ $(document).ready(function () {
     // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
     let zoomControl = new kakao.maps.ZoomControl();
     _globalMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-    // 지도 클릭 이벤트를 등록한다 (좌클릭 : click, 우클릭 : rightclick, 더블클릭 : dblclick)
-    //kakao.maps.event.addListener(_globalMap, 'click', function (mouseEvent) {
-    //	console.log('지도에서 클릭한 위치의 좌표는 ' + mouseEvent.latLng.toString() + ' 입니다.');
-    //});
-
 
     _drawingManagerOption = { // Drawing Manager를 생성할 때 사용할 옵션입니다
         map: _globalMap, // Drawing Manager로 그리기 요소를 그릴 map 객체입니다
@@ -100,14 +96,14 @@ $(document).ready(function () {
 
     //gpx file loading....
     $('#fileInput').change(function () {
-        if (_fl) {
+        if (_fileOpen) {
             alert('이미 기본 파일이 열려 있습니다.');
             return;
         } else {
-            var file = document.getElementById('fileInput').files[0];
-            _uf = file.name.substring(0, file.name.lastIndexOf('.'));
-            _ft = file.name.substring(file.name.lastIndexOf('.') + 1);
-            _fl = true;
+            let file = document.getElementById('fileInput').files[0];
+            _fileName = file.name.substring(0, file.name.lastIndexOf('.'));
+            _fileExt = file.name.substring(file.name.lastIndexOf('.') + 1);
+            _fileOpen = true;
             var reader = new FileReader();
 
             reader.onload = function (e) {
@@ -116,12 +112,11 @@ $(document).ready(function () {
             };
 
             reader.readAsText(file);
-            $('#gpx_metadata_name').val(_uf);
+            $('#gpx_metadata_name').val(_fileName);
         }
     });
 
     //
-    let baseMapPath = [];
     $('#baseInput').change(function () {
         let file = document.getElementById('baseInput').files[0];
         let reader = new FileReader();
@@ -228,12 +223,12 @@ $(document).ready(function () {
         //});
 
         //모든 polyline
-        var trkseq = new Array();	//servlet에 요청하기 위한 배열 object를 string으로 변환
-        var data = _drawingManager.getData();
-        var len = data[kakao.maps.drawing.OverlayType.POLYLINE].length;
-        for (var i = 0; i < len; i++) {
-            var line = pointsToPath(data.polyline[i].points);
-            for (var j = 0; j < line.length; j++) {
+        let trkseq = new Array();	//servlet에 요청하기 위한 배열 object를 string으로 변환
+        let data = _drawingManager.getData();
+        let len = data[kakao.maps.drawing.OverlayType.POLYLINE].length;
+        for (let i = 0; i < len; i++) {
+            let line = pointsToPath(data.polyline[i].points);
+            for (let j = 0; j < line.length; j++) {
                 trkseq.push({lat: line[j].getLat(), lng: line[j].getLng()});
             }
         }
@@ -270,10 +265,10 @@ $(document).ready(function () {
         if (!confirm('tcx파일로 저장할까요?')) {
             return;
         }
-        if (_gpxTrkseqArray.length == 0) {
-            alert('고도 정보가 있어야 저장할 수 있습니다.');
-            return;
-        }
+        /*        if (_gpxTrkseqArray.length == 0) {
+                    alert('고도 정보가 있어야 저장할 수 있습니다.');
+                    return;
+                }*/
         var trkseq = new Array();	//servlet에 요청하기 위한 배열 object를 string으로 변환
         $.each(_gpxTrkseqArray, function () {
             trkseq.push({
@@ -282,7 +277,7 @@ $(document).ready(function () {
             });
         });
 
-        var fn = _uf == undefined ? (new Date().getTime() / 1000).toFixed(0) : _uf
+        var fn = _fileName == undefined ? (new Date().getTime() / 1000).toFixed(0) : _fileName;
         $.ajax({
             type: 'post',
             url: '/gpx2tcx.do',
@@ -331,7 +326,7 @@ $(document).ready(function () {
 
 
 //https://www.topografix.com/GPX/1/1
-var _gpx = new Object();				//gpx
+/*var _gpx = new Object();				//gpx
 var _gpxMetadata = new Object();		//gpx/metadata
 var _gpxWptArray = new Array();			//허수, gpx/wpt, gpx웨이포인트
 var _gpxTrkArray = new Array();			//허수, gpx/trk
@@ -341,39 +336,32 @@ var _tcx = new Object();				//gpx
 var _tcxMetadata = new Object();		//tcx Folder
 var _tcxCourses = new Object();			//tcx Courses(Name, Lap)
 var _tcxWptArray = new Array();			//tcx CoursePoint
-var _tcxTrkseqArray = new Array();		//tcx Track/Trackpoint
+var _tcxTrkseqArray = new Array();		//tcx Track/Trackpoint*/
 function makeObject(xml) {
-    var x;	//업로드된 파일의 데이터
-    x = $.parseXML(xml);
-    x = $(x);
+    let _xmlData = $($.parseXML(xml));
 
-    if (_ft.toLowerCase() == 'gpx') {
-        loadGpx(x);
-    } else if (_ft.toLowerCase() == 'tcx') {
-        loadTcx(x);
+    if (_fileExt.toLowerCase() == 'gpx') {
+        $.each(_xmlData.find('gpx').find('trk').find('trkseg').find('trkpt'), function () {
+            let trkpt = getGpxTrk($(this).attr('lat'), $(this).attr('lon'), $(this).find('ele').text());
+            _gpxTrkseqArray.push(trkpt);    //gpx 경로정보
+            _trkPoly.push(new kakao.maps.LatLng($(this).attr('lat'), $(this).attr('lon'))); //polyline을 그리기 위한 정보
+        });
+    } else if (_fileExt.toLowerCase() == 'tcx') {
+        loadTcx(_xmlData);
     }
 
     //시작과 끝 표시
     makeMarkerPoint(_globalMap, 'start', _gpxTrkseqArray[0]);
     makeMarkerPoint(_globalMap, 'end', _gpxTrkseqArray[_gpxTrkseqArray.length - 1]);
 
-    //drawPolyline(_trkPoly); //경로를 그린다.
-    var style = _drawingManagerOption.polylineOptions;
     _drawingManager.put(kakao.maps.drawing.OverlayType.POLYLINE, _trkPoly);
 
-    var trkpt = _gpxTrkseqArray[parseInt(_gpxTrkseqArray.length / 2)];
-    _globalMap.setCenter(new kakao.maps.LatLng(trkpt.lat, trkpt.lon)); //중심점을 경로상의 중간을 설정한다.
-    _globalMap.setLevel(10);
+    //let trkpt = _gpxTrkseqArray[parseInt(_gpxTrkseqArray.length / 2)];
+    //_globalMap.setCenter(new kakao.maps.LatLng(trkpt.lat, trkpt.lng)); //중심점을 경로상의 중간을 설정한다.
+    //_globalMap.setLevel(10);
 }
 
-function loadGpx(x) {
-    $.each(x.find('gpx').find('trk').find('trkseg').find('trkpt'), function () {
-        var trkpt = getGpxTrk($(this).attr('lat'), $(this).attr('lon'), $(this).find('ele').text());
-        _gpxTrkseqArray.push(trkpt);
-        _trkPoly.push(new kakao.maps.LatLng($(this).attr('lat'), $(this).attr('lon')));
-    });
-}
-
+/*
 function loadTcx(x) {
     $.each(x.find('Trackpoint'), function () {
         var trkpt = new Object();
@@ -384,8 +372,9 @@ function loadTcx(x) {
         _gpxTrkseqArray.push(trkpt);
         _trkPoly.push(new kakao.maps.LatLng(trkpt.lat, trkpt.lon));
     });
-}
+}*/
 
+/*
 function getDataFromDrawingMap() {
     // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
     var data = _drawingManager.getData();
@@ -396,6 +385,7 @@ function getDataFromDrawingMap() {
     // 지도에 가져온 데이터로 도형들을 그립니다
     drawPolyline(data[kakao.maps.drawing.OverlayType.POLYLINE]);
 }
+*/
 
 function drawPolyline(lines) {
     var len = lines.length, i = 0;
@@ -403,19 +393,7 @@ function drawPolyline(lines) {
     for (; i < len; i++) {
         path = pointsToPath(lines[i].points);
     }
-
-    // 그리기 관리자에 polyline을 추가한다
     _drawingManager.put(kakao.maps.drawing.OverlayType.POLYLINE, path);
-}
-
-function removeOverlays() {
-    var len = overlays.length, i = 0;
-
-    for (; i < len; i++) {
-        overlays[i].setMap(null);
-    }
-
-    overlays = [];
 }
 
 //Drawing Manager에서 가져온 데이터 중
@@ -431,6 +409,17 @@ function pointsToPath(points) {
     return path;
 }
 
+
+function removeOverlays() {
+    var len = overlays.length, i = 0;
+
+    for (; i < len; i++) {
+        overlays[i].setMap(null);
+    }
+
+    overlays = [];
+}
+
 //버튼 클릭 시 호출되는 핸들러 입니다
 function selectOverlay(type) {
     // 그리기 중이면 그리기를 취소합니다
@@ -441,7 +430,7 @@ function selectOverlay(type) {
 }
 
 
-// 로딩된 경로를 삭제 후 그린다
+// 배경으로 사용할 GPX 파일을 로드한다.
 let baseTrkList = [];
 let baseWptList = [];
 let basePolyline = [];
@@ -482,11 +471,11 @@ function basePathLoadGpx(gpxfile) {
             $(this).find('type').text(),
             getIconString($(this).find('sym').text())
         );
-        //new WaypointMark(item.position, item.name, item.sym);
-        new WaypointMark(item.position, item.name, item.uid, item.sym);
+
+        //wpt를 필요에 따라 삭제할 경우에 사용
+        baseWptList.push = new WaypointMark(item.position, item.name, item.uid, item.sym);
     });
 }
-
 
 function WaypointMark(wayPosition, waypointName, uniqueId, waypointIcon) {
     let iconId;
