@@ -130,100 +130,89 @@ $(document).ready(function () {
 
         reader.readAsText(file);
     });
-    /*
-        function drawPlot() {
-            //웨이포인트 테스트용도...
-            var legends = $("#elevationImage .legendLabel");
-            var updateLegendTimeout = null;
-            var latestPosition = null;
-            var cursorMarker = new kakao.maps.Marker();
 
-            var eleArray = Array();		//경로의 높이정보
-            var distance = 0;			//직전이동거리
-            var odometer = Number(0);	//누적이동거리
-            var flag = true;			//다음값을 사용할것인지 결정
-            var minAlti = 0, maxAlti = 0;
-            curAlti = 0;
-            var currentLat, currentLon, nextLat, nextLon;
-            for (var i = 0; i < _gpxTrkseqArray.length; i++) {
-                curAlti = Number(_gpxTrkseqArray[i].ele);	//고도
+    function drawPlot() {
+        //웨이포인트 테스트용도...
+        var legends = $("#elevationImage .legendLabel");
+        var updateLegendTimeout = null;
+        var latestPosition = null;
+        var cursorMarker = new kakao.maps.Marker();
 
-                if (flag == true) { //다음값을 비교하기 위한 플래그
-                    minAlti = curAlti;
-                    maxAlti = curAlti;
+        let eleArray = [];		//경로의 높이정보
+        var distance = 0;			//직전이동거리
+        var odometer = Number(0);	//누적이동거리
+        var minAlti = 0, maxAlti = 0;
+        let curAlti = 0;
+        for (let i = 1; i < _gpxTrkseqArray.length; i++) {
+            distance = getDistance(_gpxTrkseqArray[i - 1], _gpxTrkseqArray[i]);
+            odometer += distance;
 
-                    currentLat = _gpxTrkseqArray[i].lat;
-                    currentLon = _gpxTrkseqArray[i].lon;
-                    nextLat = _gpxTrkseqArray[i].lat;
-                    nextLon = _gpxTrkseqArray[i].lon;
-                } else {
-                    nextLat = _gpxTrkseqArray[i].lat;
-                    nextLon = _gpxTrkseqArray[i].lon;
-                }
+            curAlti = _gpxTrkseqArray[i - 1].ele;	//고도
 
-                if (curAlti >= maxAlti) maxAlti = curAlti; //전체 경로에서 최대높이
-                if (curAlti <= minAlti) minAlti = curAlti; //전체 경로에서 최저높이
+            if (curAlti >= maxAlti) maxAlti = curAlti; //전체 경로에서 최대높이
+            if (curAlti <= minAlti) minAlti = curAlti; //전체 경로에서 최저높이
 
-                distance = getDistanceFromLatLon(currentLat, currentLon, nextLat, nextLon);
-                odometer += Number(distance);
+            //누적거리와 고도정보
+            eleArray.push([odometer, _gpxTrkseqArray[i - 1].ele]);
+        }
+        eleArray.push([odometer, _gpxTrkseqArray[_gpxTrkseqArray.length - 1].ele]);
 
-                spentTime = distance / 3.6;
-
-                //누적거리와 고도정보
-                eleArray.push([odometer / 1000, Number(_gpxTrkseqArray[i].ele)]);
-                if (flag == false) {
-                    currentLat = nextLat;
-                    currentLon = nextLon;
-                }
-                flag = false;
-            }
-
-            //참고 http://www.flotcharts.org/flot/examples/tracking/index.html
-            plot = $.plot("#elevationImage", [{data: eleArray}]
-                , {
-                    //series: { lines: { show: true }},
-                    crosshair: {mode: "x"},
-                    grid: {hoverable: true, autoHighlight: false, show: true, aboveData: true},
-                    yaxis: {min: minAlti * 0.7, max: maxAlti * 1.2} //위/아래에 약간의 여유
-                });
-
-
-            function updateLegend() {
-                updateLegendTimeout = null;
-                var pos = latestPosition;
-                var i, j, dataset = plot.getData();
-                for (i = 0; i < dataset.length; ++i) {
-                    var series = dataset[i];
-                    for (j = 0; j < series.data.length; ++j) {
-                        if (series.data[j][0] > pos.x) {
-                            break;
-                        }
-                    }
-
-                    //고도차트에서 마무스를 따라 움직이는 지도상의 마커
-                    cursorMarker.setMap(null);	//마커를 삭제하고
-                    cursorMarker = new kakao.maps.Marker({
-                        position: new kakao.maps.LatLng(_gpxTrkseqArray[j].lat, _gpxTrkseqArray[j].lon)
-                    });
-                    cursorMarker.setMap(_globalMap);
-
-                }
-            }
-
-            //차트에서 마우스의 움직임이 있으면....
-            $("#elevationImage").bind("plothover", function (event, pos, item) {
-                latestPosition = pos;
-                if (!updateLegendTimeout) {
-                    updateLegendTimeout = setTimeout(updateLegend, 50);
-                }
+        //참고 http://www.flotcharts.org/flot/examples/tracking/index.html
+        plot = $.plot("#elevationImage", [{data: eleArray}]
+            , {
+                //series: { lines: { show: true }},
+                crosshair: {mode: "x"},
+                grid: {hoverable: true, autoHighlight: false, show: true, aboveData: true},
+                yaxis: {min: minAlti * 0.7, max: maxAlti * 1.2} //위/아래에 약간의 여유
             });
 
+
+        function updateLegend() {
+            updateLegendTimeout = null;
+            var pos = latestPosition;
+            var i, j, dataset = plot.getData();
+            for (i = 0; i < dataset.length; ++i) {
+                var series = dataset[i];
+                for (j = 0; j < series.data.length; ++j) {
+                    if (series.data[j][0] > pos.x) {
+                        break;
+                    }
+                }
+
+                let position;
+                //고도차트에서 마무스를 따라 움직이는 지도상의 마커
+                cursorMarker.setMap(null);	//마커를 삭제하고
+                if (j == series.data.length) {
+                    position = new kakao.maps.LatLng(_gpxTrkseqArray[_gpxTrkseqArray.length - 1].lat,
+                        _gpxTrkseqArray[_gpxTrkseqArray.length - 1].lng);
+                } else {
+                    position = new kakao.maps.LatLng(_gpxTrkseqArray[j].lat, _gpxTrkseqArray[j].lng);
+                }
+                cursorMarker = new kakao.maps.Marker({
+                    position: position
+                });
+                cursorMarker.setMap(_globalMap);
+            }
         }
-    */
+
+        //차트에서 마우스의 움직임이 있으면....
+        $("#elevationImage").bind("plothover", function (event, pos, item) {
+            latestPosition = pos;
+            if (!updateLegendTimeout) {
+                updateLegendTimeout = setTimeout(updateLegend, 50);
+            }
+        });
+
+    }
+
+
     $('#getElevation').click(function () {
-        //$('#editinfo').block({ message: '<h4>Processing</h1>',
-        //    css: { border: '3px solid #a00', width:'600px' }
-        //});
+        /*        $('#editinfo').block({
+                    message: '<h4>Processing</h1>',
+                    css: {border: '3px solid #a00', width: '600px'}
+                });*/
+
+        $('#blockingAds').show();
 
         //모든 polyline
         let trkseq = new Array();	//servlet에 요청하기 위한 배열 object를 string으로 변환
@@ -238,29 +227,27 @@ $(document).ready(function () {
 
         $.ajax({
             type: 'post',
-            url: '/elevation.do',
-            data: {trackPoint: JSON.stringify(trkseq)},
+            url: '/api/1.0/elevation',
+            data: JSON.stringify({trackPoint: trkseq}),
+            contentType: 'application/json',
             dataType: 'json',
             async: true,
             complete: function () {
 
             },
-            success: function (data, status) {
-                if (data.resultcode == 'success') {
+            success: function (response, status) {
+                if (response.status === 0) {
                     _gpxTrkseqArray = [];
+                    _gpxTrkseqArray = response.data;
                     eleFalg = true;
-                    var jsonList = JSON.parse(data.resultlist);
-                    $.each(jsonList, function () {
-                        var trkpt = getGpxTrk($(this).attr('lat'), $(this).attr('lng'), $(this).attr('ele'));
-                        _gpxTrkseqArray.push(trkpt);
-                    });
-                    $('#check').text(data.check);
+                    //$('#check').text(data.check);
                     drawPlot();
                 } else {
                     eleFalg = false;
-                    alert(data.resultmessage);
+                    alert(response.message);
                 }
-            }
+                $('#blockingAds').hide();
+            },
         });
     });
 
