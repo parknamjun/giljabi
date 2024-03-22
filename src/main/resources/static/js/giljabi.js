@@ -449,18 +449,21 @@ $(document).ready(function () {
 
     //gpx파일을 병합한다.
     $('#mergeInput').change(function () {
-        if (!_firstFileOpenFlag) {
-            alert('GPX/TCX 파일을 먼저 선택해야 병합 파일을 열 수 있습니다.');
-            return;
-        }
+        alert('준비중입니다.');
+        return;
+        /*
+                if (!_firstFileOpenFlag) {
+                    alert('GPX/TCX 파일을 먼저 선택해야 병합 파일을 열 수 있습니다.');
+                    return;
+                }
 
-        let file = document.getElementById('mergeInput').files[0];
-        _fileExt = file.name.substring(file.name.lastIndexOf('.') + 1);
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            mergeObject(reader.result);
-        };
-        reader.readAsText(file);
+                let file = document.getElementById('mergeInput').files[0];
+                _fileExt = file.name.substring(file.name.lastIndexOf('.') + 1);
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    mergeObject(reader.result);
+                };
+                reader.readAsText(file);*/
     });
 
     //직전의 경로에 경로를 이어 붙힌다
