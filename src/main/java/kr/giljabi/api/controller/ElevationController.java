@@ -1,23 +1,25 @@
 package kr.giljabi.api.controller;
 
 import io.swagger.annotations.ApiOperation;
-import kr.giljabi.api.geo.Geometry3DPoint;
+import kr.giljabi.api.geo.*;
 import kr.giljabi.api.service.GoogleService;
 import kr.giljabi.api.request.RequestElevationData;
 import kr.giljabi.api.response.Response;
 import kr.giljabi.api.utils.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,6 +36,7 @@ import java.util.List;
 public class ElevationController {
 
     private final GoogleService googleService;
+    private final ResourceLoader resourceLoader;
 
     @PostMapping("/api/1.0/elevation")
     @ApiOperation(value = "고도정보", notes = "google elevation api 이용하여 고도정보를 받아오는 api")
@@ -54,25 +57,87 @@ public class ElevationController {
             return new Response(ErrorCode.STATUS_EXCEPTION.getStatus(), e.getMessage());
         }
     }
-
+/*
     @GetMapping("/api/1.0/mountain")
-    @ApiOperation(value = "고도정보", notes = "google elevation api 이용하여 고도정보를 받아오는 api")
-    public Response getMountain() {
-        ArrayList<Geometry3DPoint> list = null;
-        Response response;
-
+    @ApiOperation(value = "국립공원 GPX정보, ", notes = "파일 목록")
+    public Response getMountainList() {
+        List<String> list = new ArrayList<>();
+        StringBuffer sb = new StringBuffer();
         try {
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             Resource[] resources = resolver.getResources("classpath:/kr/*.gpx");
             for (Resource resource : resources) {
-                log.info(resource.getFilename());
+                list.add(resource.getFilename());
             }
-
             return new Response(list);
         } catch (Exception e) {
             return new Response(ErrorCode.STATUS_EXCEPTION.getStatus(), e.getMessage());
         }
     }
+
+    @GetMapping("/api/1.0/mountain/{filename}")
+    @ApiOperation(value = "국립공원 G ", notes = "파일 목록")
+    public Response getMountainTrackinfo(@PathVariable String filename) {
+        try {
+            Resource resource = resourceLoader.getResource("classpath:/kr/" + filename);
+            String xmlFile = new String(Files.readAllBytes(Paths.get(resource.getURI())), "UTF-8");
+            return new Response(xmlFile);
+        } catch (Exception e) {
+            return new Response(ErrorCode.STATUS_EXCEPTION.getStatus(), e.getMessage());
+        }
+    }
+*/
+
+    @GetMapping("/api/1.0/mountain100")
+    @ApiOperation(value = "산림청 100대 명산",
+            notes = "<h3>한국등산트레킹지원센터_산림청 100대명산</h3><br>" +
+                    "산림청 100대명산의 POI(관심지점), 갈림길(방면), 노면정보를 제공하는 GPX 포맷의 공간정보 파일데이터<br>" +
+                    "https://www.data.go.kr/data/15098177/fileData.do?recommendDataYn=Y<br>")
+    public Response getMountainList100() {
+        List<String> list = new ArrayList<>();
+        StringBuffer sb = new StringBuffer();
+        try {
+            Resource resource = resourceLoader.getResource("classpath:/kr/100/100.txt");
+            String jsonFile = new String(Files.readAllBytes(Paths.get(resource.getURI())), "UTF-8");
+            String[] lines = jsonFile.split("\r\n");
+            for (String line : lines) {
+                list.add(line);
+            }
+            return new Response(list);
+        } catch (Exception e) {
+            return new Response(ErrorCode.STATUS_EXCEPTION.getStatus(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/api/1.0/mountain100/{filename}")
+    @ApiOperation(value = "산림청 100대 명산 이름으로 검색한 gpx 파일 목록")
+    public Response getMountainList100File(@PathVariable String filename) {
+        List<String> list = new ArrayList<>();
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        try {
+            String pattern = "classpath:/kr/100/" + filename + "*.gpx";
+            Resource[] resources = resolver.getResources(pattern);
+            for (Resource resource : resources) {
+                list.add(resource.getFilename());
+            }
+            return new Response(list);
+        } catch (Exception e) {
+            return new Response(ErrorCode.STATUS_EXCEPTION.getStatus(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/api/1.0/mountain100Gpx/{filename}")
+    @ApiOperation(value = "산림청 100대 명산 gpx 파일내용 ")
+    public Response getMountainList100Gpxfile(@PathVariable String filename) {
+        try {
+            Resource resource = resourceLoader.getResource("classpath:/kr/100/" + filename);
+            String xmlFile = new String(Files.readAllBytes(Paths.get(resource.getURI())), "UTF-8");
+            return new Response(xmlFile);
+        } catch (Exception e) {
+            return new Response(ErrorCode.STATUS_EXCEPTION.getStatus(), e.getMessage());
+        }
+    }
+
 
     private Response getMountainData() {
         Response response = new Response(0, "정상 처리 되었습니다.");

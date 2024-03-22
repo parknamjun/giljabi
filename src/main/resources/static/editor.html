@@ -31,46 +31,42 @@
 
 <body>
 
-<table style="width:995px;"><!-- gpx2tcx 800+165 + 10-->
-    <tr>
-        <td>
-            <div class="map_wrap">
-                <div id="map" style="width:100%;height:500px;"></div>
-                <p class="modes">
-                    <button onclick="selectOverlay('POLYLINE')" style='color:red;'>Track</button>
-                    <input class='mapType' type="checkbox" id="chkTerrain"/><label for="chkTerrain">지형정보</label>
-                    <input class="mapType" type="checkbox" id="chkBicycle"/><label for="chkBicycle">자전거도로</label>
-                    <input class="mapType" type="checkbox" id="chkCertification"/><label
-                        for="chkCertification">인증센터​</label>
-                    <input class="mapType" type="checkbox" id="chkCvs"/><label for="chkCvs">편의점</label>
-                </p>
-            </div>
-        </td>
-    </tr>
-</table>
+<div class="map_wrap">
+    <div id="map" style="width:100%;height:100%;"></div>
+    <p class="modes">
+        <button onclick="selectOverlay('POLYLINE')" style='color:red;'>Track</button>
+        <input class='mapType' type="checkbox" id="chkTerrain"/><label for="chkTerrain">지형정보</label>
+        <input class="mapType" type="checkbox" id="chkBicycle"/><label for="chkBicycle">자전거도로</label>
+        <input class="mapType" type="checkbox" id="chkCertification"/><label
+            for="chkCertification">인증센터</label>
+        <input class="mapType" type="checkbox" id="chkCvs"/><label for="chkCvs">편의점</label>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        산림청 100대 명산
+        <select class="mapType" id="mountain100Select" name="mountain100Select">
+            <option>선택</option>
+        </select>
+        웨이포인트 포함 유무
+        <input class="mapType" type="checkbox" id="wptIcon" name="wptIcon" value="true" style="width:20px;">
+    </p>
+</div>
 
-<table>
-    <tr>
-        <td>
-            <div id='editinfo'>
-                배경 경로 File: <input type="file" id="baseInput" accept=".gpx">&nbsp;&nbsp;&nbsp;&nbsp;
-                GPX/TCX File: <input type="file" id="fileInput" accept=".gpx">
-                평속(km/h):<input type="text" id="averageV" value="15" style="width:20px;">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                웨이포인트 삭제<input type="checkbox" id="wptIcon" name="wptIcon" value="true" style="width:50px;">
-            </div>
+<div>
+    <div id='editinfo' style="vertical-align:top; height:20px;">
+        <p>
+            배경 GPX: <input type="file" id="baseInput" accept=".gpx" style="width:200px;">
+            GPX/TCX File: <input type="file" id="fileInput" accept=".gpx" style="width:200px;">
+            평속(km/h):<input type="text" id="averageV" value="15" style="width:20px;">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" id="getElevation" value="getElevation">
+            <input type="button" id="gpxsave" value="Gpx Save"/>
+            <input type="button" id="reset" value="Reset"/>
+        </p>
+    </div>
 
-            <div class="elevationContainer">
-                <div id="elevationImage" class="elevation"></div>
-            </div>
-        </td>
-        <td>
-            <input type='button' id='getElevation' class="button" value='getElevation'><br><br>
-            <input type="button" id="tcxsave" class="button" value="tcx Save"/><br><br>
-            <input type="button" id="reset" class="button" value="Reset"/>
-        </td>
-    </tr>
-</table>
+    <div class="elevationContainer">
+        <div id="elevationImage" class="elevation"></div>
+    </div>
+</div>
 
 <div id="blockingAds" class="blockUI" style="display:none">
     <div class="blockUI blockOverlay" style="z-index: 1000; border: none;

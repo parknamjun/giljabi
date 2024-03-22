@@ -125,14 +125,124 @@ $(document).ready(function () {
         let reader = new FileReader();
 
         reader.onload = function (e) {
-            basePathLoadGpx(reader.result);
+            basePathLoadGpx(reader.result, '#A52A2A');
         };
 
         reader.readAsText(file);
     });
 
+    $('#moutain').click(function () {
+        let mountainList = [];
+        $.ajax({
+            type: 'get',
+            url: '/api/1.0/mountain',
+            contentType: 'application/json',
+            dataType: 'json',
+            async: false,
+            complete: function () {
+            },
+            success: function (response, status) {
+                if (response.status === 0) {
+                    mountainList = response.data;
+                } else {
+                    alert(response.message);
+                }
+            },
+        });
+        console.log(mountainList);
+        $.each(mountainList, function (index, ele) {
+            $.ajax({
+                type: 'get',
+                url: '/api/1.0/mountain/' + mountainList[index],
+                contentType: 'application/json',
+                dataType: 'json',
+                async: false,
+                complete: function () {
+                },
+                success: function (response, status) {
+                    if (response.status === 0) {
+                        basePathLoadGpx(response.data, '#0037ff');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+            });
+        });
+    });
+
+    function combo100() {
+        $.ajax({
+            type: 'get',
+            url: '/api/1.0/mountain100',
+            contentType: 'application/json',
+            dataType: 'json',
+            async: false,
+            complete: function () {
+            },
+            success: function (response, status) {
+                if (response.status === 0) {
+                    response.data.forEach(function (mountain) {
+                        $('#mountain100Select').append($('<option></option>').val(mountain).html(mountain));
+                    });
+                    console.info($('#mountain100Select').html());
+                } else {
+                    alert(response.message);
+                }
+            },
+        });
+    }
+
+    $('#mountain100Select').on('change', function () {
+        // this를 사용하여 현재 선택된 옵션의 value를 얻음
+        let selectedValue = $(this).val();
+
+        let mountainList = [];
+        $.ajax({
+            type: 'get',
+            url: '/api/1.0/mountain100/' + selectedValue,
+            contentType: 'application/json',
+            dataType: 'json',
+            async: false,
+            complete: function () {
+            },
+            success: function (response, status) {
+                if (response.status === 0) {
+                    mountainList = response.data;
+                } else {
+                    alert(response.message);
+                }
+            },
+        });
+        console.log(mountainList);
+
+        $.each(mountainList, function (index, ele) {
+            $.ajax({
+                type: 'get',
+                url: '/api/1.0/mountain100Gpx/' + mountainList[index],
+                contentType: 'application/json',
+                dataType: 'json',
+                async: false,
+                complete: function () {
+                },
+                success: function (response, status) {
+                    if (response.status === 0) {
+                        basePathLoadGpx(response.data, '#0037ff');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+            });
+        });
+    });
+
+    combo100();
+
     function drawPlot() {
-        //웨이포인트 테스트용도...
+        if (_gpxTrkseqArray.length == 0) {
+            alert('고도 정보가 없습니다.');
+            return;
+        }
+
         var legends = $("#elevationImage .legendLabel");
         var updateLegendTimeout = null;
         var latestPosition = null;
@@ -251,8 +361,8 @@ $(document).ready(function () {
         });
     });
 
-    $('#tcxsave').click(function () {
-        if (!confirm('tcx파일로 저장할까요?')) {
+    $('#gpxsave').click(function () {
+        if (!confirm('Gpx 파일로 저장할까요?')) {
             return;
         }
         /*        if (_gpxTrkseqArray.length == 0) {
@@ -312,6 +422,7 @@ $(document).ready(function () {
         if (confirm('초기화 할까요?'))
             location.reload();
     });
+    /*
     $('#wptIcon').click(function () {
         if ($(this).prop('checked')) {
             //웨이포인트를 삭제하자...
@@ -323,7 +434,7 @@ $(document).ready(function () {
             console.log('Checkbox is unchecked.');
         }
     });
-
+*/
 });
 
 
@@ -431,7 +542,7 @@ function selectOverlay(type) {
     _drawingManager.select(kakao.maps.drawing.OverlayType[type]);
 }
 
-function basePathLoadGpx(gpxfile) {
+function basePathLoadGpx(gpxfile, strokeColor) {
     let reader = $($.parseXML(gpxfile));
     $.each(reader.find('gpx').find('trk'), function () {
         let item = new Object();
@@ -444,15 +555,15 @@ function basePathLoadGpx(gpxfile) {
             );
         });
         item.trkseg = trkptList;
-        baseTrkList.push(item); //삭제하기 위한 데이터, 삭제할 필요가 있을까??? 계속 추가해도 좋을듯
+        //baseTrkList.push(item); //삭제하기 위한 데이터, 삭제할 필요가 있을까??? 계속 추가해도 좋을듯
 
         let lineStyle = new kakao.maps.Polyline({
             map: _globalMap,
             path: trkptList,
-            strokeColor: '#A52A2A', // 선의 색깔
+            strokeColor: strokeColor, // 선의 색깔 '#A52A2A'
             strokeOpacity: 1, // 선의 불투명도, 1에서 0 사이의 값이며 0에 가까울수록 투명
             strokeStyle: 'solid', // 선의 스타일
-            strokeWeight: 5
+            strokeWeight: 3
         });
         basePolyline.push(lineStyle);
     });
@@ -468,8 +579,9 @@ function basePathLoadGpx(gpxfile) {
             getIconString($(this).find('sym').text())
         );
 
-        //wpt를 필요에 따라 삭제할 경우에 사용
-        baseWptList.push(new WaypointMark(item.position, item.name, item.uid, item.sym));
+        //wpt 체크되어 있으면 웨이포인트를 표시한다.
+        if ($('#wptIcon').prop('checked'))
+            baseWptList.push(new WaypointMark(item.position, item.name, item.uid, item.sym));
     });
 }
 
