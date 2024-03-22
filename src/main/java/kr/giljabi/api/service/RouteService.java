@@ -26,22 +26,22 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.query.Param;
+//import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
 /**
- * 경로 탐색 클래스 
+ * 경로 탐색 클래스
  * eahn.park@gmail.com
  * 2021.10.01
  */
 @Slf4j
 @Service
-@Transactional
+//@Transactional
 public class RouteService {
     @Value("${giljabi.openrouteservice.apikey}")
     private String apikey;
@@ -49,21 +49,22 @@ public class RouteService {
     @Value("${giljabi.openrouteservice.directionUrl}")
     private String directionUrl;
 
-    private final ApiCallInfoRepository apiCallInfoRepository;
-    private final ClientInfoRepository clientInfoRepository;
+    //private final ApiCallInfoRepository apiCallInfoRepository;
+    //private final ClientInfoRepository clientInfoRepository;
 
     /**
      * 생상자 주입방식을 권장
      * @param apiCallInfoRepository
      * @param clientInfoRepository
      */
-    @Autowired
+/*    @Autowired
     public RouteService (ApiCallInfoRepository apiCallInfoRepository,
                          ClientInfoRepository clientInfoRepository) {
         this.apiCallInfoRepository = apiCallInfoRepository;
         this.clientInfoRepository = clientInfoRepository;
 
-    }
+    }*/
+
     /**
      * openrouteservice를 사용하지만, google direction를 사용하는 것도 고려할 필요 있음
      */
@@ -89,7 +90,7 @@ public class RouteService {
         //log.info(direction.toString());
         //log.info(resultList.toString());
 
-        saveApiCallInfo(request, direction, resultList);
+        //saveApiCallInfo(request, direction, resultList);
 
         //GeoPositionData를 배열로 구성하면 응답데이터를 크기를 줄일 수 있을수도...
         return resultList;
@@ -97,10 +98,12 @@ public class RouteService {
 
     /**
      * save api_call_info table
+     *
      * @param request
      * @param direction
      * @param resultList
      */
+    /*
     private void saveApiCallInfo(RouteData request, OSRDirectionV2Data direction, ArrayList<Geometry3DPoint> resultList) {
         //DB에 필요한 정보블 저장한다.
         ApiCallInfo apiCallInfo = new ApiCallInfo();
@@ -110,17 +113,17 @@ public class RouteService {
         apiCallInfo.setToLat(request.getTarget()[1]);
         apiCallInfo.setApiCode(ApiCode.DIRECTION);
 
-        apiCallInfo.setDistance((int)direction.getRoutes().get(0).getSummary().getDistance());
-        apiCallInfo.setDuration((int)direction.getRoutes().get(0).getSummary().getDuration());
-        apiCallInfo.setAscent((int)direction.getRoutes().get(0).getSummary().getAscent());
-        apiCallInfo.setDescent((int)direction.getRoutes().get(0).getSummary().getDescent());
+        apiCallInfo.setDistance((int) direction.getRoutes().get(0).getSummary().getDistance());
+        apiCallInfo.setDuration((int) direction.getRoutes().get(0).getSummary().getDuration());
+        apiCallInfo.setAscent((int) direction.getRoutes().get(0).getSummary().getAscent());
+        apiCallInfo.setDescent((int) direction.getRoutes().get(0).getSummary().getDescent());
 
         ProfileCode code = null;
-        if(request.getProfile().compareTo("cycling-road") == 0)
+        if (request.getProfile().compareTo("cycling-road") == 0)
             code = ProfileCode.CYCLING_ROAD;
-        else if(request.getProfile().compareTo("cycling-mountain")  == 0)
+        else if (request.getProfile().compareTo("cycling-mountain") == 0)
             code = ProfileCode.CYCLING_MOUNTAIN;
-        else if(request.getProfile().toUpperCase().compareTo("foot-hiking")  == 0)
+        else if (request.getProfile().toUpperCase().compareTo("foot-hiking") == 0)
             code = ProfileCode.FOOT_HIKING;
         else
             code = ProfileCode.CYCLING_ROAD;
@@ -135,13 +138,15 @@ public class RouteService {
         log.info("apiCallInfo.id={}", apiCallInfo.getId());
 
         saveClientInfo(apiCallInfo);
-
     }
+*/
 
     /**
      * 사용자는 IP로 구분하고, IP를 기준으로 insert/update 한다.
+     *
      * @param apiCallInfo
      */
+    /*
     private void saveClientInfo(ApiCallInfo apiCallInfo) {
         ClientInfo findClientInfo = clientInfoRepository.findByClientIp(apiCallInfo.getCreateBy());
         log.info("findClientInfo={}", findClientInfo);
@@ -151,7 +156,7 @@ public class RouteService {
         clientInfo.setApiCode(apiCallInfo.getApiCode());
         clientInfo.setProfileCode(apiCallInfo.getProfileCode());
 
-        if(findClientInfo == null) {
+        if (findClientInfo == null) {
             clientInfo.setAccumulate_distance(apiCallInfo.getDistance());   //누적 거리
             clientInfo.setAccumulate_count(1);                              //누적 사용건수
         } else {
@@ -161,9 +166,9 @@ public class RouteService {
         }
         clientInfoRepository.save(clientInfo);
     }
+*/
 
     /**
-     *
      * @param httpPost
      * @param json
      * @return
@@ -185,8 +190,8 @@ public class RouteService {
             ResponseHandler<String> handler = new BasicResponseHandler();
             result = handler.handleResponse(response);
         } finally {
-            if(response != null) response.close();
-            if(httpClient != null) httpClient.close();
+            if (response != null) response.close();
+            if (httpClient != null) httpClient.close();
         }
         log.info(result);
         return result;
