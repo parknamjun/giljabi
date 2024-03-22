@@ -2,7 +2,7 @@ let xmlData;
 let NEWLINE = '\n';
 
 function gpxHeader() {
-    xmlData = '';	//저장할떼마다 초기화
+    xmlData = '';	//저장할때 초기화
     xmlData += '<?xml version="1.0" encoding="UTF-8"?>' + NEWLINE;
     if (_filetype === 'gpx') {
         xmlData += '<gpx creator="Giljabi" version="1.1"' + NEWLINE;
