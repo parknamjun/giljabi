@@ -435,6 +435,21 @@ $(document).ready(function () {
             return wpt;
         }
     */
+    $('#reset').hover(
+        function (event) {
+            // 마우스 오버 시
+            $('#resettooltip').css({
+                'display': 'block',
+                'left': event.pageX + 10 + 'px',
+                'top': event.pageY + 10 + 'px'
+            });
+        },
+        function () {
+            // 마우스 아웃 시
+            $('#resettooltip').css('display', 'none');
+        }
+    );
+
     $('#reset').click(function () {
         if (confirm('초기화 할까요?'))
             location.href = '/giljabi.html';
