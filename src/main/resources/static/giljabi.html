@@ -36,6 +36,7 @@
     <script type="text/javascript" src="/js/giljabi.js"></script>
     <link type="text/css" href="/js/jquery-ui.css" rel="stylesheet"/>
     <link type="text/css" href="/js/giljabi.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <style type="text/css">
         .placeinfo_wrap {
@@ -211,14 +212,6 @@
             display: flex; /* This will arrange the child divs in a row */
 			border: 1px solid #ddd;
         }
-        .tooltip {
-            position: absolute;
-            background-color: black;
-            color: blue;
-            font-size: 12px;
-            padding: 5px;
-            border-radius: 5px;
-        }
     </style>
 
 </head>
@@ -260,11 +253,8 @@
         파일병합: <input type="file" id="mergeInput" accept=".gpx,.tcx" size="0" disabled>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="button" id="waypointinfo" value="Waypoint Info"/>
-        <div id="waypointinfotooltip" style="display:none;">화면에 최소한 1개 이상의 웨이포인트가 있어야 합니다.</div>
-
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="button" id="reset" value="Reset"/>
-        <div id="resettooltip" style="display:none;">화면을 초기화 합니다.</div>
     </p>
 </div>
 <div class="containerLine">
