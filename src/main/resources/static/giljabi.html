@@ -2,242 +2,323 @@
 <html>
 <head>
 
-<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-<title>대한민국의 모든 경로</title>
-<link rel="icon" type="image/png" sizes="32x32" href="/images/giljabi-logo.png">
-<link rel="icon" type="image/png" sizes="144x144" href="/images/giljabi-logo.png">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <title>대한민국의 모든 경로</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/giljabi-logo.png">
+    <link rel="icon" type="image/png" sizes="144x144" href="/images/giljabi-logo.png">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-<meta name="description" content="tcx, gpx 경로만들기">
-<meta name="keyword" content="가민 tcx, garmin tcx, gpx, tcx,웨이포인트,waypoint,그란폰도,메디오폰도">
+    <meta name="description" content="tcx, gpx 경로만들기">
+    <meta name="keyword" content="가민 tcx, garmin tcx, gpx, tcx,웨이포인트,waypoint,그란폰도,메디오폰도">
 
-<meta http-equiv="Expires" content="-1">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=27f606d8edf497ab495f16d1d983047f&libraries=services"></script>
-<script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="/js/jquery-ui.js"></script>
-<script type="text/javascript" src="/js/jquery.flot.js"></script>
-<script type="text/javascript" src="/js/jquery.flot.crosshair.js"></script>
-<script type="text/javascript" src="/js/jquery-plugin/jquery.jqGrid.min.js"></script>
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=27f606d8edf497ab495f16d1d983047f&libraries=services"></script>
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.crosshair.js"></script>
+    <script type="text/javascript" src="/js/jquery-plugin/jquery.jqGrid.min.js"></script>
 
-<!-- SheetJS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
-<!--FileSaver [savaAs 함수 이용] -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+    <!-- SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+    <!--FileSaver [savaAs 함수 이용] -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
-<script type="text/javascript" src="/js/common.js"></script>
-<script type="text/javascript" src="/js/routeutil.js"></script>
-<script type="text/javascript" src="/js/waypoint.js"></script>
-<script type="text/javascript" src="/js/xmlwriter.js"></script>
-<script type="text/javascript" src="/js/giljabi.js"></script>
-<link type="text/css" href="/js/jquery-ui.css" rel="stylesheet" />
-<link type="text/css" href="/js/giljabi.css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/routeutil.js"></script>
+    <script type="text/javascript" src="/js/waypoint.js"></script>
+    <script type="text/javascript" src="/js/xmlwriter.js"></script>
+    <script type="text/javascript" src="/js/giljabi.js"></script>
+    <link type="text/css" href="/js/jquery-ui.css" rel="stylesheet"/>
+    <link type="text/css" href="/js/giljabi.css" rel="stylesheet"/>
 
-<style type="text/css">
-.placeinfo_wrap {position:absolute;bottom:28px;left:-150px;width:300px;}
-.placeinfo {position:relative;width:100%;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;padding-bottom: 10px;background: #fff;}
-.placeinfo:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.placeinfo_wrap .after {content:'';position:relative;margin-left:-12px;left:50%;width:22px;height:12px;background:url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-.placeinfo a, .placeinfo a:hover, .placeinfo a:active{color:#fff;text-decoration: none;}
-.placeinfo a, .placeinfo span {display: block;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-.placeinfo span {margin:5px 5px 0 5px;cursor: default;font-size:13px;}
-.placeinfo .title {font-weight: bold; font-size:14px;border-radius: 6px 6px 0 0;margin: -1px -1px 0 -1px;padding:10px; color: #fff;background: #d95050;background: #d95050 url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
-.placeinfo .tel {color:#0f7833;}
-.placeinfo .jibun {color:#999;font-size:11px;margin-top:0;}
+    <style type="text/css">
+        .placeinfo_wrap {
+            position: absolute;
+            bottom: 28px;
+            left: -150px;
+            width: 300px;
+        }
 
-.timeClass {
-  font-family: "Lucida Console", Monaco, monospace;
-}
+        .placeinfo {
+            position: relative;
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            background: #fff;
+        }
+
+        .placeinfo:nth-of-type(n) {
+            border: 0;
+            box-shadow: 0px 1px 2px #888;
+        }
+
+        .placeinfo_wrap .after {
+            content: '';
+            position: relative;
+            margin-left: -12px;
+            left: 50%;
+            width: 22px;
+            height: 12px;
+            background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+        }
+
+        .placeinfo a, .placeinfo a:hover, .placeinfo a:active {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .placeinfo a, .placeinfo span {
+            display: block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .placeinfo span {
+            margin: 5px 5px 0 5px;
+            cursor: default;
+            font-size: 13px;
+        }
+
+        .placeinfo .title {
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 6px 6px 0 0;
+            margin: -1px -1px 0 -1px;
+            padding: 10px;
+            color: #fff;
+            background: #d95050;
+            background: #d95050 url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;
+        }
+
+        .placeinfo .tel {
+            color: #0f7833;
+        }
+
+        .placeinfo .jibun {
+            color: #999;
+            font-size: 11px;
+            margin-top: 0;
+        }
+
+        .timeClass {
+            font-family: "Lucida Console", Monaco, monospace;
+        }
 
 
-#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:180px;display: none;
-	margin:20px 0px 30px 5px;padding:5px;overflow-y:auto; z-index: 1;font-size:12px;}
-.bg_white {background:#fff;}
-#menu_wrap hr {display: block; height: 1px;border: 0;
-	border-top: 2px solid #5F5F5F;margin:3px 0;}
-#placesList li {list-style: none;margin: 0 0 0 -35px;}
-#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 40px;}
-#placesList .item span {display: block;margin-top:4px;}
-#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+        #menu_wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 180px;
+            display: none;
+            margin: 20px 0px 30px 5px;
+            padding: 5px;
+            overflow-y: auto;
+            z-index: 1;
+            font-size: 12px;
+        }
 
-#pagination {margin:10px auto;text-align: center;}
-#pagination a {display:inline-block;margin-right:10px;}
-#pagination .on {font-weight: bold; cursor: default;color:#777;}
-</style>
+        .bg_white {
+            background: #fff;
+        }
+
+        #menu_wrap hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 2px solid #5F5F5F;
+            margin: 3px 0;
+        }
+
+        #placesList li {
+            list-style: none;
+            margin: 0 0 0 -35px;
+        }
+
+        #placesList .item {
+            position: relative;
+            border-bottom: 1px solid #888;
+            overflow: hidden;
+            cursor: pointer;
+            min-height: 40px;
+        }
+
+        #placesList .item span {
+            display: block;
+            margin-top: 4px;
+        }
+
+        #placesList .item h5, #placesList .item .info {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        #pagination {
+            margin: 10px auto;
+            text-align: center;
+        }
+
+        #pagination a {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        #pagination .on {
+            font-weight: bold;
+            cursor: default;
+            color: #777;
+        }
+
+        .container {
+			width: 100%;
+            display: flex; /* This will arrange the child divs in a row */
+			height: 70vh;
+			position: relative;
+        }
+
+        .left-div {
+			width: 950px;
+		}
+
+        .right-div {
+            width: 210px;
+			height: 100%;
+			overflow-y: auto;
+        }
+
+        .containerLine {
+			margin-bottom: 0;
+            vertical-align: top;
+            height: 27px;
+            display: flex; /* This will arrange the child divs in a row */
+        }
+
+        .containerPlot {
+			margin-bottom: 0;
+            vertical-align: top;
+            height: 120px;
+            display: flex; /* This will arrange the child divs in a row */
+			border: 1px solid #ddd;
+        }
+    </style>
 
 </head>
 
 <body>
-<form id="giljabiform" action="">
-<input hidden id="trkseq">
-<input hidden id="wpt">
-<input hidden id="command">
 
-<table border="0" style="border-collapse: collapse;table-layout: fixed;">
-	<tr>
-		<td width="950">
-			<table>
-				<tr>
-					<td>
-			<div class="map_wrap">
-				<div id="map" style="width:940px;height:500px;"></div>
-				<p class="modes">
-					<!--
-					<input type="text" value="" id="keyword" placeholder="검색" size="15">
-				    <input class='mapType' type="checkbox" id="chkTerrain"/><label for="chkTerrain">지형정보</label>
-			    	<input class="mapType" type="checkbox" id="chkBicycle"/><label for="chkBicycle">자전거도로</label>
-			    	<input class="mapType" type="checkbox" id="chkCertification"/><label for="chkCertification">인증센터​</label>
-			    	&nbsp;&nbsp;&nbsp;&nbsp;
-			    	<input type="radio" name="daumpoi" value="CS2">편의점
-					<input type="radio" name="daumpoi" value="AD5">숙박
-					<input type="radio" name="daumpoi" value="">없음
-					-->
-					<select id="direction" style="width: 500px;">
-					<option value="waypoint">웨이포인트</option>
-					<option value="cycling-road">cycling-road</option>
-					<option value="cycling-mountain">cycling-mountain</option>
-					<option value="foot-hiking">foot-hiking</option>
-					</select>
-					<br>
-				</p>
-				    <div id="menu_wrap" class="bg_white">
-				        <hr>
-				        <ul id="placesList"></ul>
-				        <div id="pagination"></div>
-				    </div>
-			</div>
-					</td>
-					<td>
-			<div id="waypointlist" style="width:220px;height:500px;overflow-y:scroll;">
-				<table style="width:205px;">
-					<tr><td>I</td>
-						<td>Name</td>
-						<td align='right'>km</td>
-						<td align='right'>Time</td>
-					</tr>
-					<tbody id="waypointinfoViewTable"></tbody>
-				</table>
-			</div>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+<div class="container">
+    <div class="left-div">
+        <div id="map" style="width:100%;height:100%;"></div>
+        <p class="modes">기능선택:
+            <select id="direction" style="width: 150px;">
+                <option value="waypoint">waypoint 만들기</option>
+                <option value="cycling-road">cycling-road 경로탐색</option>
+                <option value="cycling-mountain">cycling-mountain 경로탐색</option>
+                <option value="foot-hiking">foot-hiking 경로탐색</option>
+            </select>
+            <br>
+        </p>
 
-<table border="0" style="width:1179px;">
-	<tr>
-		<td colspan="2">
-			<div id="page-wrapper">
-				<div>
-					<table border="0" style="border-collapse: collapse;table-layout: fixed;">
-					<tr>
-						<td width="320px" style="vertical-align: middle;">
-				<!-- 지금은 gpx만 사용 -->
-				파일종류: <input type="file" id="fileInput" accept=".gpx">
-						</td>
-						<td width="150px" style="vertical-align: middle;">&nbsp;
-							<!-- 경사도 -->
-						</td>
-						<td width="150px;" style="vertical-align: middle;">
-				평속(Km/H) : <input type="text" id="averageV" value="15" style="width:30px;">
-						</td>
-						<td width="310px" style="vertical-align: middle;">
-				파일병합: <input type="file" id="mergeInput" accept=".gpx,.tcx" size="0">
-						</td>
-					</tr>
-					<tr>
-						<td style="vertical-align: middle;">
-				경로/파일명 : <input type="text" id="gpx_metadata_name" size="20">
-						</td>
-						<td style="vertical-align: middle;">
-				저장:
-					<input type="radio" name="filetype" value="gpx" checked="checked">gpx
-					<input type="radio" name="filetype" value="tcx">tcx
-						</td>
-						<td>&nbsp;
-						</td>
-						<td style="color: red"><b>크롬으로 개발/테스트하였습니다.  크롬을 사용해주세요</b>
-						</td>
-					</tr>
-					</table>
-				<!-- 획득고도:<input type="text" id="AcquisitionElevation" size="10"> -->
-				</div>
-			</div>
-		</td>
-		<td rowspan="2" align="left">
-            <input type="button" id="waypointinfo" style="width:200px;" class="buttonClassic" value="Waypoint Info" /><br>
-			<div style="height:5px;"></div>
-            <input type="button" id="saveas" style="width:200px;" class="buttonClassic" value="Save to PC" /><br>
-			<div style="height:5px;"></div>
-            <input type="button" id="waypointexcelsave" style="width:200px;" class="buttonClassic" value="Waypoint to Excel" /><br>
-			<div style="height:5px;"></div>
-            <input type="button" id="reset" style="width:95px;" class="buttonClassic" value="Reset" />
-            &nbsp;
-            <input type="button" id="reverse" style="width:95px;" class="buttonClassic" value="Reverse" />
-            <!--
-            <input type="button" id="" class="button" value="tcx Save to Server" />
-            <br><br>
-            <input type="button" id="" class="button" value="구간 자르기" />
-            -->
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<div class="elevationContainer">
-				<div id="elevationImage" class="elevation"></div>
-			</div>
-		</td>
-	</tr>
-</table>
+    </div>
+    <div class="right-div">
+        <table style="border: 2px">
+            <tr>
+                <td style="width: 10px; align:center">I</td>
+                <td style="width: 100px;">Name</td>
+                <td style="width: 40px; align: right;">km</td>
+                <td style="width: 50px; align: right;">Time</td>
+            </tr>
+            <tbody id="waypointinfoViewTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="containerLine">
+    <p>
+        파일종류: <input type="file" id="fileInput" accept=".gpx">
+        평속(Km/H) : <input type="text" id="averageV" value="15" style="width:30px;">
+        파일병합: <input type="file" id="mergeInput" accept=".gpx,.tcx" size="0">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" id="waypointinfo" value="Waypoint Info"/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" id="reset" value="Reset"/>
+    </p>
+</div>
+<div class="containerLine">
+    <p>
+		경로/파일명 : <input type="text" id="gpx_metadata_name" size="20">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        저장형식:
+        <input type="radio" name="filetype" value="gpx" checked="checked">gpx
+        <input type="radio" name="filetype" value="tcx">tcx
+        <input type="button" id="saveas" value="Save to PC"/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <input type="button" id="waypointexcelsave" value="Waypoint to Excel"/>
+
+    </p>
+</div>
+<br>
+
+<div class="containerPlot">
+	<p>
+    <div id="elevationImage" class="elevation"></div>
+	</p>
+</div>
 
 <div style="display: none;" id="viewWaypoint" class='waypointStyle'>
 	<div style='width:150px;'>
-	<img src="images/waypoint.png" id="selectWaypointIcon">
-	<input type='text' id="waypointName" size='11'>
+		<img src="images/waypoint.png" id="selectWaypointIcon">
+		<input type='text' id="waypointName" size='11'>
 	</div>
 	<div style='margin-left:20px;layout:fixed;'>
 		<table>
 			<tr>
 				<td><img class='waypointIcon' src="images/left.png" height="33" width="26" id="left"></td>
-				<td><img class='waypointIcon' src="images/straight.png" height="33" width="26"  id="straight"></td>
-				<td><img class='waypointIcon' src="images/right.png" height="33" width="26"  id="right"></td>
+				<td><img class='waypointIcon' src="images/straight.png" height="33" width="26" id="straight"></td>
+				<td><img class='waypointIcon' src="images/right.png" height="33" width="26" id="right"></td>
 			</tr>
 			<tr>
-				<td><img class='waypointIcon' src="images/sprint.png" height="33" width="26"  id="sprint"></td>
-				<td><img class='waypointIcon' src="images/generic.png" height="33" width="26"  id="generic"></td>
-				<td><img class='waypointIcon' src="images/summit.png" height="33" width="26"  id="summit"></td>
+				<td><img class='waypointIcon' src="images/sprint.png" height="33" width="26" id="sprint"></td>
+				<td><img class='waypointIcon' src="images/generic.png" height="33" width="26" id="generic"></td>
+				<td><img class='waypointIcon' src="images/summit.png" height="33" width="26" id="summit"></td>
 			</tr>
 			<tr>
-				<td><img class='waypointIcon' src="images/water.png" height="33" width="26"  id="water"></td>
-				<td><img class='waypointIcon' src="images/danger.png" height="33" width="26"  id="danger"></td>
-				<td><img class='waypointIcon' src="images/food.png" height="33" width="26"  id="food"></td>
+				<td><img class='waypointIcon' src="images/water.png" height="33" width="26" id="water"></td>
+				<td><img class='waypointIcon' src="images/danger.png" height="33" width="26" id="danger"></td>
+				<td><img class='waypointIcon' src="images/food.png" height="33" width="26" id="food"></td>
 			</tr>
 		</table>
 	</div>
 </div>
 
-	<!-- 서버에 정보 요청 후 기다리는 UI-->
+<!-- 서버에 정보 요청 후 기다리는 UI-->
 <div id="blockingAds" class="blockUI" style="display:none">
 	<div class="blockUI blockOverlay" style="z-index: 1000; border: none;
-	margin: 0px; padding: 0px; width: 100%; height: 100%; top: 0px; left: 0px; 
-	background-color: rgb(0, 0, 0); opacity: 0.6; cursor: wait; position: absolute;">
+margin: 0px; padding: 0px; width: 100%; height: 100%; top: 0px; left: 0px;
+background-color: rgb(0, 0, 0); opacity: 0.6; cursor: wait; position: absolute;">
 	</div>
 	<div class="blockUI blockMsg blockElement" style="z-index: 1011;
-	position: absolute; padding: 0px; margin: 0px; height:120px; width: 920px; top: 30%; left: 150px;
-	text-align: center; color: rgb(0, 0, 0); border: 3px solid rgb(170, 0, 0); 
-	background-color: rgb(255, 255, 255); cursor: wait;">
-	 <div>
-	 <br><br>
-	 <img src="/images/ajax-loader.gif" width="200px" height="20px">
-	 &nbsp;&nbsp;&nbsp;&nbsp;잠시만 기다려 주세요....
-	 </div>
+position: absolute; padding: 0px; margin: 0px; height:120px; width: 920px; top: 30%; left: 150px;
+text-align: center; color: rgb(0, 0, 0); border: 3px solid rgb(170, 0, 0);
+background-color: rgb(255, 255, 255); cursor: wait;">
+		<div>
+			<br><br>
+			<img src="/images/ajax-loader.gif" width="200px" height="20px">
+			&nbsp;&nbsp;&nbsp;&nbsp;잠시만 기다려 주세요....
+		</div>
 	</div>
 </div>
-
-</form>
 
 </body>
 </html>
