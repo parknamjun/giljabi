@@ -182,7 +182,7 @@ $(document).ready(function () {
         if (_fileExt == 'gpx') {
             loadGpx(readXmlfile);
         } else if (_fileExt == 'tcx') {
-            //loadTcx(readXmlfile); gpx 포맷을 끝내고 진행...
+            loadTcx(readXmlfile); //gpx 포맷을 끝내고 진행...
         }
 
         drawPolyline(_trkPoly); //경로를 그린다.
@@ -248,6 +248,8 @@ $(document).ready(function () {
             _gpxTrkseqArray.push(trackPoint);
             _trkPoly.push(new kakao.maps.LatLng(trackPoint.lat, trackPoint.lng));
         });
+        $("input[type='radio'][name='filetype'][value='gpx']").prop("checked", true);
+
     }
 
     /**
@@ -255,13 +257,20 @@ $(document).ready(function () {
      * @param loadFile
      */
     function loadTcx(loadFile) {
-        let speed = loadFile.find('TrainingCenterDatabase').find('Courses').find('Course').find('Speed').text();
-        _gpxMetadata.speed = speed == '' ? '15' : speed;
-        $('#averageV').val(_gpxMetadata.speed);
+        _gpxMetadata.author = loadFile.find('TrainingCenterDatabase').find('Folders').find('Courses').find('CourseFolder').find('CourseNameRef').find('Author').text();
+        _gpxMetadata.name = loadFile.find('TrainingCenterDatabase').find('Courses').find('Course').find('Name').text();
 
-        let pathname = loadFile.find('TrainingCenterDatabase').find('Courses').find('Course').find('Name').first().text();
-        _gpxMetadata.name = pathname == '' ? 'giljabi' : pathname;
-        $('#gpx_metadata_name').val(_gpxMetadata.name);
+        if (_gpxMetadata.name == "")
+            $('#gpx_metadata_name').val(_uploadFilename);
+        else
+            $('#gpx_metadata_name').val(_gpxMetadata.name);
+
+        //_gpxMetadata.desc = loadFile.find('gpx').find('metadata').find('desc').text();
+        _gpxMetadata.speed = loadFile.find('TrainingCenterDatabase').find('Courses').find('Course').find('Speed').text();
+        if (_gpxMetadata.speed == "")
+            $('#averageV').val('15');
+        else
+            $('#averageV').val(_gpxMetadata.speed);
 
         //waypoint가 있는경우
         $.each(loadFile.find('CoursePoint'), function () {
@@ -278,15 +287,21 @@ $(document).ready(function () {
         });
 
         //경로
+        //$.each(loadFile.find('gpx').find('trk').find('trkseg').find('trkpt'), function () {
         $.each(loadFile.find('Trackpoint'), function () {
             let trackPoint = new Point3D(
                 $(this).find('LatitudeDegrees').text(),
                 $(this).find('LongitudeDegrees').text(),
-                $(this).find('AltitudeMeters').text()
+                $(this).find('AltitudeMeters').text(),
+                $(this).find('DistanceMeters').text(),
+                "0"
             );
+
             _gpxTrkseqArray.push(trackPoint);
             _trkPoly.push(new kakao.maps.LatLng(trackPoint.lat, trackPoint.lng));
         });
+
+        $("input[type='radio'][name='filetype'][value='tcx']").prop("checked", true);
     }
 
     //var plot;
