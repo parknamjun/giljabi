@@ -10,6 +10,7 @@ let _gpxTrkseqArray = new Array();		//gpx/trk/trkseq
 let baseTrkList = [];
 let baseWptList = [];
 let basePolyline = [];
+let _filetype = 'gpx';
 
 function getGpxTrk(lat, lon, ele) {
     let trkpt = new Object();
@@ -184,7 +185,7 @@ $(document).ready(function () {
                     response.data.forEach(function (mountain) {
                         $('#mountain100Select').append($('<option></option>').val(mountain).html(mountain));
                     });
-                    console.info($('#mountain100Select').html());
+                    //console.info($('#mountain100Select').html());
                 } else {
                     alert(response.message);
                 }
@@ -365,57 +366,35 @@ $(document).ready(function () {
         if (!confirm('Gpx 파일로 저장할까요?')) {
             return;
         }
-        /*        if (_gpxTrkseqArray.length == 0) {
-                    alert('고도 정보가 있어야 저장할 수 있습니다.');
-                    return;
-                }*/
-        var trkseq = new Array();	//servlet에 요청하기 위한 배열 object를 string으로 변환
-        $.each(_gpxTrkseqArray, function () {
-            trkseq.push({
-                lat: $(this).attr('lat'), lng: $(this).attr('lon')
-                , ele: $(this).attr('ele')
-            });
-        });
+        _fileName == undefined ? (new Date().getTime() / 1000).toFixed(0) : _fileName;
 
-        var fn = _fileName == undefined ? (new Date().getTime() / 1000).toFixed(0) : _fileName;
-        $.ajax({
-            type: 'post',
-            url: '/gpx2tcx.do',
-            data: {
-                trkseq: JSON.stringify(trkseq)
-                , wpt: ''
-                , velocity: $('#averageV').val()
-                , courseName: fn
-                , fileName: fn
-                , filetype: 'tcx'	//tcx만 사용함
-                , command: 'editor'
-            },
-            dataType: 'json',
-            async: false,
-            timeout: 10000,
-            complete: function () {
+        let BASETIME = new Date('2022-01-01T00:00:00Z');
+        let ptDateTime = new Date(BASETIME);
 
-            },
-            success: function (data, status) {
-                if (data.resultcode == 'success') {
-                    _gpxTrkseqArray = [];
-                    result = true;
-                    //console.log(data.tcxdata);
-                    var blob = new Blob([data.tcxdata]);
-                    var link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    if (fn.indexOf('giljabi_ele') >= 0)
-                        link.download = fn + '.tcx';
-                    else
-                        link.download = fn + '_giljabi_ele' + '.tcx';
-                    link.click();
-                } else {
-                    alert(data.resultmessage);
-                }
-            }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(errorThrown);
-        });
+        _gpxTrkseqArray[0].time = (new Date(BASETIME)).toISOString();
+        _gpxTrkseqArray[0].dist = 0;
+
+        //시간 = 거리 / 속도
+        let speed = Number($('#averageV').val());
+        for (let trkptIndex = 1; trkptIndex < _gpxTrkseqArray.length; trkptIndex++) {
+            let distance = getDistance(_gpxTrkseqArray[trkptIndex - 1], _gpxTrkseqArray[trkptIndex]);
+            _gpxTrkseqArray[trkptIndex].dist = (Number(_gpxTrkseqArray[trkptIndex - 1].dist) + distance).toFixed(2);
+            let ptSecond = distance / speed * 3600;
+            ptDateTime.setSeconds(ptDateTime.getSeconds() + ptSecond);
+            _gpxTrkseqArray[trkptIndex].time = ptDateTime.toISOString();
+            _gpxTrkseqArray[trkptIndex].desc = _gpxTrkseqArray[trkptIndex].dist; //누적거리 km
+
+        }
+
+        gpxHeader();
+        gpxMetadata(_fileName, Number($('#averageV').val()), (new Date().toISOString()));
+        gpxTrack(_gpxTrkseqArray);
+
+        saveAs(new Blob([xmlData], {
+            type: "application/vnd.garmin.tcx+xml"
+        }), _fileName + '.gpx');
+
+
     });
 
     $('#reset').click(function () {
@@ -455,13 +434,16 @@ function makeObject(xml) {
 
     if (_fileExt.toLowerCase() == 'gpx') {
         $.each(_xmlData.find('gpx').find('trk').find('trkseg').find('trkpt'), function () {
-            let trkpt = getGpxTrk($(this).attr('lat'), $(this).attr('lon'), $(this).find('ele').text());
+            let trkpt = getGpxTrk(Number($(this).attr('lat')),
+                Number($(this).attr('lon')),
+                Number($(this).find('ele').text()));
             _gpxTrkseqArray.push(trkpt);    //gpx 경로정보
             _trkPoly.push(new kakao.maps.LatLng($(this).attr('lat'), $(this).attr('lon'))); //polyline을 그리기 위한 정보
         });
     } else if (_fileExt.toLowerCase() == 'tcx') {
         loadTcx(_xmlData);
     }
+    moveCenterList(_gpxTrkseqArray);
 
     //시작과 끝 표시
     makeMarkerPoint(_globalMap, 'start', _gpxTrkseqArray[0]);
@@ -472,6 +454,17 @@ function makeObject(xml) {
     //let trkpt = _gpxTrkseqArray[parseInt(_gpxTrkseqArray.length / 2)];
     //_globalMap.setCenter(new kakao.maps.LatLng(trkpt.lat, trkpt.lng)); //중심점을 경로상의 중간을 설정한다.
     //_globalMap.setLevel(10);
+}
+
+function moveCenterList(pointList) {
+    let midPoint = pointList[parseInt(pointList.length / 2)];
+    _globalMap.setCenter(new kakao.maps.LatLng(midPoint.lat, midPoint.lng)); //중심점을 경로상의 중간을 설정한다.
+    _globalMap.setLevel(7);
+}
+
+function moveCenterPoint(kakaoPoint) {
+    _globalMap.setCenter(kakaoPoint); //중심점을 경로상의 중간을 설정한다.
+    _globalMap.setLevel(7);
 }
 
 /*
@@ -545,8 +538,6 @@ function selectOverlay(type) {
 function basePathLoadGpx(gpxfile, strokeColor) {
     let reader = $($.parseXML(gpxfile));
     $.each(reader.find('gpx').find('trk'), function () {
-        let item = new Object();
-        item.name = $(this).find('name').text();
         let trkptList = [];
         $.each($(this).find('trkseg').find('trkpt'), function () {
             trkptList.push(new kakao.maps.LatLng(
@@ -554,7 +545,6 @@ function basePathLoadGpx(gpxfile, strokeColor) {
                 Number($(this).attr('lon')))
             );
         });
-        item.trkseg = trkptList;
         //baseTrkList.push(item); //삭제하기 위한 데이터, 삭제할 필요가 있을까??? 계속 추가해도 좋을듯
 
         let lineStyle = new kakao.maps.Polyline({
@@ -566,6 +556,7 @@ function basePathLoadGpx(gpxfile, strokeColor) {
             strokeWeight: 3
         });
         basePolyline.push(lineStyle);
+        moveCenterPoint(trkptList[parseInt(trkptList.length / 2)]);
     });
 
     $.each(reader.find('gpx').find('wpt'), function () {
