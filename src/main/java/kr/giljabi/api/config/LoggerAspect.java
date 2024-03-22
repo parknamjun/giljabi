@@ -16,9 +16,9 @@ import java.util.Enumeration;
 
 /**
  * request, response 로그
+ *
  * @author eahn.park@gmail.com
  * @date 2022.03.29
- *
  */
 @Aspect
 @Component
@@ -54,7 +54,12 @@ public class LoggerAspect {
         long endAt = System.currentTimeMillis();
 
         log.info("===== RESPONSE Start Request URL : {} ===========================", request.getRequestURI());
-        log.info("Response : {}", resultJson);
+
+        if (methodName.indexOf("getMountain") == 0)  //gpx파일 로그는 남기지 않음
+            log.info("Response : {}", "GPX 파일 내용은 로그 남기지 않음");
+        else
+            log.info("Response : {}", resultJson);
+
         log.info("Time Required : {}ms", endAt - startAt);
         log.info("===== RESPONSE End Request URL : {} ===========================", request.getRequestURI());
 
@@ -63,6 +68,7 @@ public class LoggerAspect {
 
     /**
      * request 에 담긴 정보를 JSONObject 형태로 반환한다.
+     *
      * @return JSONObject
      */
     private static String getParams(HttpServletRequest request) {

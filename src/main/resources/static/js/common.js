@@ -189,8 +189,7 @@ function checkPattern(type, checkValue) {
 
 //첫 화면에서 서울 위치, 우리집으로 할까나.., https는 현재 geoLocation을 사용할 수 있음
 function getLocation() {
-    //return new kakao.maps.LatLng(37.56683546665817, 126.9786607449023);
-    return new kakao.maps.LatLng(37.945721, 127.087334);
+    return new kakao.maps.LatLng(37.56683546665817, 126.9786607449023);
 }
 
 //첫문자를 대문자로 변경
