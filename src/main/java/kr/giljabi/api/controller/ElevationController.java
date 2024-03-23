@@ -6,6 +6,7 @@ import kr.giljabi.api.service.GoogleService;
 import kr.giljabi.api.request.RequestElevationData;
 import kr.giljabi.api.response.Response;
 import kr.giljabi.api.utils.ErrorCode;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -112,16 +113,29 @@ public class ElevationController {
         List<String> list = new ArrayList<>();
         StringBuffer sb = new StringBuffer();
         try {
-            String jsonFile = readFileAsString( "100.txt");
-            String[] lines = jsonFile.split(System.getProperty("line.separator"));
+            String fileFullName = String.format("%s/%s", mountain100Path, "100.txt");
+            List<String> lines = Files.readAllLines(Paths.get(fileFullName));
+            List<Mountain100> fileList = new ArrayList<>();
             for (String line : lines) {
                 if(line.charAt(0) == '#')
                     continue;
-                list.add(line);
+                fileList.add(new Mountain100(line));
             }
-            return new Response(list);
+            return new Response(fileList);
         } catch (Exception e) {
             return new Response(ErrorCode.STATUS_EXCEPTION.getStatus(), e.getMessage());
+        }
+    }
+
+    @Data
+    private class Mountain100 {
+        public String name;
+        public String filename;
+
+        public Mountain100(String lineReader) {
+            String[] mountain = lineReader.split(",");
+            this.name = mountain[0];
+            this.filename = mountain[1];
         }
     }
 
