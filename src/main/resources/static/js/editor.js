@@ -185,7 +185,7 @@ $(document).ready(function () {
             success: function (response, status) {
                 if (response.status === 0) {
                     response.data.forEach(function (mountain) {
-                        $('#mountain100Select').append($('<option></option>').val(mountain).html(mountain));
+                        $('#mountain100Select').append($('<option></option>').val(mountain.filename).html(mountain.name));
                     });
                     console.info($('#mountain100Select').html());
                 } else {
