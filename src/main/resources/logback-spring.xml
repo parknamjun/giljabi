@@ -7,7 +7,8 @@
     <!-- Local -->
     <springProfile name="local">
 
-        <logger name="org.springframework" level="INFO"/>
+        <logger name="kr.giljabi.api.controller.ElevationController" level="OFF"/>
+        <logger name="org.springframework.web" level="OFF"/>
         <logger name="org.springframework.security" level="INFO"/>
         <logger name="com.zaxxer.hikari" level="INFO"/>
         <logger name="org.hibernate.SQL" level="INFO"/>
@@ -47,7 +48,7 @@
 
     <springProfile name="real">
 
-        <logger name="org.springframework" level="INFO"/>
+        <logger name="org.springframework.web" level="INFO"/>
         <logger name="org.springframework.security" level="INFO"/>
         <logger name="com.zaxxer.hikari" level="INFO"/>
         <logger name="org.hibernate.SQL" level="INFO"/>

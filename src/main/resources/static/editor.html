@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <title>대한민국의 모든 경로를 만들다</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="keyword" content="가민 tcx, garmin tcx, gpx, tcx,웨이포인트,waypoint">
+    <meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=27f606d8edf497ab495f16d1d983047f&libraries=drawing"></script>
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.crosshair.js"></script>
+    <script type="text/javascript" src="/js/jquery-plugin/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="/js/jquery-plugin/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/routeutil.js"></script>
+    <script type="text/javascript" src="/js/editor.js"></script>
+    <script type="text/javascript" src="/js/xmlwriter.js"></script>
+    <script type="text/javascript" src="/js/FileSaver.min.js"></script>
+
+    <link type="text/css" href="/js/jquery-ui.css" rel="stylesheet"/>
+    <link type="text/css" href="/js/giljabi.css" rel="stylesheet"/>
+
+
+    <style type="text/css">
+        .container {
+            width: 100%;
+            display: flex; /* This will arrange the child divs in a row */
+            height: 70vh;
+            position: relative;
+        }
+
+        .left-div {
+            width: 950px;
+        }
+
+        .right-div {
+            width: 210px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        .ad-container {
+            text-align: center;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<div w3-include-html="/menu.html"></div>
+<div class="container">
+    <div class="left-div">
+        <div class="map_wrap">
+            <div id="map" style="width:100%;height:100%;"></div>
+            <p class="modes">
+                <button onclick="selectOverlay('POLYLINE')" style='color:red;'>Track</button>
+                <input class='mapType' type="checkbox" id="chkTerrain"/><label for="chkTerrain">지형정보</label>
+                <input class="mapType" type="checkbox" id="chkBicycle"/><label for="chkBicycle">자전거도로</label>
+                <input class="mapType" type="checkbox" id="chkCertification"/><label
+                    for="chkCertification">인증센터</label>
+                <input class="mapType" type="checkbox" id="chkCvs"/><label for="chkCvs">편의점</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                산림청 100대 명산
+                <select class="mapType" id="mountain100Select" name="mountain100Select">
+                    <option>선택</option>
+                </select>
+                웨이포인트 포함 유무
+                <input class="mapType" type="checkbox" id="wptIcon" name="wptIcon" value="true" style="width:20px;">
+            </p>
+        </div>
+    </div>
+    <div class="right-div">
+        <div class="ad-container">
+        </div>
+    </div>
+</div>
+
+
+
+<div>
+    <div id='editinfo' style="vertical-align:top; height:20px;">
+        <p>
+            배경 GPX: <input type="file" id="baseInput" accept=".gpx" style="width:200px;">
+            GPX/TCX File: <input type="file" id="fileInput" accept=".gpx" style="width:200px;">
+            평속(km/h):<input type="text" id="averageV" value="15" style="width:20px;">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" id="getElevation" value="getElevation">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" id="gpxsave" value="Gpx Save"/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" id="reset" value="Reset"/>
+        </p>
+    </div>
+
+    <div class="elevationContainer">
+        <div id="elevationImage" class="elevation"></div>
+    </div>
+</div>
+
+<div id="blockingAds" class="blockUI" style="display:none">
+    <div class="blockUI blockOverlay" style="z-index: 1000; border: none;
+	margin: 0px; padding: 0px; width: 100%; height: 100%; top: 0px; left: 0px;
+	background-color: rgb(0, 0, 0); opacity: 0.6; cursor: wait; position: absolute;">
+    </div>
+    <div class="blockUI blockMsg blockElement" style="z-index: 1011;
+	position: absolute; padding: 0px; margin: 0px; height:120px; width: 920px; top: 30%; left: 150;
+	text-align: center; color: rgb(0, 0, 0); border: 3px solid rgb(170, 0, 0);
+	background-color: rgb(255, 255, 255); cursor: wait;">
+        <div>
+            <br><br>
+            <img src="/images/ajax-loader.gif" width="200px" height="20px">
+            &nbsp;&nbsp;&nbsp;&nbsp;고도 정보를 가져옵니다. 잠시만 기다려 주세요....
+        </div>
+    </div>
+</div>
+
+<script>
+    includeHTML();
+</script>
+</body>
+</html>

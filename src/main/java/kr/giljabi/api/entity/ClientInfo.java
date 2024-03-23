@@ -1,17 +1,23 @@
 package kr.giljabi.api.entity;
 
+/*
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+*/
 
+/*
 @Entity
 @Getter @Setter
 @ToString
 @NoArgsConstructor
+
+ */
 public class ClientInfo extends BaseEntity {
+    /*
     @Id
     private String clientIp;
 
@@ -23,5 +29,5 @@ public class ClientInfo extends BaseEntity {
 
     private int accumulate_count;
     private int accumulate_distance;
-
+*/
 }

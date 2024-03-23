@@ -1,0 +1,49 @@
+
+#h2 db create : jdbc:h2:~/IdeaProjects/giljabi/db/giljabidb
+#server로 사용 : jdbc:h2:tcp://localhost/~/IdeaProjects/giljabi/db/giljabidb
+#spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/IdeaProjects/giljabi/db/giljabidb
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#  jpa:
+#    #hibernate:
+#      #ddl-auto: create
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        #default_batch_fetch_size: 100
+
+#logging.level:
+#  org.hibernate.SQL: info
+#  #org.hibernate.type: trace
+
+jwt:
+  #accessTokenSecret: 4RT/2hAAJmC6i2FzmezBbaCVMD9FtsuExyjaVWJ5xRA=
+  accessTokenSecret: accessTokenSecret
+  accessTokenExpiration: 604800000
+
+# H2 Settings
+h2:
+  console:
+  enabled: true
+  path: /h2-console
+
+giljabi:
+  openrouteservice:
+    apikey: ### your api key ###
+    directionUrl: https://api.openrouteservice.org/v2/directions/%s/json
+  google:
+    elevation:
+      #google elevation get api는 요청된 좌표 적절히 잘라서 8192를 넘지 않아야 한다. 400이 적당
+      #400은 소스 코드에 추가하자.
+      googleGetCount: 400
+      apikey: ### your api key ###
+      elevationUrl: https://maps.googleapis.com/maps/api/elevation/json
+  mountain100:
+    path: /home/bitnami/giljabi/forest100
+server:
+  port: 9090
+
+
