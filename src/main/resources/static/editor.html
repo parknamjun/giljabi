@@ -9,10 +9,6 @@
     <meta http-equiv="Expires" content="-1">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Cache-Control" content="no-cache">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131114801-1"></script>
-    <script type="text/javascript" src="/js/google.js"></script>
-    <!-- google -->
     <script type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=27f606d8edf497ab495f16d1d983047f&libraries=drawing"></script>
     <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
@@ -29,28 +25,61 @@
     <link type="text/css" href="/js/jquery-ui.css" rel="stylesheet"/>
     <link type="text/css" href="/js/giljabi.css" rel="stylesheet"/>
 
+
+    <style type="text/css">
+        .container {
+            width: 100%;
+            display: flex; /* This will arrange the child divs in a row */
+            height: 70vh;
+            position: relative;
+        }
+
+        .left-div {
+            width: 950px;
+        }
+
+        .right-div {
+            width: 210px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        .ad-container {
+            text-align: center;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 
 <body>
-
-<div class="map_wrap">
-    <div id="map" style="width:100%;height:100%;"></div>
-    <p class="modes">
-        <button onclick="selectOverlay('POLYLINE')" style='color:red;'>Track</button>
-        <input class='mapType' type="checkbox" id="chkTerrain"/><label for="chkTerrain">지형정보</label>
-        <input class="mapType" type="checkbox" id="chkBicycle"/><label for="chkBicycle">자전거도로</label>
-        <input class="mapType" type="checkbox" id="chkCertification"/><label
-            for="chkCertification">인증센터</label>
-        <input class="mapType" type="checkbox" id="chkCvs"/><label for="chkCvs">편의점</label>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        산림청 100대 명산
-        <select class="mapType" id="mountain100Select" name="mountain100Select">
-            <option>선택</option>
-        </select>
-        웨이포인트 포함 유무
-        <input class="mapType" type="checkbox" id="wptIcon" name="wptIcon" value="true" style="width:20px;">
-    </p>
+<div w3-include-html="/menu.html"></div>
+<div class="container">
+    <div class="left-div">
+        <div class="map_wrap">
+            <div id="map" style="width:100%;height:100%;"></div>
+            <p class="modes">
+                <button onclick="selectOverlay('POLYLINE')" style='color:red;'>Track</button>
+                <input class='mapType' type="checkbox" id="chkTerrain"/><label for="chkTerrain">지형정보</label>
+                <input class="mapType" type="checkbox" id="chkBicycle"/><label for="chkBicycle">자전거도로</label>
+                <input class="mapType" type="checkbox" id="chkCertification"/><label
+                    for="chkCertification">인증센터</label>
+                <input class="mapType" type="checkbox" id="chkCvs"/><label for="chkCvs">편의점</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                산림청 100대 명산
+                <select class="mapType" id="mountain100Select" name="mountain100Select">
+                    <option>선택</option>
+                </select>
+                웨이포인트 포함 유무
+                <input class="mapType" type="checkbox" id="wptIcon" name="wptIcon" value="true" style="width:20px;">
+            </p>
+        </div>
+    </div>
+    <div class="right-div">
+        <div class="ad-container">
+        </div>
+    </div>
 </div>
+
+
 
 <div>
     <div id='editinfo' style="vertical-align:top; height:20px;">
@@ -89,5 +118,8 @@
     </div>
 </div>
 
+<script>
+    includeHTML();
+</script>
 </body>
 </html>

@@ -190,8 +190,8 @@ h2 {
 
 
 #topMenu {
-    height: 40px; /* 메인 메뉴의 높이 */
-    width: 810px; /* 900 메인 메뉴의 넓이 */
+    height: 30px; /* 메인 메뉴의 높이 */
+    width: 950px; /* 900 메인 메뉴의 넓이 */
 }
 
 #topMenu ul { /* 메인 메뉴 안의 ul을 설정함: 상위메뉴의 ul+하위 메뉴의 ul */
@@ -204,7 +204,7 @@ h2 {
     color: white; /* 글씨 색을 흰색으로 설정 */
     background-color: #2d2d2d; /* 배경 색을 RGB(2D2D2D)로 설정 */
     float: left; /* 왼쪽으로 나열되도록 설정 */
-    line-height: 40px; /* 텍스트 한 줄의 높이를 30px로 설정 */
+    line-height: 30px; /* 텍스트 한 줄의 높이를 30px로 설정 */
     vertical-align: middle; /* 세로 정렬을 가운데로 설정 */
     text-align: center; /* 텍스트를 가운데로 정렬 */
     position: relative; /* 해당 li 태그 내부의 top/left 포지션 초기화 */
@@ -213,7 +213,7 @@ h2 {
 .menuLink, .submenuLink { /* 상위 메뉴와 하위 메뉴의 a 태그에 공통으로 설정할 스타일 */
     text-decoration: none; /* a 태그의 꾸밈 효과 제거 */
     display: block; /* a 태그의 클릭 범위를 넓힘 */
-    width: 159px; /* 기본 넓이를 150px로 설정 */
+    width: 150px; /* 기본 넓이를 150px로 설정 */
     font-size: 14px; /* 폰트 사이즈를 12px로 설정 */
     font-weight: bold; /* 폰트를 굵게 설정 */
     font-family: "Trebuchet MS", Dotum; /* 기본 폰트를 영어/한글 순서대로 설정 */
@@ -236,7 +236,7 @@ h2 {
 }
 
 .longLink { /* 좀 더 긴 메뉴 스타일 설정 */
-    width: 190px; /* 넓이는 190px로 설정 */
+    width: 210px; /* 넓이는 190px로 설정 */
 }
 
 .submenu { /* 하위 메뉴 스타일 설정 */
@@ -250,7 +250,7 @@ h2 {
 }
 
 .topMenuLi:hover .submenu { /* 상위 메뉴에 마우스 모버한 경우 그 안의 하위 메뉴 스타일 설정 */
-    height: 200px; /* 높이를 93px로 설정 */
+    height: 100px; /* 높이를 93px로 설정 */
     position: absolute;
     z-index: 100;
 }
@@ -260,3 +260,8 @@ h2 {
     background-color: #dddddd; /* 배경을 RGB(DDDDDD)로 설정 */
 }
 
+.adsense-container {
+    /* Adjust width based on AdSense requirements */
+    width: 20%;
+    /* Optional: Adjust the height or set other properties */
+}

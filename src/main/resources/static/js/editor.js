@@ -12,6 +12,8 @@ let baseWptList = [];
 let basePolyline = [];
 let _filetype = 'gpx';
 
+let BASETIME = new Date('2022-01-01T00:00:00Z');
+
 function getGpxTrk(lat, lon, ele) {
     let trkpt = new Object();
     trkpt.lat = lat;
@@ -185,7 +187,7 @@ $(document).ready(function () {
                     response.data.forEach(function (mountain) {
                         $('#mountain100Select').append($('<option></option>').val(mountain).html(mountain));
                     });
-                    //console.info($('#mountain100Select').html());
+                    console.info($('#mountain100Select').html());
                 } else {
                     alert(response.message);
                 }
@@ -222,7 +224,7 @@ $(document).ready(function () {
                 url: '/api/1.0/mountain100Gpx/' + mountainList[index],
                 contentType: 'application/json',
                 dataType: 'json',
-                async: false,
+                async: true,
                 complete: function () {
                 },
                 success: function (response, status) {
@@ -363,12 +365,23 @@ $(document).ready(function () {
     });
 
     $('#gpxsave').click(function () {
-        if (!confirm('Gpx 파일로 저장할까요?')) {
-            return;
+        if(_gpxTrkseqArray.length == 0) {
+            if(!confirm("고도(높이) 정보를 처리하지 않고 경로를 저장할까요?")) {
+                return;
+            }
+            //구글 높이를 받아오지 않은 경우에도 경로를 저장하기 위한 정보처리
+            let data = _drawingManager.getData();
+            let len = data[kakao.maps.drawing.OverlayType.POLYLINE].length;
+            for (let i = 0; i < len; i++) {
+                let line = pointsToPath(data.polyline[i].points);
+                for (let j = 0; j < line.length; j++) {
+                    _gpxTrkseqArray.push({lat: line[j].getLat(), lng: line[j].getLng(), ele: 0, dist:0, ele:0, time:''});
+                }
+            }
         }
-        _fileName == undefined ? (new Date().getTime() / 1000).toFixed(0) : _fileName;
 
-        let BASETIME = new Date('2022-01-01T00:00:00Z');
+        _fileName = (new Date().getTime() / 1000).toFixed(0);
+
         let ptDateTime = new Date(BASETIME);
 
         _gpxTrkseqArray[0].time = (new Date(BASETIME)).toISOString();
@@ -387,14 +400,12 @@ $(document).ready(function () {
         }
 
         gpxHeader();
-        gpxMetadata(_fileName, Number($('#averageV').val()), (new Date().toISOString()));
+        gpxMetadata(_fileName, Number($('#averageV').val()), (new Date(BASETIME)).toISOString());
         gpxTrack(_gpxTrkseqArray);
 
         saveAs(new Blob([xmlData], {
-            type: "application/vnd.garmin.tcx+xml"
-        }), _fileName + '.gpx');
-
-
+            type: "application/vnd.garmin.gpx+xml"
+        }), _fileName + '.' + _filetype);
     });
 
     $('#reset').click(function () {
