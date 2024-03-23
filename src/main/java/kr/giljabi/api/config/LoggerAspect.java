@@ -35,12 +35,14 @@ public class LoggerAspect {
 
         String controllerName = pjp.getSignature().getDeclaringType().getSimpleName();
         String methodName = pjp.getSignature().getName();
+        String remoteAddr = request.getRemoteAddr();
 
         long startAt = System.currentTimeMillis();
 
         log.info("===== REQUEST Start Request URL : {} ===========================", request.getRequestURI());
         log.info("Controller : {}", controllerName);
         log.info("method : {}", methodName);
+        log.info("remoteAddr : {}", remoteAddr);
         //log.info("Request URL : {}", request.getRequestURI());
         log.info("Http Method : {}", request.getMethod());
         log.info("params : {}", getParams(request));
