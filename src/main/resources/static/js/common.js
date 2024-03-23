@@ -204,7 +204,7 @@ function removePoi(list) {
     }
 }
 
-/*
+
 	function includeHTML() {
 		let tagNamelist = document.getElementsByTagName("*");
 		for (let i = 0; i < tagNamelist.length; i++) {
@@ -230,7 +230,7 @@ function removePoi(list) {
 			}
 		}
 	}
-*/
+
 /*
 	function adsview(id) {
 		adblockDetector.init({
