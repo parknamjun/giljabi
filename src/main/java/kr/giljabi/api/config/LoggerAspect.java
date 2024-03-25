@@ -39,14 +39,14 @@ public class LoggerAspect {
 
         long startAt = System.currentTimeMillis();
 
-        log.info("===== REQUEST Start Request URL : {} ===========================", request.getRequestURI());
+        log.info("===== REQUEST Start Request URL : {}", request.getRequestURI());
         log.info("Controller : {}", controllerName);
         log.info("method : {}", methodName);
         log.info("remoteAddr : {}", remoteAddr);
         //log.info("Request URL : {}", request.getRequestURI());
         log.info("Http Method : {}", request.getMethod());
         log.info("params : {}", getParams(request));
-        log.info("===== REQUEST End Request URL : {} ===========================", request.getRequestURI());
+        log.info("===== REQUEST End Request URL : {}", request.getRequestURI());
 
         Object result = pjp.proceed();
 
@@ -55,7 +55,7 @@ public class LoggerAspect {
 
         long endAt = System.currentTimeMillis();
 
-        log.info("===== RESPONSE Start Request URL : {} ===========================", request.getRequestURI());
+        log.info("===== RESPONSE Start Request URL : {}", request.getRequestURI());
 
         if (methodName.indexOf("getMountain") == 0)  //gpx파일 로그는 남기지 않음
             log.info("Response : {}", "GPX 파일 내용은 로그 남기지 않음");
@@ -63,7 +63,7 @@ public class LoggerAspect {
             log.info("Response : {}", resultJson);
 
         log.info("Time Required : {}ms", endAt - startAt);
-        log.info("===== RESPONSE End Request URL : {} ===========================", request.getRequestURI());
+        log.info("===== RESPONSE End Request URL : {}", request.getRequestURI());
 
         return result;
     }
