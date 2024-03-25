@@ -1,9 +1,7 @@
 package kr.giljabi.api.request;
 
-import jdk.nashorn.internal.objects.annotations.Constructor;
 import lombok.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
