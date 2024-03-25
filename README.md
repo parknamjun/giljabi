@@ -8,6 +8,7 @@
 #### editor.html 경로그리기
 * "한국등산트레킹지원센터_산림청 100대명산" gpx를 배경으로 두고 원하는 경로를 그릴 수 있게 개선
   * 출처: https://www.data.go.kr/data/15098177/fileData.do?recommendDataYn=Y
+  * forest100.zip 압축파일 내용을 forest100 폴더에 넣어줌
 * 개인적인 경로를 배경을 두고 원하는 경로를 그릴 수 있게 개선
 
 ---
