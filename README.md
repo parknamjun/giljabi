@@ -1,8 +1,16 @@
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fparknamjun%2Fgiljabi&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
+## 2024.03.25
+#### h2 db 사용삭제
+#### giljabi.html 웨이포인트 편집/경로 검색
+* trkseg가 2개 이상이 있는 경우, 이어서 그려주고 저장시 1개로 저장
+#### editor.html 경로그리기
+* "한국등산트레킹지원센터_산림청 100대명산" gpx를 배경으로 두고 원하는 경로를 그릴 수 있게 개선
+  * 출처: https://www.data.go.kr/data/15098177/fileData.do?recommendDataYn=Y
+* 개인적인 경로를 배경을 두고 원하는 경로를 그릴 수 있게 개선
 
-#### 파일을 지도에 올리는 것은 gpx 파일만 사용 가능하고, 저장은 gpx, tcx 가능합니다. tcx 파일 올리는 것은 준비중입니다.
+---
 
 ### [http://giljabi.kr](http://giljabi.kr/) 초기버전은 AWS Light sail를 사용하고 있으며 아래에 설명이 있습니다.
 * [AWS Lightsail apache tomcat 설치 그리고 운영](https://gpxtcx.tistory.com/11)
@@ -67,8 +75,7 @@ querydsl를 사용할수도 있겠지만, 리포팅 부분은 mybatis같은 매�
 ### swagger http://localhost:8080/swagger-ui.html
 API 테스트 방법
 1. API key 설정
-
-   application.yml에 위 사이트에서 발급받은 key 값을 각각 넣어줍니다.
+* application.yml에 위 사이트에서 발급받은 key 값을 각각 넣어줍니다.
 ```
 giljabi:
   openrouteservice:
@@ -82,7 +89,7 @@ giljabi:
 ```
 
 2. 경로탐색
-   .http 파일의 내용을 참고
+* http 파일의 내용을 참고
 ```
 GET http://localhost:8080/api/1.0/route?start=127.01117,37.5555&target=126.99448,37.54565&direction=cycling-road
 Content-Type: application/json
@@ -112,23 +119,6 @@ Content-Type: application/json
 ]
 }
 ```
-
-4. 테이블 생성
-
-테이블은 현재 사용한 사용자의 IP를 기준으로 이력을 저장하는 테이블을 2개 사용합니다. 사용이력 테이블(api_call_info), IP별 누적 사용현황(client_info)을 사용합니다.
-
-mybtis등을 사용하면 간편하지만, 학습중인 JPA를 사용하였습니다. 기본 기능인 insert/update를 사용하고 있습니다.
-
-docs/script/schema.sql을 mysql or h2에 생성합니다. 아니면
-``` 
- hibernate:
-   ddl-auto: create
-```
-이렇게 설정되어 있으면 drop table 후 create table을 해줍니다.
-
-Audit 정보는 공통으로 사용되는 부분이라 테이블을 표현으로만 분리되어 있습니다.
-
-![images/table1.png](images/table1.png)
 
 ## GPX & TCX 사양
 * [https://en.wikipedia.org/wiki/Training_Center_XML](https://en.wikipedia.org/wiki/Training_Center_XML)
@@ -166,7 +156,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	</trk>
 </gpx>
 ```
-
 
 ### 현재는 1개 경로만 사용합니다.
 ## tcx
