@@ -11,6 +11,7 @@
   * forest100.zip 압축파일 내용을 forest100 폴더에 넣어줌
 * 개인적인 경로를 배경을 두고 원하는 경로를 그릴 수 있게 개선
 
+action test 1
 ---
 
 ### [http://giljabi.kr](http://giljabi.kr/) 초기버전은 AWS Light sail를 사용하고 있으며 아래에 설명이 있습니다.
